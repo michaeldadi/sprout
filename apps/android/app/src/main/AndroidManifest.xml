@@ -40,7 +40,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 
                 <data android:scheme="com.michaeldadi.sprout"
-                      android:host="auth/apple/callback" />
+                      android:host="auth"
+                      android:path="/apple" />
             </intent-filter>
         </activity>
     </application>

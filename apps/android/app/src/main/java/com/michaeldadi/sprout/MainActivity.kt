@@ -16,6 +16,8 @@ import com.michaeldadi.sprout.navigation.AuthNavigation
 import com.michaeldadi.sprout.services.AppleSignInService
 import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.ui.theme.SproutTheme
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +41,12 @@ class MainActivity : ComponentActivity() {
     
     private fun handleAppleSignInCallback(intent: Intent) {
         val data = intent.data
-        if (data != null && data.scheme == "com.michaeldadi.sprout" && data.host == "auth/apple/callback") {
-            // Handle the Apple Sign In callback
+        if (data != null && data.scheme == "com.michaeldadi.sprout" && data.host == "auth" && data.path == "/apple") {
+            // Handle Apple Sign In callback in a coroutine since it's suspend
             val appleService = AppleSignInService(this, this)
-            appleService.handleCallback(intent)
+            lifecycleScope.launch {
+                appleService.handleCallback(intent)
+            }
         }
     }
 }

@@ -548,7 +548,6 @@ private fun SignUpForm(
                                     is AppleSignInResult.Success -> {
                                         authService.signInWithApple(
                                             idToken = result.idToken,
-                                            authorizationCode = result.authorizationCode,
                                             email = result.email,
                                             fullName = result.fullName
                                         )

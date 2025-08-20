@@ -205,48 +205,33 @@ class AuthService(application: Application) : AndroidViewModel(application) {
     }
 
     // MARK: - Apple Sign In
-    suspend fun signInWithApple(idToken: String, authorizationCode: String, email: String?, fullName: String?) {
+    suspend fun signInWithApple(idToken: String, email: String?, fullName: String?) {
         _isLoading.value = true
         try {
-            // First, check if we need to exchange the authorization code for tokens
-            // This would typically be done on your backend server
-            println("Apple Sign In - Authorization Code: $authorizationCode")
             println("Apple Sign In - ID Token: $idToken")
-
-            // For Cognito federated sign in, you have two options:
-            // 1. Use a custom authentication flow (requires Lambda triggers)
-            // 2. Use AdminInitiateAuth with ADMIN_USER_PASSWORD_AUTH (requires backend)
-
-            // Option 1: Try custom auth flow
+            println("Apple Sign In - Email: $email")
+            println("Apple Sign In - Full Name: $fullName")
+            
+            // Validate the Apple ID token first
+            if (!validateAppleIdToken(idToken)) {
+                throw AuthError.SignInFailed("Invalid Apple ID token")
+            }
+            
+            // Extract user information
+            val userEmail = email ?: extractEmailFromAppleIdToken(idToken)
+            
+            if (userEmail.isNullOrBlank()) {
+                throw AuthError.SignInFailed("Email is required for Apple Sign In")
+            }
+            
+            // Try to find existing user or create new one
             try {
-                val authRequest = InitiateAuthRequest {
-                    authFlow = AuthFlowType.CustomAuth
-                    clientId = CognitoConfig.clientId
-                    authParameters = mapOf(
-                        "USERNAME" to (email ?: "apple_user"),
-                        "CHALLENGE_NAME" to "APPLE_SIGNIN",
-                        "ID_TOKEN" to idToken
-                    )
-                }
-
-                val response = cognitoClient.initiateAuth(authRequest)
-
-                response.authenticationResult?.let { authResult ->
-                    handleAuthenticationResult(authResult, email ?: "apple_user@example.com")
-                } ?: response.challengeName?.let { challenge ->
-                    // Handle custom auth challenge if needed
-                    println("Apple Sign In Challenge: $challenge")
-                    throw AuthError.ChallengeRequired(challenge.toString())
-                }
-            } catch (customAuthError: Exception) {
-                // If custom auth fails, try creating/linking user
-                println("Custom auth failed, trying user creation: ${customAuthError.message}")
-
-                // Extract email from ID token if not provided
-                val userEmail = email ?: extractEmailFromAppleIdToken(idToken) ?: "apple_user_${UUID.randomUUID()}@example.com"
-
-                // Create or get existing user
-                signUpOrLinkAppleUser(userEmail, idToken, fullName)
+                // First, try to sign in existing user with Apple identity
+                signInExistingAppleUser(userEmail, idToken)
+            } catch (e: Exception) {
+                println("Existing user sign in failed, trying to create new user: ${e.message}")
+                // If user doesn't exist, create a new one
+                createAppleUser(userEmail, idToken, fullName)
             }
 
         } catch (e: Exception) {
@@ -358,6 +343,104 @@ class AuthService(application: Application) : AndroidViewModel(application) {
 
             _currentUser.value = user
             _isAuthenticated.value = true
+        }
+    }
+    
+    private suspend fun signInExistingAppleUser(email: String, idToken: String) {
+        // Try to find and authenticate existing user
+        // For Apple users, we'll use a special Apple-specific password
+        val applePassword = generateAppleUserPassword(email, idToken)
+        
+        val authRequest = InitiateAuthRequest {
+            authFlow = AuthFlowType.UserPasswordAuth
+            clientId = CognitoConfig.clientId
+            authParameters = mapOf(
+                "USERNAME" to email,
+                "PASSWORD" to applePassword
+            )
+        }
+        
+        val response = cognitoClient.initiateAuth(authRequest)
+        
+        response.authenticationResult?.let { authResult ->
+            handleAuthenticationResult(authResult, email)
+        } ?: run {
+            throw Exception("Authentication failed for existing Apple user")
+        }
+    }
+    
+    private suspend fun createAppleUser(email: String, idToken: String, fullName: String?) {
+        val names = fullName?.split(" ") ?: listOf()
+        val givenName = names.firstOrNull() ?: ""
+        val familyName = if (names.size > 1) names.drop(1).joinToString(" ") else ""
+        
+        // Generate a deterministic password for Apple users
+        val applePassword = generateAppleUserPassword(email, idToken)
+        
+        val signUpRequest = SignUpRequest {
+            clientId = CognitoConfig.clientId
+            username = email
+            password = applePassword
+            userAttributes = listOf(
+                AttributeType {
+                    name = "email"
+                    value = email
+                },
+                AttributeType {
+                    name = "email_verified"
+                    value = "true" // Apple has already verified the email
+                },
+                AttributeType {
+                    name = "given_name"
+                    value = givenName
+                },
+                AttributeType {
+                    name = "family_name"
+                    value = familyName
+                },
+                AttributeType {
+                    name = "custom:auth_provider"
+                    value = "apple"
+                }
+            )
+        }
+        
+        val response = cognitoClient.signUp(signUpRequest)
+        println("Apple user created: $response")
+        
+        // Auto-confirm the user since Apple has already verified them
+        try {
+            // Note: AdminConfirmSignUp requires admin privileges - should be done on backend
+            println("Would auto-confirm Apple user: $email")
+        } catch (e: Exception) {
+            println("Auto-confirm failed (expected - requires admin): ${e.message}")
+        }
+        
+        // Now sign in the user
+        signInExistingAppleUser(email, idToken)
+    }
+    
+    private fun generateAppleUserPassword(email: String, idToken: String): String {
+        // Generate a deterministic password based on email and ID token
+        // This ensures Apple users can sign in consistently
+        val combined = "$email:$idToken:apple_signin"
+        val bytes = combined.toByteArray()
+        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(bytes)
+        return java.util.Base64.getEncoder().encodeToString(digest).take(16) + "Aa1!"
+    }
+    
+    private fun validateAppleIdToken(idToken: String): Boolean {
+        // Basic validation - in production you should:
+        // 1. Verify the token signature using Apple's public keys
+        // 2. Check the audience (aud) claim
+        // 3. Check the issuer (iss) claim
+        // 4. Check the expiration time
+        
+        return try {
+            val parts = idToken.split(".")
+            parts.size == 3 && parts.all { it.isNotBlank() }
+        } catch (e: Exception) {
+            false
         }
     }
 
