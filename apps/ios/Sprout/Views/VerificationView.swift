@@ -104,7 +104,7 @@ struct VerificationView: View {
                             .foregroundColor(.white)
                             .keyboardType(.numberPad)
                             .focused($codeFocused)
-                            .onChange(of: verificationCode) { newValue in
+                            .onChange(of: verificationCode) { oldValue, newValue in
                                 // Limit to 6 digits
                                 if newValue.count > 6 {
                                     verificationCode = String(newValue.prefix(6))
