@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Fail fast if required tools are missing (prevents partial commits)
+command -v swiftformat >/dev/null 2>&1 || { echo "swiftformat not found. brew install swiftformat"; exit 1; }
+npx --yes lint-staged

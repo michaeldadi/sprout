@@ -1,0 +1,42 @@
+{
+  "name": "@sprout/source",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "workspaces": [
+    "services/*",
+    "apps/*",
+    "infra",
+    "services"
+  ],
+  "scripts": {
+    "format": "prettier --write . && swiftformat ios-app --quiet",
+    "lint": "eslint \"{infra,services}/**/*.{ts,tsx}\" --max-warnings=0",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "{infra,services}/**/*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "apps/ios/**/*.{swift}": [
+      "swiftformat --quiet"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "aws-cdk-lib": "2.204.0",
+    "constructs": "^10.0.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.4",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.9"
+  }
+}

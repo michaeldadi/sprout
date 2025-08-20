@@ -1,0 +1,18 @@
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Node.js dependencies
+node_modules/
+
+# Environment files
+.env.*
+*.env
+!.env.example.*
+apps/*/generated/
+
+# amplify
+.amplify
+amplify_outputs*
+amplifyconfiguration*
