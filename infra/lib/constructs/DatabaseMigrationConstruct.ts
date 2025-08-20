@@ -1,12 +1,13 @@
 import { Construct } from 'constructs';
-import { Function, Runtime, Code, Architecture } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, Architecture } from 'aws-cdk-lib/aws-lambda';
 import { CustomResource, Duration } from 'aws-cdk-lib';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { DatabaseInstance, DatabaseCluster } from 'aws-cdk-lib/aws-rds';
 import { SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
-import * as fs from 'node:fs';
+import { NodejsFunction, OutputFormat } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as path from 'node:path';
+import * as fs from 'node:fs';
 
 export interface DatabaseMigrationConstructProps {
     database: DatabaseInstance | DatabaseCluster;
@@ -21,12 +22,20 @@ export class DatabaseMigrationConstruct extends Construct {
         super(scope, id);
 
         // Create the migration Lambda function
-        const migrationFunction = new Function(this, 'MigrationFunction', {
-            runtime: Runtime.NODEJS_18_X,
+        const migrationFunction = new NodejsFunction(this, 'MigrationFunction', {
+            entry: path.join(__dirname, '../../lambda/migration-handler.ts'),
+            runtime: Runtime.NODEJS_20_X,
             architecture: Architecture.ARM_64,
-            handler: 'index.handler',
-            code: Code.fromInline(this.getMigrationCode()),
+            memorySize: 256,
             timeout: Duration.minutes(10),
+            bundling: {
+                minify: true,
+                sourceMap: true,
+                target: 'node20',
+                format: OutputFormat.CJS,
+                mainFields: ['module', 'main'],
+                externalModules: [],
+            },
             vpc: props.vpc,
             securityGroups: [props.securityGroup],
             environment: {

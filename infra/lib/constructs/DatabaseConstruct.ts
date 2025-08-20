@@ -103,7 +103,7 @@ export class DatabaseConstruct extends Construct {
             this.database = new DatabaseCluster(this, 'DatabaseCluster', {
                 clusterIdentifier: `sprout-cluster-${props.environment}`,
                 engine: DatabaseClusterEngine.auroraPostgres({
-                    version: AuroraPostgresEngineVersion.VER_15_4
+                    version: AuroraPostgresEngineVersion.VER_17_4
                 }),
                 writer: ClusterInstance.serverlessV2('writer', {
                     scaleWithWriter: true,
