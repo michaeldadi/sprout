@@ -1,0 +1,75 @@
+/* Common */
+"back" = "Back";
+"email" = "Email";
+"password" = "Password";
+"or" = "OR";
+"loading" = "Loading...";
+
+/* Authentication */
+"welcome_back" = "Welcome Back";
+"sign_in_subtitle" = "Sign in to continue your journey";
+"enter_email" = "Enter your email";
+"enter_password" = "Enter your password";
+"forgot_password" = "Forgot Password?";
+"sign_in" = "Sign In";
+"dont_have_account" = "Don't have an account?";
+"sign_up" = "Sign Up";
+"continue_with_google" = "Continue with Google";
+"continue_with_apple" = "Continue with Apple";
+
+/* Sign Up */
+"create_account" = "Create your Account";
+"sign_up_subtitle" = "Join Sprout and start growing";
+"first_name" = "First Name";
+"last_name" = "Last Name";
+"first" = "First";
+"last" = "Last";
+"create_password" = "Create password";
+"confirm_password" = "Confirm password";
+"confirm_password_field" = "Confirm Password";
+"terms_prefix" = "By continuing, you agree to our";
+"terms_of_service" = "Terms of Service";
+"and" = "and";
+"privacy_policy" = "Privacy Policy";
+"create_account_button" = "Create Account";
+"already_have_account" = "Already have an account?";
+
+/* Email Verification */
+"verify_email" = "Verify Your Email";
+"verification_sent" = "We've sent a verification code to";
+"verification_code" = "Verification Code";
+"enter_code_placeholder" = "Enter 6-digit code";
+"verify_email_button" = "Verify Email";
+"didnt_receive_code" = "Didn't receive the code? Resend";
+
+/* Forgot Password */
+"check_email" = "Check Your Email";
+"reset_instructions_sent" = "We've sent password reset instructions to";
+"check_spam" = "Didn't receive the email? Check your spam folder or";
+"resend_email" = "Resend Email";
+"forgot_password_title" = "Forgot Password";
+"forgot_password_subtitle" = "Enter your email address and we'll send you instructions to reset your password";
+"send_reset_email" = "Send Reset Email";
+"remember_password" = "Remember your password?";
+
+/* Error Messages */
+"error_enter_email" = "Please enter your email";
+"error_enter_password" = "Please enter your password";
+"error_enter_first_name" = "Please enter your first name";
+"error_enter_last_name" = "Please enter your last name";
+"error_passwords_dont_match" = "Passwords don't match";
+"error_weak_password" = "Password must be at least 8 characters";
+"error_invalid_email" = "Please enter a valid email address";
+"error_enter_verification_code" = "Please enter a 6-digit verification code";
+
+/* Success Messages */
+"login_successful" = "Login successful! Welcome back.";
+"email_verified" = "Email verified! You can now sign in.";
+"reset_email_sent" = "Password reset email sent!";
+"verification_code_resent" = "Verification code resent to %@";
+"google_signin_successful" = "Google Sign In successful!";
+
+/* Generic Messages */
+"signin_failed" = "Sign in failed. Please try again.";
+"google_signin_failed" = "Google Sign In failed";
+"reset_email_sent_again" = "Reset email sent again";

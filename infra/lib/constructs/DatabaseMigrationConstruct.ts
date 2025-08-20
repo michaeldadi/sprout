@@ -54,7 +54,7 @@ export class DatabaseMigrationConstruct extends Construct {
             logRetention: 14
         });
 
-        // Create custom resource that triggers the migration
+        // Create a custom resource that triggers the migration
         new CustomResource(this, 'MigrationResource', {
             serviceToken: provider.serviceToken,
             properties: {
