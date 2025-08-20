@@ -108,6 +108,7 @@
 		14B44E962E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				LaunchScreen.storyboard,
 				Secrets.swift,
 			);
 			target = 141705DE2E505702004229DD /* SproutTests */;
@@ -115,6 +116,7 @@
 		14B44E972E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				LaunchScreen.storyboard,
 				Secrets.swift,
 			);
 			target = 141705E82E505702004229DD /* SproutUITests */;
