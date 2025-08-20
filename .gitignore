@@ -5,6 +5,7 @@
 
 # Node.js dependencies
 node_modules/
+.yarn/install-state.gz
 
 # Environment files
 .env.*
