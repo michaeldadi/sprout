@@ -117,7 +117,7 @@ export class DatabaseConstruct extends Construct {
                 subnetGroup,
                 backup: {
                     retention: isProduction ?
-                        Duration.days(60) :
+                        Duration.days(28) :
                         Duration.days(14),
                     preferredWindow: '03:00-04:00'
                 },
@@ -149,7 +149,7 @@ export class DatabaseConstruct extends Construct {
                 allocatedStorage: 20,
                 maxAllocatedStorage: props.environment === 'dev' ? 50 : 200,
                 backupRetention: isProduction ?
-                    Duration.days(30) :
+                    Duration.days(28) :
                     Duration.days(14),
                 preferredBackupWindow: '03:00-04:00',
                 preferredMaintenanceWindow: 'sun:04:00-sun:05:00',
@@ -166,7 +166,7 @@ export class DatabaseConstruct extends Construct {
 
         // Outputs
         new CfnOutput(this, 'DatabaseEndpoint', {
-            value: this.database instanceof DatabaseCluster 
+            value: this.database instanceof DatabaseCluster
                 ? this.database.clusterEndpoint.hostname
                 : this.database.instanceEndpoint.hostname,
             description: `Database endpoint for ${props.environment}`
