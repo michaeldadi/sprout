@@ -270,7 +270,7 @@ class AuthService: ObservableObject {
         defer { isLoading = false }
         
         // Create identity token for Cognito federated authentication
-        let authInput = InitiateAuthInput(
+        _ = InitiateAuthInput(
             authFlow: .userPasswordAuth,
             authParameters: [
                 "USERNAME": "apple_\(UUID().uuidString)",
@@ -294,6 +294,12 @@ class AuthService: ObservableObject {
             
         } catch {
             print("Apple Sign In error: \(error)")
+          
+            // Check if a user cancelled Apple sign-in
+            if let authError = error as? ASAuthorizationError, authError.code == .canceled {
+                print("Apple Sign In canceled by user")
+                return
+            }
             throw AuthError.signInFailed("Apple Sign In failed: \(error.localizedDescription)")
         }
     }
@@ -314,7 +320,7 @@ class AuthService: ObservableObject {
         print("Apple user sign up successful: \(response)")
         
         // Auto-confirm the user since Apple has already verified the email
-        let confirmInput = AdminConfirmSignUpInput(
+        _ = AdminConfirmSignUpInput(
             userPoolId: config.userPoolId,
             username: email
         )

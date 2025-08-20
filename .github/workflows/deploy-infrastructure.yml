@@ -1,0 +1,117 @@
+name: Deploy AWS Resources to Production
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/**'
+      - 'services/**'
+      - '.github/workflows/deploy-infrastructure.yml'
+
+jobs:
+  deploy-production:
+    name: Deploy CDK Infrastructure to Production
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: |
+          infra/package.json
+          services/package.json
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+    - name: Install CDK CLI
+      run: npm install -g aws-cdk@latest
+
+    - name: Install infrastructure dependencies
+      run: |
+        cd infra
+        npm ci
+
+    - name: Install services dependencies
+      run: |
+        cd services
+        npm ci
+
+    - name: Build services
+      run: |
+        cd services
+        npm run build
+
+    - name: Build CDK infrastructure
+      run: |
+        cd infra
+        npm run build
+
+    - name: CDK Bootstrap (if needed)
+      run: |
+        cd infra
+        cdk bootstrap
+      env:
+        CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+        CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+
+    - name: CDK Synth
+      run: |
+        cd infra
+        cdk synth --context environment=prod
+
+    - name: CDK Deploy to Production
+      run: |
+        cd infra
+        cdk deploy --context environment=prod --require-approval never --all
+      env:
+        # Environment-specific variables
+        ENVIRONMENT: prod
+        CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
+        CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+        
+        # App-specific environment variables
+        COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID_PROD }}
+        COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.COGNITO_USER_POOL_CLIENT_ID_PROD }}
+        API_DOMAIN_NAME: ${{ secrets.API_DOMAIN_NAME_PROD }}
+        
+        # Database and storage
+        DB_NAME: ${{ secrets.DB_NAME_PROD }}
+        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME_PROD }}
+
+    - name: Upload CDK outputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: cdk-outputs-prod
+        path: |
+          infra/cdk.out/
+          infra/cdk.json
+        retention-days: 30
+
+    - name: Post-deployment verification
+      run: |
+        echo "🚀 Production deployment completed successfully!"
+        echo "Environment: prod"
+        echo "Commit: ${{ github.sha }}"
+        echo "Deployed by: ${{ github.actor }}"
+        
+        # Optional: Add health check or smoke tests here
+        # curl -f https://api.yourdomain.com/health || exit 1
+
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Production deployment failed!"
+        echo "Check the logs above for details."
+        # Optional: Send notification to Slack, Discord, etc.
+        # curl -X POST -H 'Content-type: application/json' --data '{"text":"Production deployment failed for Sprout"}' ${{ secrets.SLACK_WEBHOOK_URL }}
