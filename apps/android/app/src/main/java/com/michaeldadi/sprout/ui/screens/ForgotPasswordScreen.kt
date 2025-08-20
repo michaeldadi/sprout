@@ -120,7 +120,8 @@ fun ForgotPasswordScreen(
                             text = "←",
                             color = Color.White,
                             fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.offset(y = (-3).dp)
                         )
                         Text(
                             text = "Back",

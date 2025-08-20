@@ -9,13 +9,13 @@ object AppConfig {
     const val awsRegion = "us-east-1" // TODO: Update with actual values from CDK deployment
     const val cognitoUserPoolId = "us-east-1_XXXXXXXXX" // TODO: Update with actual values from CDK deployment
     const val cognitoClientId = "XXXXXXXXXXXXXXXXXXXXXXXXXX" // TODO: Update with actual values from CDK deployment
-    
+
     // Google Sign In Configuration
     const val googleSignInClientId = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com" // TODO: Update with actual Google client ID
-    
+
     // API Configuration
     const val apiBaseUrl = "https://api.sprout.com" // TODO: Update with actual API base URL
-    
+
     // App Configuration
     const val appName = "Sprout"
     const val supportEmail = "support@sprout.com"

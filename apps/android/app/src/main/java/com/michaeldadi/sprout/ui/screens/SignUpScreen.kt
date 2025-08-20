@@ -2,7 +2,6 @@ package com.michaeldadi.sprout.ui.screens
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -447,8 +446,9 @@ private fun SignUpForm(
                     Text(
                         text = "→",
                         color = Color(0xFF30A030),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.offset(y = (-3).dp)
                     )
                 }
             }

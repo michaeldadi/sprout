@@ -307,8 +307,9 @@ private fun LoginForm(
                     Text(
                         text = "→",
                         color = Color(0xFF30A030),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.offset(y = (-4).dp)
                     )
                 }
             }
