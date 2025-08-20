@@ -12,10 +12,13 @@
     "build:esbuild": "esbuild --bundle --platform=node --target=node14 --outfile=dist/index.js src/index.ts",
     "watch:esbuild": "esbuild --bundle --platform=node --target=node14 --outfile=dist/index.js src/index.ts --watch",
     "deploy:esbuild": "cdk deploy --app \"node dist/index.js\"",
-    "destroy:esbuild": "cdk destroy --app \"node dist/index.js\""
+    "destroy:esbuild": "cdk destroy --app \"node dist/index.js\"",
+    "migrate:dev": "npx ts-node scripts/run-migration.ts --env dev",
+    "migrate:prod": "npx ts-node scripts/run-migration.ts --env prod"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
     "@types/source-map-support": "^0",
     "aws-cdk-lib": "^2.211.0",
     "constructs": "^10.4.2",
@@ -25,6 +28,8 @@
   },
   "type": "commonjs",
   "dependencies": {
-    "esbuild": "^0.25.9"
+    "@aws-sdk/client-secrets-manager": "^3.651.1",
+    "esbuild": "^0.25.9",
+    "pg": "^8.12.0"
   }
 }

@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { AuthConstruct } from './constructs/AuthConstruct';
 import { StorageConstruct } from './constructs/StorageConstruct';
 import { DatabaseConstruct } from './constructs/DatabaseConstruct';
+import { DatabaseMigrationConstruct } from './constructs/DatabaseMigrationConstruct';
 import { ApiConstruct } from './constructs/ApiConstruct';
 
 export interface SproutStackProps extends StackProps {
@@ -20,6 +21,15 @@ export class SproutStack extends Stack {
         const database = new DatabaseConstruct(this, 'Database', {
             environment: props.environment,
             useCluster: props.environment === 'prod' // Use Aurora cluster for prod, single instance for dev
+        });
+
+        // Run database migrations
+        new DatabaseMigrationConstruct(this, 'DatabaseMigration', {
+            database: database.database,
+            credentials: database.credentials,
+            vpc: database.vpc,
+            securityGroup: database.securityGroup,
+            environment: props.environment
         });
         
         const api = new ApiConstruct(this, 'Api', {
