@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -39,7 +38,6 @@ import com.michaeldadi.sprout.services.AppleSignInService
 import com.michaeldadi.sprout.services.AppleSignInResult
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
-import kotlinx.coroutines.launch
 import androidx.activity.ComponentActivity
 
 /**
@@ -54,17 +52,119 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
     val toastState = rememberToastState()
 
     // State
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
+    var shouldTriggerLogin by remember { mutableStateOf(false) }
+    var shouldTriggerGoogleLogin by remember { mutableStateOf(false) }
+    var shouldTriggerAppleLogin by remember { mutableStateOf(false) }
+
+    val textLoginFailure = stringResource(R.string.login_failed)
+
+    // Handle login attempts via LaunchedEffect
+    LaunchedEffect(shouldTriggerLogin) {
+        if (shouldTriggerLogin) {
+            try {
+                authService.signIn(email, password)
+                // Success is handled by isAuthenticated state change
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textLoginFailure)
+            } finally {
+                shouldTriggerLogin = false
+            }
+        }
+    }
+
+    val textGoogleSignInFailure = stringResource(R.string.login_failed_google)
+
+    // Handle Google login attempts
+    LaunchedEffect(shouldTriggerGoogleLogin) {
+        if (shouldTriggerGoogleLogin) {
+            try {
+                val activity = context as? ComponentActivity
+                if (activity != null) {
+                    val googleSignInService = GoogleSignInService(context, activity)
+                    when (val result = googleSignInService.signIn()) {
+                        is GoogleSignInResult.Success -> {
+                            authService.signInWithGoogle(
+                                idToken = result.idToken,
+                                email = result.email,
+                                fullName = result.displayName
+                            )
+                            // Success message is handled by LaunchedEffect
+                        }
+                        is GoogleSignInResult.Cancelled -> {
+                            ToastManager.showInfo(context, "Sign in cancelled")
+                        }
+                        is GoogleSignInResult.Error -> {
+                            ToastManager.showError(context, result.message)
+                        }
+                    }
+                } else {
+                    ToastManager.showError(context, "Unable to get activity context")
+                }
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textGoogleSignInFailure)
+            } finally {
+                shouldTriggerGoogleLogin = false
+            }
+        }
+    }
+
+    val textAppleSignInFailure = stringResource(R.string.login_failed_apple)
+
+    // Handle Apple login attempts
+    LaunchedEffect(shouldTriggerAppleLogin) {
+        if (shouldTriggerAppleLogin) {
+            try {
+                val activity = context as? ComponentActivity
+                if (activity != null) {
+                    val appleSignInService = AppleSignInService(context, activity)
+                    when (val result = appleSignInService.signIn()) {
+                        is AppleSignInResult.Success -> {
+                            authService.signInWithApple(
+                                idToken = result.idToken,
+                                email = result.email,
+                                fullName = result.fullName
+                            )
+                            // Success message is handled by LaunchedEffect
+                        }
+                        is AppleSignInResult.Cancelled -> {
+                            ToastManager.showInfo(context, "Sign in cancelled")
+                        }
+                        is AppleSignInResult.Error -> {
+                            ToastManager.showError(context, result.message)
+                        }
+                    }
+                } else {
+                    ToastManager.showError(context, "Unable to get activity context")
+                }
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textAppleSignInFailure)
+            } finally {
+                shouldTriggerAppleLogin = false
+            }
+        }
+    }
 
     // Auth state
     val isLoading by authService.isLoading.collectAsState()
     val isAuthenticated by authService.isAuthenticated.collectAsState()
+
+    val textLoginSuccess = stringResource(R.string.login_success)
+
+    // Handle navigation based on auth state changes - outside of coroutine scope
+    LaunchedEffect(isAuthenticated) {
+        if (isAuthenticated) {
+            // Show success message and clear focus when authenticated
+            ToastManager.showSuccess(context, textLoginSuccess)
+            focusManager.clearFocus()
+            // Navigation is handled by parent component observing auth state
+        }
+    }
 
     // Animation
     val infiniteTransition = rememberInfiniteTransition(label = "background")
@@ -126,21 +226,12 @@ fun LoginScreen(
                 onPasswordVisibilityToggle = { isPasswordVisible = !isPasswordVisible },
                 onForgotPassword = onNavigateToForgotPassword,
                 onLogin = {
-                    coroutineScope.launch {
-                        try {
-                            authService.signIn(email, password)
-                            ToastManager.showSuccess(context, "Login successful! Welcome back.")
-                            focusManager.clearFocus()
-                        } catch (e: Exception) {
-                            focusManager.clearFocus()
-                            ToastManager.showError(context, e.message ?: "Login failed")
-                        }
-                    }
+                    shouldTriggerLogin = true
                 },
                 isLoading = isLoading,
                 focusManager = focusManager,
-                coroutineScope = coroutineScope,
-                authService = authService
+                onTriggerGoogleLogin = { shouldTriggerGoogleLogin = true },
+                onTriggerAppleLogin = { shouldTriggerAppleLogin = true }
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -192,7 +283,7 @@ private fun LogoSection() {
 
         // Welcome Text
         Text(
-            text = "Welcome Back",
+            text = stringResource(R.string.welcome_back),
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -201,7 +292,7 @@ private fun LogoSection() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Sign in to continue your journey",
+            text = stringResource(R.string.login_continue_journey),
             fontSize = 16.sp,
             color = Color.White.copy(alpha = 0.8f)
         )
@@ -221,8 +312,8 @@ private fun LoginForm(
     onLogin: () -> Unit,
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
-    coroutineScope: kotlinx.coroutines.CoroutineScope,
-    authService: AuthService
+    onTriggerGoogleLogin: () -> Unit,
+    onTriggerAppleLogin: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -231,10 +322,10 @@ private fun LoginForm(
     ) {
         // Email Field
         CustomTextField(
-            title = "Email",
+            title = stringResource(R.string.email),
             value = email,
             onValueChange = onEmailChange,
-            placeholder = "Enter your email",
+            placeholder = stringResource(R.string.enter_your_email),
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
@@ -246,7 +337,7 @@ private fun LoginForm(
             title = "Password",
             value = password,
             onValueChange = onPasswordChange,
-            placeholder = "Enter your password",
+            placeholder = stringResource(R.string.enter_your_password),
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
             onImeAction = { onLogin() },
@@ -263,7 +354,7 @@ private fun LoginForm(
         ) {
             TextButton(onClick = onForgotPassword) {
                 Text(
-                    text = "Forgot Password?",
+                    text = stringResource(R.string.forgot_password),
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
@@ -271,15 +362,18 @@ private fun LoginForm(
             }
         }
 
+        val textEnterEmail = stringResource(R.string.enter_your_email)
+        val textEnterPassword = stringResource(R.string.enter_your_password)
+
         // Sign In Button
         Button(
             onClick = {
                 if (email.isBlank()) {
-                    ToastManager.showError(context, "Please enter your email")
+                    ToastManager.showError(context, textEnterEmail)
                     return@Button
                 }
                 if (password.isBlank()) {
-                    ToastManager.showError(context, "Please enter your password")
+                    ToastManager.showError(context, textEnterPassword)
                     return@Button
                 }
                 onLogin()
@@ -306,7 +400,7 @@ private fun LoginForm(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Sign In",
+                        text = stringResource(R.string.text_sign_in),
                         color = Color(0xFF30A030),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
@@ -335,7 +429,7 @@ private fun LoginForm(
             color = Color.White.copy(alpha = 0.3f)
           )
           Text(
-                text = "OR",
+                text = stringResource(R.string.or_auth_divider_label),
                 modifier = Modifier.padding(horizontal = 10.dp),
                 color = Color.White.copy(alpha = 0.6f),
                 fontSize = 14.sp,
@@ -357,36 +451,7 @@ private fun LoginForm(
               backgroundColor = Color.White,
               textColor = Color.Black,
               icon = "google",
-              onClick = {
-                coroutineScope.launch {
-                  try {
-                    val activity = context as? ComponentActivity
-                    if (activity != null) {
-                      val googleSignInService = GoogleSignInService(context, activity)
-                      when (val result = googleSignInService.signIn()) {
-                        is GoogleSignInResult.Success -> {
-                          authService.signInWithGoogle(
-                            idToken = result.idToken,
-                            email = result.email,
-                            fullName = result.displayName
-                          )
-                          ToastManager.showSuccess(context, "Signed in successfully!")
-                        }
-                        is GoogleSignInResult.Cancelled -> {
-                          ToastManager.showInfo(context, "Sign in cancelled")
-                        }
-                        is GoogleSignInResult.Error -> {
-                          ToastManager.showError(context, result.message)
-                        }
-                      }
-                    } else {
-                      ToastManager.showError(context, "Unable to get activity context")
-                    }
-                  } catch (e: Exception) {
-                    ToastManager.showError(context, e.message ?: "Google Sign In failed")
-                  }
-                }
-              }
+              onClick = onTriggerGoogleLogin
             )
 
             SocialLoginButton(
@@ -394,36 +459,7 @@ private fun LoginForm(
                 backgroundColor = Color.Black,
                 textColor = Color.White,
                 icon = "apple",
-                onClick = {
-                    coroutineScope.launch {
-                        try {
-                            val activity = context as? ComponentActivity
-                            if (activity != null) {
-                                val appleSignInService = AppleSignInService(context, activity)
-                                when (val result = appleSignInService.signIn()) {
-                                    is AppleSignInResult.Success -> {
-                                        authService.signInWithApple(
-                                            idToken = result.idToken,
-                                            email = result.email,
-                                            fullName = result.fullName
-                                        )
-                                        ToastManager.showSuccess(context, "Signed in successfully!")
-                                    }
-                                    is AppleSignInResult.Cancelled -> {
-                                        ToastManager.showInfo(context, "Sign in cancelled")
-                                    }
-                                    is AppleSignInResult.Error -> {
-                                        ToastManager.showError(context, result.message)
-                                    }
-                                }
-                            } else {
-                                ToastManager.showError(context, "Unable to get activity context")
-                            }
-                        } catch (e: Exception) {
-                            ToastManager.showError(context, e.message ?: "Apple Sign In failed")
-                        }
-                    }
-                }
+                onClick = onTriggerAppleLogin
             )
         }
     }

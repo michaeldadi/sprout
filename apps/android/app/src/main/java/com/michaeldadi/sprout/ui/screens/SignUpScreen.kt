@@ -63,7 +63,6 @@ fun SignUpScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
 
     // State
     var firstName by remember { mutableStateOf("") }
@@ -73,9 +72,130 @@ fun SignUpScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
+    var shouldTriggerSignUp by remember { mutableStateOf(false) }
+    var shouldTriggerGoogleSignUp by remember { mutableStateOf(false) }
+    var shouldTriggerAppleSignUp by remember { mutableStateOf(false) }
+
+    // Track sign up success for navigation
+    var signUpSuccessEmail by remember { mutableStateOf<String?>(null) }
+    var socialSignUpSuccessEmail by remember { mutableStateOf<String?>(null) }
+
+    val textSignUpFailure = stringResource(R.string.sign_up_failed)
+
+    // Handle sign up attempts via LaunchedEffect
+    LaunchedEffect(shouldTriggerSignUp) {
+        if (shouldTriggerSignUp) {
+            try {
+                authService.signUp(email, password)
+                // Set success state to trigger navigation via LaunchedEffect
+                signUpSuccessEmail = email
+            } catch (e: Exception) {
+                // Only show error immediately, success is handled by LaunchedEffect
+                ToastManager.showError(context, e.message ?: textSignUpFailure)
+            } finally {
+                shouldTriggerSignUp = false
+            }
+        }
+    }
+
+    val textGoogleSignUpFailure = stringResource(R.string.sign_up_failed_google)
+
+    // Handle Google sign up attempts
+    LaunchedEffect(shouldTriggerGoogleSignUp) {
+        if (shouldTriggerGoogleSignUp) {
+            try {
+                val activity = context as? ComponentActivity
+                if (activity != null) {
+                    val googleSignInService = GoogleSignInService(context, activity)
+                    when (val result = googleSignInService.signIn()) {
+                        is GoogleSignInResult.Success -> {
+                            authService.signInWithGoogle(
+                                idToken = result.idToken,
+                                email = result.email,
+                                fullName = result.displayName
+                            )
+                            // Trigger state-based navigation
+                            socialSignUpSuccessEmail = result.email
+                        }
+                        is GoogleSignInResult.Cancelled -> {
+                            ToastManager.showInfo(context, "Sign up cancelled")
+                        }
+                        is GoogleSignInResult.Error -> {
+                            ToastManager.showError(context, result.message)
+                        }
+                    }
+                } else {
+                    ToastManager.showError(context, "Unable to get activity context")
+                }
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textGoogleSignUpFailure)
+            } finally {
+                shouldTriggerGoogleSignUp = false
+            }
+        }
+    }
+
+    val textAppleSignUpFailure = stringResource(R.string.sign_up_failed_apple)
+
+    // Handle Apple sign up attempts
+    LaunchedEffect(shouldTriggerAppleSignUp) {
+        if (shouldTriggerAppleSignUp) {
+            try {
+                val activity = context as? ComponentActivity
+                if (activity != null) {
+                    val appleSignInService = AppleSignInService(context, activity)
+                    when (val result = appleSignInService.signIn()) {
+                        is AppleSignInResult.Success -> {
+                            authService.signInWithApple(
+                                idToken = result.idToken,
+                                email = result.email,
+                                fullName = result.fullName
+                            )
+                            // Trigger state-based navigation
+                            result.email?.let { socialSignUpSuccessEmail = it }
+                        }
+                        is AppleSignInResult.Cancelled -> {
+                            ToastManager.showInfo(context, "Sign up cancelled")
+                        }
+                        is AppleSignInResult.Error -> {
+                            ToastManager.showError(context, result.message)
+                        }
+                    }
+                } else {
+                    ToastManager.showError(context, "Unable to get activity context")
+                }
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textAppleSignUpFailure)
+            } finally {
+                shouldTriggerAppleSignUp = false
+            }
+        }
+    }
+
+    val textAccountCreatedNextStep = stringResource(R.string.account_created_what_next)
 
     // Auth state
     val isLoading by authService.isLoading.collectAsState()
+
+    // Handle navigation when sign up is successful
+    LaunchedEffect(signUpSuccessEmail) {
+        signUpSuccessEmail?.let { email ->
+            ToastManager.showSuccess(context, textAccountCreatedNextStep)
+            onNavigateToVerification(email)
+            signUpSuccessEmail = null // Reset to prevent re-navigation
+        }
+    }
+
+    val textAccountCreatedSocialProviderNextStep = stringResource(R.string.account_created_social_provider_what_next)
+
+    // Handle navigation when social sign up is successful
+    LaunchedEffect(socialSignUpSuccessEmail) {
+        socialSignUpSuccessEmail?.let { email ->
+            ToastManager.showSuccess(context, textAccountCreatedSocialProviderNextStep)
+            onNavigateToVerification(email)
+            socialSignUpSuccessEmail = null // Reset to prevent re-navigation
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -133,22 +253,13 @@ fun SignUpScreen(
                 isConfirmPasswordVisible = isConfirmPasswordVisible,
                 onConfirmPasswordVisibilityToggle = { isConfirmPasswordVisible = !isConfirmPasswordVisible },
                 onSignUp = {
-                    coroutineScope.launch {
-                        try {
-                            authService.signUp(email, password)
-                            ToastManager.showSuccess(context, "Account created! Please check your email for verification code.")
-                            onNavigateToVerification(email)
-                        } catch (e: Exception) {
-                            ToastManager.showError(context, e.message ?: "Sign up failed")
-                        }
-                    }
+                    shouldTriggerSignUp = true
                 },
                 isLoading = isLoading,
                 focusManager = focusManager,
                 context = context,
-                coroutineScope = coroutineScope,
-                authService = authService,
-                onNavigateToVerification = onNavigateToVerification
+                onTriggerGoogleSignUp = { shouldTriggerGoogleSignUp = true },
+                onTriggerAppleSignUp = { shouldTriggerAppleSignUp = true }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -200,7 +311,7 @@ private fun SignUpLogoSection() {
 
         // Welcome Text
         Text(
-            text = "Create your Account",
+            text = stringResource(R.string.create_your_account),
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
@@ -209,7 +320,7 @@ private fun SignUpLogoSection() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Join Sprout and start growing",
+            text = stringResource(R.string.join_start_growing),
             fontSize = 14.sp,
             color = Color.White.copy(alpha = 0.8f)
         )
@@ -237,9 +348,8 @@ private fun SignUpForm(
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
     context: Context,
-    coroutineScope: kotlinx.coroutines.CoroutineScope,
-    authService: AuthService,
-    onNavigateToVerification: (String) -> Unit
+    onTriggerGoogleSignUp: () -> Unit,
+    onTriggerAppleSignUp: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -254,7 +364,7 @@ private fun SignUpForm(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
-                    text = "First Name",
+                    text = stringResource(R.string.first_name),
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -265,7 +375,7 @@ private fun SignUpForm(
                     onValueChange = onFirstNameChange,
                     placeholder = {
                         Text(
-                            text = "First",
+                            text = stringResource(R.string.label_first_name_input),
                             color = Color.White.copy(alpha = 0.5f)
                         )
                     },
@@ -303,7 +413,7 @@ private fun SignUpForm(
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(
-                    text = "Last Name",
+                    text = stringResource(R.string.last_name),
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -314,7 +424,7 @@ private fun SignUpForm(
                     onValueChange = onLastNameChange,
                     placeholder = {
                         Text(
-                            text = "Last",
+                            text = stringResource(R.string.label_last_name_input),
                             color = Color.White.copy(alpha = 0.5f)
                         )
                     },
@@ -352,7 +462,7 @@ private fun SignUpForm(
             title = "Email",
             value = email,
             onValueChange = onEmailChange,
-            placeholder = "Enter your email",
+            placeholder = stringResource(R.string.enter_your_email),
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
@@ -364,7 +474,7 @@ private fun SignUpForm(
             title = "Password",
             value = password,
             onValueChange = onPasswordChange,
-            placeholder = "Create password",
+            placeholder = stringResource(R.string.create_password),
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Next,
             onImeAction = { focusManager.moveFocus(FocusDirection.Down) },
@@ -376,10 +486,10 @@ private fun SignUpForm(
 
         // Confirm Password Field
         SignUpTextField(
-            title = "Confirm Password",
+            title = stringResource(R.string.confirm_password),
             value = confirmPassword,
             onValueChange = onConfirmPasswordChange,
-            placeholder = "Confirm password",
+            placeholder = stringResource(R.string.confirm_password),
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
             onImeAction = { onSignUp() },
@@ -392,35 +502,43 @@ private fun SignUpForm(
         // Terms and Conditions
         TermsAndConditions(context = context)
 
+        val textPromptEnterFirstName = stringResource(R.string.toast_prompt_enter_first_name)
+        val textPromptEnterLastName = stringResource(R.string.toast_prompt_enter_last_name)
+        val textPromptEnterEmail = stringResource(R.string.toast_prompt_enter_email)
+        val textPromptEnterValidEmail = stringResource(R.string.toast_prompt_enter_valid_email)
+        val textPromptEnterPassword = stringResource(R.string.toast_prompt_enter_password)
+        val textPromptPasswordMinLength = stringResource(R.string.toast_prompt_password_min_length)
+        val textPromptPasswordsNoMatch = stringResource(R.string.toast_prompt_passwords_not_match)
+
         // Sign Up Button
         Button(
             onClick = {
                 if (firstName.isBlank()) {
-                    ToastManager.showError(context, "Please enter your first name")
+                    ToastManager.showError(context, textPromptEnterFirstName)
                     return@Button
                 }
                 if (lastName.isBlank()) {
-                    ToastManager.showError(context, "Please enter your last name")
+                    ToastManager.showError(context, textPromptEnterLastName)
                     return@Button
                 }
                 if (email.isBlank()) {
-                    ToastManager.showError(context, "Please enter your email")
+                    ToastManager.showError(context, textPromptEnterEmail)
                     return@Button
                 }
                 if (!isValidEmail(email)) {
-                    ToastManager.showError(context, "Please enter a valid email address")
+                    ToastManager.showError(context, textPromptEnterValidEmail)
                     return@Button
                 }
                 if (password.isBlank()) {
-                    ToastManager.showError(context, "Please create a password")
+                    ToastManager.showError(context, textPromptEnterPassword)
                     return@Button
                 }
                 if (password.length < 8) {
-                    ToastManager.showError(context, "Password must be at least 8 characters")
+                    ToastManager.showError(context, textPromptPasswordMinLength)
                     return@Button
                 }
                 if (password != confirmPassword) {
-                    ToastManager.showError(context, "Passwords do not match")
+                    ToastManager.showError(context, textPromptPasswordsNoMatch)
                     return@Button
                 }
 
@@ -449,7 +567,7 @@ private fun SignUpForm(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = "Create Account",
+                        text = stringResource(R.string.create_account),
                         color = Color(0xFF30A030),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
@@ -478,7 +596,7 @@ private fun SignUpForm(
             color = Color.White.copy(alpha = 0.3f)
           )
           Text(
-                text = "OR",
+                text = stringResource(R.string.or_auth_divider_label),
                 modifier = Modifier.padding(horizontal = 8.dp),
                 color = Color.White.copy(alpha = 0.6f),
                 fontSize = 12.sp,
@@ -500,37 +618,7 @@ private fun SignUpForm(
               backgroundColor = Color.White,
               textColor = Color.Black,
               icon = "google",
-              onClick = {
-                coroutineScope.launch {
-                  try {
-                    val activity = context as? ComponentActivity
-                    if (activity != null) {
-                      val googleSignInService = GoogleSignInService(context, activity)
-                      when (val result = googleSignInService.signIn()) {
-                        is GoogleSignInResult.Success -> {
-                          authService.signInWithGoogle(
-                            idToken = result.idToken,
-                            email = result.email,
-                            fullName = result.displayName
-                          )
-                          ToastManager.showSuccess(context, "Signed up successfully! Please check your email for verification.")
-                          onNavigateToVerification(result.email)
-                        }
-                        is GoogleSignInResult.Cancelled -> {
-                          ToastManager.showInfo(context, "Sign up cancelled")
-                        }
-                        is GoogleSignInResult.Error -> {
-                          ToastManager.showError(context, result.message)
-                        }
-                      }
-                    } else {
-                      ToastManager.showError(context, "Unable to get activity context")
-                    }
-                  } catch (e: Exception) {
-                    ToastManager.showError(context, e.message ?: "Google Sign Up failed")
-                  }
-                }
-              }
+              onClick = onTriggerGoogleSignUp
             )
 
             SocialLoginButton(
@@ -538,37 +626,7 @@ private fun SignUpForm(
                 backgroundColor = Color.Black,
                 textColor = Color.White,
                 icon = "apple",
-                onClick = {
-                    coroutineScope.launch {
-                        try {
-                            val activity = context as? ComponentActivity
-                            if (activity != null) {
-                                val appleSignInService = AppleSignInService(context, activity)
-                                when (val result = appleSignInService.signIn()) {
-                                    is AppleSignInResult.Success -> {
-                                        authService.signInWithApple(
-                                            idToken = result.idToken,
-                                            email = result.email,
-                                            fullName = result.fullName
-                                        )
-                                        ToastManager.showSuccess(context, "Signed up successfully! Please check your email for verification.")
-                                        result.email?.let { onNavigateToVerification(it) }
-                                    }
-                                    is AppleSignInResult.Cancelled -> {
-                                        ToastManager.showInfo(context, "Sign up cancelled")
-                                    }
-                                    is AppleSignInResult.Error -> {
-                                        ToastManager.showError(context, result.message)
-                                    }
-                                }
-                            } else {
-                                ToastManager.showError(context, "Unable to get activity context")
-                            }
-                        } catch (e: Exception) {
-                            ToastManager.showError(context, e.message ?: "Apple Sign Up failed")
-                        }
-                    }
-                }
+                onClick = onTriggerAppleSignUp
             )
         }
     }
@@ -664,7 +722,7 @@ private fun TermsAndConditions(context: Context) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "By continuing, you agree to our",
+            text = stringResource(R.string.text_terms_privacy_agree_continue),
             fontSize = 12.sp,
             color = Color.White.copy(alpha = 0.8f),
             textAlign = TextAlign.Center
@@ -682,12 +740,12 @@ private fun TermsAndConditions(context: Context) {
                         fontWeight = FontWeight.Medium,
                         textDecoration = TextDecoration.Underline
                     )) {
-                        append("Terms of Service")
+                        append(stringResource(R.string.terms_of_service))
                     }
                 }
 
                 withStyle(style = SpanStyle(color = Color.White.copy(alpha = 0.8f))) {
-                    append(" and ")
+                    append(" ${stringResource(R.string.terms_privacy_spaced_and)} ")
                 }
 
                 val privacyLink = LinkAnnotation.Url(AppConfig.privacyUrl)
@@ -697,7 +755,7 @@ private fun TermsAndConditions(context: Context) {
                         fontWeight = FontWeight.Medium,
                         textDecoration = TextDecoration.Underline
                     )) {
-                        append("Privacy Policy")
+                        append(stringResource(R.string.privacy_policy))
                     }
                 }
             }
@@ -717,14 +775,14 @@ private fun LoginLink(onNavigateToLogin: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "Already have an account?",
+            text = stringResource(R.string.already_have_an_account),
             color = Color.White.copy(alpha = 0.7f),
             fontSize = 14.sp
         )
 
         TextButton(onClick = onNavigateToLogin) {
             Text(
-                text = "Sign In",
+                text = stringResource(R.string.text_sign_in),
                 color = Color.White,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold

@@ -42,10 +42,56 @@ fun VerificationScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
 
     // State
     var verificationCode by remember { mutableStateOf("") }
+    var shouldShowSuccessMessage by remember { mutableStateOf(false) }
+    var shouldNavigateOnSuccess by remember { mutableStateOf(false) }
+    var shouldTriggerVerification by remember { mutableStateOf(false) }
+
+    val textVerifyEnterCodeLong = stringResource(R.string.verify_enter_code_long)
+    val textVerificationFailure = stringResource(R.string.verify_failed)
+
+    // Handle verification attempts
+    LaunchedEffect(shouldTriggerVerification) {
+        if (shouldTriggerVerification) {
+            if (verificationCode.length != 6) {
+                ToastManager.showError(context, textVerifyEnterCodeLong)
+                shouldTriggerVerification = false
+                return@LaunchedEffect
+            }
+
+            focusManager.clearFocus()
+
+            try {
+                authService.confirmSignUp(email, verificationCode)
+                // Trigger success message and navigation via state
+                shouldShowSuccessMessage = true
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: textVerificationFailure)
+            } finally {
+                shouldTriggerVerification = false
+            }
+        }
+    }
+
+    val textSuccessEmailVerified = stringResource(R.string.text_email_verified)
+
+    // Handle success message and navigation outside coroutine scope
+    LaunchedEffect(shouldShowSuccessMessage) {
+        if (shouldShowSuccessMessage) {
+            ToastManager.showSuccess(context, textSuccessEmailVerified)
+            shouldNavigateOnSuccess = true
+            shouldShowSuccessMessage = false
+        }
+    }
+
+    LaunchedEffect(shouldNavigateOnSuccess) {
+        if (shouldNavigateOnSuccess) {
+            onVerificationComplete()
+            shouldNavigateOnSuccess = false
+        }
+    }
 
     // Auth state
     val isLoading by authService.isLoading.collectAsState()
@@ -53,15 +99,7 @@ fun VerificationScreen(
     // Auto-submit when 6 digits entered
     LaunchedEffect(verificationCode) {
         if (verificationCode.length == 6) {
-            handleVerification(
-                authService = authService,
-                email = email,
-                verificationCode = verificationCode,
-                context = context,
-                focusManager = focusManager,
-                onSuccess = onVerificationComplete,
-                coroutineScope = coroutineScope
-            )
+            shouldTriggerVerification = true
         }
     }
 
@@ -112,7 +150,7 @@ fun VerificationScreen(
                             modifier = Modifier.offset(y = (-3).dp)
                         )
                         Text(
-                            text = "Back",
+                            text = stringResource(R.string.back),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
@@ -154,7 +192,7 @@ fun VerificationScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Verify Your Email",
+                    text = stringResource(R.string.verify_your_email),
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -162,7 +200,7 @@ fun VerificationScreen(
                 )
 
                 Text(
-                    text = "We've sent a verification code to",
+                    text = stringResource(R.string.verify_code_sent_to),
                     fontSize = 16.sp,
                     color = Color.White.copy(alpha = 0.8f),
                     textAlign = TextAlign.Center
@@ -184,7 +222,7 @@ fun VerificationScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Verification Code",
+                    text = stringResource(R.string.verification_code),
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
@@ -200,7 +238,7 @@ fun VerificationScreen(
                     },
                     placeholder = {
                         Text(
-                            text = "Enter 6-digit code",
+                            text = stringResource(R.string.verify_enter_code),
                             color = Color.White.copy(alpha = 0.5f)
                         )
                     },
@@ -218,15 +256,7 @@ fun VerificationScreen(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             if (verificationCode.length == 6) {
-                                handleVerification(
-                                    authService = authService,
-                                    email = email,
-                                    verificationCode = verificationCode,
-                                    context = context,
-                                    focusManager = focusManager,
-                                    onSuccess = onVerificationComplete,
-                                    coroutineScope = coroutineScope
-                                )
+                                shouldTriggerVerification = true
                             }
                         }
                     ),
@@ -249,15 +279,7 @@ fun VerificationScreen(
             // Verify Button
             Button(
                 onClick = {
-                    handleVerification(
-                        authService = authService,
-                        email = email,
-                        verificationCode = verificationCode,
-                        context = context,
-                        focusManager = focusManager,
-                        onSuccess = onVerificationComplete,
-                        coroutineScope = coroutineScope
-                    )
+                    shouldTriggerVerification = true
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -281,7 +303,7 @@ fun VerificationScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "Verify Email",
+                            text = stringResource(R.string.verify_email),
                             color = Color(0xFF30A030),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
@@ -298,11 +320,13 @@ fun VerificationScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            val textVerificationCodeResent = stringResource(R.string.verify_code_resent_to)
+
             // Resend Code
             TextButton(
                 onClick = {
                     // TODO: Implement resend functionality
-                    ToastManager.showInfo(context, "Verification code resent to $email")
+                    ToastManager.showInfo(context, "$textVerificationCodeResent $email")
                 }
             ) {
                 Text(
@@ -318,29 +342,3 @@ fun VerificationScreen(
     }
 }
 
-private fun handleVerification(
-    authService: AuthService,
-    email: String,
-    verificationCode: String,
-    context: android.content.Context,
-    focusManager: androidx.compose.ui.focus.FocusManager,
-    onSuccess: () -> Unit,
-    coroutineScope: kotlinx.coroutines.CoroutineScope
-) {
-    if (verificationCode.length != 6) {
-        ToastManager.showError(context, "Please enter a 6-digit verification code")
-        return
-    }
-
-    focusManager.clearFocus()
-
-    coroutineScope.launch {
-        try {
-            authService.confirmSignUp(email, verificationCode)
-            ToastManager.showSuccess(context, "Email verified! You can now sign in.")
-            onSuccess()
-        } catch (e: Exception) {
-            ToastManager.showError(context, e.message ?: "Verification failed")
-        }
-    }
-}

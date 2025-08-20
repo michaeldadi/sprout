@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
-import kotlinx.coroutines.launch
+import com.michaeldadi.sprout.R
 import java.util.regex.Pattern
 
 /**
@@ -43,11 +44,64 @@ fun ForgotPasswordScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val coroutineScope = rememberCoroutineScope()
 
     // State
     var email by remember { mutableStateOf("") }
     var isSubmitted by remember { mutableStateOf(false) }
+    var shouldShowSuccessMessage by remember { mutableStateOf(false) }
+    var shouldShowResendMessage by remember { mutableStateOf(false) }
+    var shouldTriggerForgotPassword by remember { mutableStateOf(false) }
+    var shouldTriggerResend by remember { mutableStateOf(false) }
+
+    val failedSendResetEmailMessage = stringResource(R.string.failed_send_reset_email)
+    val successSendResetEmailMessage = stringResource(R.string.success_send_reset_email)
+    val successResendResetEmailMessage = stringResource(R.string.success_resend_reset_email)
+
+    // Handle forgot password attempts
+    LaunchedEffect(shouldTriggerForgotPassword) {
+        if (shouldTriggerForgotPassword) {
+            try {
+                authService.forgotPassword(email)
+                // Trigger success message and state change via state
+                shouldShowSuccessMessage = true
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: failedSendResetEmailMessage)
+            } finally {
+                shouldTriggerForgotPassword = false
+            }
+        }
+    }
+
+    // Handle resend attempts
+    LaunchedEffect(shouldTriggerResend) {
+        if (shouldTriggerResend) {
+            try {
+                authService.forgotPassword(email)
+                // Trigger success message via state
+                shouldShowResendMessage = true
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: failedSendResetEmailMessage)
+            } finally {
+                shouldTriggerResend = false
+            }
+        }
+    }
+
+    // Handle success messages outside coroutine scope
+    LaunchedEffect(shouldShowSuccessMessage) {
+        if (shouldShowSuccessMessage) {
+            ToastManager.showSuccess(context, successSendResetEmailMessage)
+            isSubmitted = true
+            shouldShowSuccessMessage = false
+        }
+    }
+
+    LaunchedEffect(shouldShowResendMessage) {
+        if (shouldShowResendMessage) {
+            ToastManager.showInfo(context, successResendResetEmailMessage)
+            shouldShowResendMessage = false
+        }
+    }
 
     // Auth state
     val isLoading by authService.isLoading.collectAsState()
@@ -124,7 +178,7 @@ fun ForgotPasswordScreen(
                             modifier = Modifier.offset(y = (-3).dp)
                         )
                         Text(
-                            text = "Back",
+                            text = stringResource(R.string.back),
                             color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
@@ -140,42 +194,30 @@ fun ForgotPasswordScreen(
                 SuccessState(
                     email = email,
                     onResendEmail = {
-                        coroutineScope.launch {
-                            try {
-                                authService.forgotPassword(email)
-                                ToastManager.showInfo(context, "Reset email sent again")
-                            } catch (e: Exception) {
-                                ToastManager.showError(context, e.message ?: "Failed to resend email")
-                            }
-                        }
+                        shouldTriggerResend = true
                     },
                     animatedScale = animatedScale
                 )
             } else {
+                val enterEmailText = stringResource(R.string.enter_email_address)
+                val enterValidEmailText = stringResource(R.string.enter_valid_email)
+
                 // Input State
                 InputState(
                     email = email,
                     onEmailChange = { email = it },
                     onSendResetEmail = {
                         if (email.isBlank()) {
-                            ToastManager.showError(context, "Please enter your email address")
+                            ToastManager.showError(context, enterEmailText)
                             return@InputState
                         }
                         if (!isValidEmail(email)) {
-                            ToastManager.showError(context, "Please enter a valid email address")
+                            ToastManager.showError(context, enterValidEmailText)
                             return@InputState
                         }
 
                         focusManager.clearFocus()
-                        coroutineScope.launch {
-                            try {
-                                authService.forgotPassword(email)
-                                ToastManager.showSuccess(context, "Password reset email sent!")
-                                isSubmitted = true
-                            } catch (e: Exception) {
-                                ToastManager.showError(context, e.message ?: "Failed to send reset email")
-                            }
-                        }
+                        shouldTriggerForgotPassword = true
                     },
                     isLoading = isLoading,
                     focusManager = focusManager,
@@ -194,7 +236,7 @@ fun ForgotPasswordScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Remember your password?",
+                    text = stringResource(R.string.remember_password),
                     color = Color.White.copy(alpha = 0.7f),
                     fontSize = 16.sp
                 )
@@ -203,7 +245,7 @@ fun ForgotPasswordScreen(
 
                 TextButton(onClick = onBackPressed) {
                     Text(
-                        text = "Sign In",
+                        text = stringResource(R.string.text_sign_in),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
@@ -259,7 +301,7 @@ private fun InputState(
             }
 
             Text(
-                text = "Forgot Password",
+                text = stringResource(R.string.forgot_password_stmt),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -267,7 +309,7 @@ private fun InputState(
             )
 
             Text(
-                text = "Enter your email address and we'll send you instructions to reset your password",
+                text = stringResource(R.string.password_reset_instructions),
                 fontSize = 16.sp,
                 color = Color.White.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center,
@@ -285,7 +327,7 @@ private fun InputState(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Email",
+                    text = stringResource(R.string.email),
                     color = Color.White.copy(alpha = 0.8f),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
@@ -296,7 +338,7 @@ private fun InputState(
                     onValueChange = onEmailChange,
                     placeholder = {
                         Text(
-                            text = "Enter your email",
+                            text = stringResource(R.string.enter_email_address),
                             color = Color.White.copy(alpha = 0.5f)
                         )
                     },
@@ -354,7 +396,7 @@ private fun InputState(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "Send Reset Email",
+                            text = stringResource(R.string.send_reset_email),
                             color = Color(0xFF30A030),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold
@@ -412,7 +454,7 @@ private fun SuccessState(
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Text(
-                text = "Check Your Email",
+                text = stringResource(R.string.check_your_email),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -420,7 +462,7 @@ private fun SuccessState(
             )
 
             Text(
-                text = "We've sent password reset instructions to",
+                text = stringResource(R.string.password_reset_instructions_sent_to),
                 fontSize = 16.sp,
                 color = Color.White.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center
@@ -442,7 +484,7 @@ private fun SuccessState(
             modifier = Modifier.padding(top = 10.dp)
         ) {
             Text(
-                text = "Didn't receive the email? Check your spam folder or",
+                text = stringResource(R.string.text_password_reset_not_received),
                 fontSize = 14.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center,
@@ -451,7 +493,7 @@ private fun SuccessState(
 
             TextButton(onClick = onResendEmail) {
                 Text(
-                    text = "Resend Email",
+                    text = stringResource(R.string.resend_email),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,
