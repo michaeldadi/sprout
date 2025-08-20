@@ -9,6 +9,7 @@ import {
     DatabaseCluster,
     DatabaseClusterEngine,
     AuroraPostgresEngineVersion,
+    ClusterInstance,
 } from 'aws-cdk-lib/aws-rds';
 import {
   Vpc,
@@ -104,13 +105,16 @@ export class DatabaseConstruct extends Construct {
                 engine: DatabaseClusterEngine.auroraPostgres({
                     version: AuroraPostgresEngineVersion.VER_15_4
                 }),
+                writer: ClusterInstance.serverlessV2('writer', {
+                    scaleWithWriter: true,
+                }),
+                serverlessV2MinCapacity: isProduction ? 1 : 0.5,
+                serverlessV2MaxCapacity: isProduction ? 16 : 4,
                 credentials: Credentials.fromSecret(this.credentials),
                 defaultDatabaseName: process.env.DB_NAME || `sprout_${props.environment}`,
                 vpc: this.vpc,
                 securityGroups: [this.securityGroup],
                 subnetGroup,
-                serverlessV2MinCapacity: isProduction ? 1 : 0.5,
-                serverlessV2MaxCapacity: isProduction ? 16 : 4,
                 backup: {
                     retention: isProduction ?
                         Duration.days(60) :
