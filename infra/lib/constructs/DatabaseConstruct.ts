@@ -159,7 +159,7 @@ export class DatabaseConstruct extends Construct {
                     RemovalPolicy.DESTROY,
                 parameterGroup: ParameterGroup.fromParameterGroupName(
                     this, 'InstanceParameterGroup',
-                    'default.postgres15'
+                    'default.postgres17'
                 )
             });
         }
