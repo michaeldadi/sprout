@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.michaeldadi.sprout"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.foundation)
+
+    // Custom Tabs for Apple Sign In
+    implementation(libs.androidx.browser)
 
   testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

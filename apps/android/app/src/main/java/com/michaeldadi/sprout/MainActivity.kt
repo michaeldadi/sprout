@@ -1,5 +1,6 @@
 package com.michaeldadi.sprout
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.michaeldadi.sprout.navigation.AuthNavigation
+import com.michaeldadi.sprout.services.AppleSignInService
 import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.ui.theme.SproutTheme
 
@@ -19,10 +21,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Handle Apple Sign In callback if this is a redirect
+        handleAppleSignInCallback(intent)
+        
         setContent {
             SproutTheme {
                 SproutApp()
             }
+        }
+    }
+    
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleAppleSignInCallback(intent)
+    }
+    
+    private fun handleAppleSignInCallback(intent: Intent) {
+        val data = intent.data
+        if (data != null && data.scheme == "com.michaeldadi.sprout" && data.host == "auth/apple/callback") {
+            // Handle the Apple Sign In callback
+            val appleService = AppleSignInService(this, this)
+            appleService.handleCallback(intent)
         }
     }
 }

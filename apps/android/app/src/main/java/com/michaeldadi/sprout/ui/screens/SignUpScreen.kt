@@ -40,10 +40,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.michaeldadi.sprout.config.AppConfig
 import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.services.AuthService
+import com.michaeldadi.sprout.services.GoogleSignInService
+import com.michaeldadi.sprout.services.GoogleSignInResult
+import com.michaeldadi.sprout.services.AppleSignInService
+import com.michaeldadi.sprout.services.AppleSignInResult
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import androidx.activity.ComponentActivity
 import androidx.core.net.toUri
 
 /**
@@ -140,7 +145,10 @@ fun SignUpScreen(
                 },
                 isLoading = isLoading,
                 focusManager = focusManager,
-                context = context
+                context = context,
+                coroutineScope = coroutineScope,
+                authService = authService,
+                onNavigateToVerification = onNavigateToVerification
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -228,7 +236,10 @@ private fun SignUpForm(
     onSignUp: () -> Unit,
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
-    context: Context
+    context: Context,
+    coroutineScope: kotlinx.coroutines.CoroutineScope,
+    authService: AuthService,
+    onNavigateToVerification: (String) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -490,8 +501,35 @@ private fun SignUpForm(
               textColor = Color.Black,
               icon = "google",
               onClick = {
-                // TODO: Implement Google Sign In
-                ToastManager.showInfo(context, "Google Sign Up coming soon")
+                coroutineScope.launch {
+                  try {
+                    val activity = context as? ComponentActivity
+                    if (activity != null) {
+                      val googleSignInService = GoogleSignInService(context, activity)
+                      when (val result = googleSignInService.signIn()) {
+                        is GoogleSignInResult.Success -> {
+                          authService.signInWithGoogle(
+                            idToken = result.idToken,
+                            email = result.email,
+                            fullName = result.displayName
+                          )
+                          ToastManager.showSuccess(context, "Signed up successfully! Please check your email for verification.")
+                          onNavigateToVerification(result.email)
+                        }
+                        is GoogleSignInResult.Cancelled -> {
+                          ToastManager.showInfo(context, "Sign up cancelled")
+                        }
+                        is GoogleSignInResult.Error -> {
+                          ToastManager.showError(context, result.message)
+                        }
+                      }
+                    } else {
+                      ToastManager.showError(context, "Unable to get activity context")
+                    }
+                  } catch (e: Exception) {
+                    ToastManager.showError(context, e.message ?: "Google Sign Up failed")
+                  }
+                }
               }
             )
 
@@ -501,8 +539,36 @@ private fun SignUpForm(
                 textColor = Color.White,
                 icon = "apple",
                 onClick = {
-                    // TODO: Implement Apple Sign In
-                    ToastManager.showInfo(context, "Apple Sign Up coming soon")
+                    coroutineScope.launch {
+                        try {
+                            val activity = context as? ComponentActivity
+                            if (activity != null) {
+                                val appleSignInService = AppleSignInService(context, activity)
+                                when (val result = appleSignInService.signIn()) {
+                                    is AppleSignInResult.Success -> {
+                                        authService.signInWithApple(
+                                            idToken = result.idToken,
+                                            authorizationCode = result.authorizationCode,
+                                            email = result.email,
+                                            fullName = result.fullName
+                                        )
+                                        ToastManager.showSuccess(context, "Signed up successfully! Please check your email for verification.")
+                                        result.email?.let { onNavigateToVerification(it) }
+                                    }
+                                    is AppleSignInResult.Cancelled -> {
+                                        ToastManager.showInfo(context, "Sign up cancelled")
+                                    }
+                                    is AppleSignInResult.Error -> {
+                                        ToastManager.showError(context, result.message)
+                                    }
+                                }
+                            } else {
+                                ToastManager.showError(context, "Unable to get activity context")
+                            }
+                        } catch (e: Exception) {
+                            ToastManager.showError(context, e.message ?: "Apple Sign Up failed")
+                        }
+                    }
                 }
             )
         }

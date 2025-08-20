@@ -33,9 +33,14 @@ import com.michaeldadi.sprout.R
 import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.managers.rememberToastState
 import com.michaeldadi.sprout.services.AuthService
+import com.michaeldadi.sprout.services.GoogleSignInService
+import com.michaeldadi.sprout.services.GoogleSignInResult
+import com.michaeldadi.sprout.services.AppleSignInService
+import com.michaeldadi.sprout.services.AppleSignInResult
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import kotlinx.coroutines.launch
+import androidx.activity.ComponentActivity
 
 /**
  * Login screen that mirrors the iOS LoginView design and functionality
@@ -134,7 +139,8 @@ fun LoginScreen(
                 },
                 isLoading = isLoading,
                 focusManager = focusManager,
-                coroutineScope = coroutineScope
+                coroutineScope = coroutineScope,
+                authService = authService
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -215,7 +221,8 @@ private fun LoginForm(
     onLogin: () -> Unit,
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
-    coroutineScope: kotlinx.coroutines.CoroutineScope
+    coroutineScope: kotlinx.coroutines.CoroutineScope,
+    authService: AuthService
 ) {
     val context = LocalContext.current
 
@@ -353,10 +360,30 @@ private fun LoginForm(
               onClick = {
                 coroutineScope.launch {
                   try {
-                    // TODO: Implement Google Sign In with AuthService
-                    ToastManager.showInfo(context, "Google Sign In coming soon")
+                    val activity = context as? ComponentActivity
+                    if (activity != null) {
+                      val googleSignInService = GoogleSignInService(context, activity)
+                      when (val result = googleSignInService.signIn()) {
+                        is GoogleSignInResult.Success -> {
+                          authService.signInWithGoogle(
+                            idToken = result.idToken,
+                            email = result.email,
+                            fullName = result.displayName
+                          )
+                          ToastManager.showSuccess(context, "Signed in successfully!")
+                        }
+                        is GoogleSignInResult.Cancelled -> {
+                          ToastManager.showInfo(context, "Sign in cancelled")
+                        }
+                        is GoogleSignInResult.Error -> {
+                          ToastManager.showError(context, result.message)
+                        }
+                      }
+                    } else {
+                      ToastManager.showError(context, "Unable to get activity context")
+                    }
                   } catch (e: Exception) {
-                    ToastManager.showError(context, "Google Sign In failed")
+                    ToastManager.showError(context, e.message ?: "Google Sign In failed")
                   }
                 }
               }
@@ -368,8 +395,35 @@ private fun LoginForm(
                 textColor = Color.White,
                 icon = "apple",
                 onClick = {
-                    // TODO: Implement Apple Sign In
-                    ToastManager.showInfo(context, "Apple Sign In coming soon")
+                    coroutineScope.launch {
+                        try {
+                            val activity = context as? ComponentActivity
+                            if (activity != null) {
+                                val appleSignInService = AppleSignInService(context, activity)
+                                when (val result = appleSignInService.signIn()) {
+                                    is AppleSignInResult.Success -> {
+                                        authService.signInWithApple(
+                                            idToken = result.idToken,
+                                            authorizationCode = result.authorizationCode,
+                                            email = result.email,
+                                            fullName = result.fullName
+                                        )
+                                        ToastManager.showSuccess(context, "Signed in successfully!")
+                                    }
+                                    is AppleSignInResult.Cancelled -> {
+                                        ToastManager.showInfo(context, "Sign in cancelled")
+                                    }
+                                    is AppleSignInResult.Error -> {
+                                        ToastManager.showError(context, result.message)
+                                    }
+                                }
+                            } else {
+                                ToastManager.showError(context, "Unable to get activity context")
+                            }
+                        } catch (e: Exception) {
+                            ToastManager.showError(context, e.message ?: "Apple Sign In failed")
+                        }
+                    }
                 }
             )
         }

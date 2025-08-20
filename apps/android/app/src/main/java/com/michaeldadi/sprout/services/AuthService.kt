@@ -205,19 +205,48 @@ class AuthService(application: Application) : AndroidViewModel(application) {
     }
 
     // MARK: - Apple Sign In
-    suspend fun signInWithApple(idToken: String, authorizationCode: String, fullName: String?) {
+    suspend fun signInWithApple(idToken: String, authorizationCode: String, email: String?, fullName: String?) {
         _isLoading.value = true
         try {
-            // For federated authentication, we would typically use AdminInitiateAuth
-            // with APPLE as the identity provider. For now, we'll create a user with Apple credentials
-            val email = extractEmailFromAppleIdToken(idToken) ?: "apple_user@example.com"
+            // First, check if we need to exchange the authorization code for tokens
+            // This would typically be done on your backend server
+            println("Apple Sign In - Authorization Code: $authorizationCode")
+            println("Apple Sign In - ID Token: $idToken")
 
-            // Try to sign in first (user might already exist)
+            // For Cognito federated sign in, you have two options:
+            // 1. Use a custom authentication flow (requires Lambda triggers)
+            // 2. Use AdminInitiateAuth with ADMIN_USER_PASSWORD_AUTH (requires backend)
+
+            // Option 1: Try custom auth flow
             try {
-                signIn(email, authorizationCode)
-            } catch (e: Exception) {
-                // If sign in fails, try to create account
-                signUpWithApple(email, idToken, fullName)
+                val authRequest = InitiateAuthRequest {
+                    authFlow = AuthFlowType.CustomAuth
+                    clientId = CognitoConfig.clientId
+                    authParameters = mapOf(
+                        "USERNAME" to (email ?: "apple_user"),
+                        "CHALLENGE_NAME" to "APPLE_SIGNIN",
+                        "ID_TOKEN" to idToken
+                    )
+                }
+
+                val response = cognitoClient.initiateAuth(authRequest)
+
+                response.authenticationResult?.let { authResult ->
+                    handleAuthenticationResult(authResult, email ?: "apple_user@example.com")
+                } ?: response.challengeName?.let { challenge ->
+                    // Handle custom auth challenge if needed
+                    println("Apple Sign In Challenge: $challenge")
+                    throw AuthError.ChallengeRequired(challenge.toString())
+                }
+            } catch (customAuthError: Exception) {
+                // If custom auth fails, try creating/linking user
+                println("Custom auth failed, trying user creation: ${customAuthError.message}")
+
+                // Extract email from ID token if not provided
+                val userEmail = email ?: extractEmailFromAppleIdToken(idToken) ?: "apple_user_${UUID.randomUUID()}@example.com"
+
+                // Create or get existing user
+                signUpOrLinkAppleUser(userEmail, idToken, fullName)
             }
 
         } catch (e: Exception) {
@@ -225,6 +254,32 @@ class AuthService(application: Application) : AndroidViewModel(application) {
             throw AuthError.SignInFailed("Apple Sign In failed: ${e.message}")
         } finally {
             _isLoading.value = false
+        }
+    }
+
+    private suspend fun signUpOrLinkAppleUser(email: String, idToken: String, fullName: String?) {
+        // First, try to see if user exists
+        try {
+            // Check if user already exists by trying to sign in
+            val testAuthRequest = InitiateAuthRequest {
+                authFlow = AuthFlowType.UserPasswordAuth
+                clientId = CognitoConfig.clientId
+                authParameters = mapOf(
+                    "USERNAME" to email,
+                    "PASSWORD" to "DummyPassword123!" // This will fail but tells us if user exists
+                )
+            }
+            cognitoClient.initiateAuth(testAuthRequest)
+        } catch (e: Exception) {
+            if (e.message?.contains("NotAuthorizedException") == true) {
+                // User exists but password is wrong - this means they signed up with Apple before
+                // In production, you'd link the Apple ID to the existing user
+                println("User exists, would link Apple ID: $email")
+                throw AuthError.SignInFailed("Please sign in with your original method")
+            } else if (e.message?.contains("UserNotFoundException") == true) {
+                // User doesn't exist, create new user
+                signUpWithApple(email, idToken, fullName)
+            }
         }
     }
 
@@ -266,20 +321,66 @@ class AuthService(application: Application) : AndroidViewModel(application) {
     }
 
     private fun extractEmailFromAppleIdToken(idToken: String): String? {
-        // In a real implementation, you would decode the JWT token
-        // For now, we'll return null and handle it in the calling function
+        try {
+            // Split the JWT token
+            val parts = idToken.split(".")
+            if (parts.size >= 2) {
+                // Decode the payload (second part)
+                val payload = String(Base64.getUrlDecoder().decode(parts[1]))
+
+                // Simple JSON parsing - extract email
+                val emailPattern = """"email":\s*"([^"]+)"""".toRegex()
+                val emailMatch = emailPattern.find(payload)
+                return emailMatch?.groupValues?.get(1)
+            }
+        } catch (e: Exception) {
+            println("Error extracting email from Apple ID token: ${e.message}")
+        }
         return null
     }
 
+    private fun handleAuthenticationResult(authResult: AuthenticationResultType, email: String) {
+        val accessToken = authResult.accessToken
+        val idToken = authResult.idToken
+        val refreshToken = authResult.refreshToken
+
+        if (accessToken != null && idToken != null && refreshToken != null) {
+            // Store tokens securely
+            storeTokens(accessToken, idToken, refreshToken)
+
+            // Create user object
+            val user = CognitoUser(
+                email = email,
+                accessToken = accessToken,
+                idToken = idToken,
+                refreshToken = refreshToken
+            )
+
+            _currentUser.value = user
+            _isAuthenticated.value = true
+        }
+    }
+
     // MARK: - Google Sign In
-    suspend fun signInWithGoogle(idToken: String, accessToken: String, email: String, fullName: String?) {
+    suspend fun signInWithGoogle(idToken: String, email: String, fullName: String?) {
         _isLoading.value = true
         try {
-            // Try to sign in first (user might already exist)
-            try {
-                signIn(email, accessToken)
-            } catch (e: Exception) {
-                // If sign in fails, try to create account
+            // Use federated sign in with Google ID token
+            val authRequest = InitiateAuthRequest {
+                authFlow = AuthFlowType.CustomAuth
+                clientId = CognitoConfig.clientId
+                authParameters = mapOf(
+                    "PROVIDER_NAME" to "Google",
+                    "ID_TOKEN" to idToken
+                )
+            }
+
+            val response = cognitoClient.initiateAuth(authRequest)
+
+            response.authenticationResult?.let { authResult ->
+                handleAuthenticationResult(authResult, email)
+            } ?: run {
+                // If custom auth is not set up, fall back to creating a regular user
                 signUpWithGoogle(email, idToken, fullName)
             }
 
