@@ -2,6 +2,7 @@ import { Stack, StackProps, CfnOutput } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { AuthConstruct } from './constructs/AuthConstruct';
 import { StorageConstruct } from './constructs/StorageConstruct';
+import { DatabaseConstruct } from './constructs/DatabaseConstruct';
 import { ApiConstruct } from './constructs/ApiConstruct';
 
 export interface SproutStackProps extends StackProps {
@@ -14,6 +15,13 @@ export class SproutStack extends Stack {
 
         const auth = new AuthConstruct(this, 'Auth', { environment: props.environment });
         const storage = new StorageConstruct(this, 'Storage', { environment: props.environment });
+        
+        // Add RDS database
+        const database = new DatabaseConstruct(this, 'Database', {
+            environment: props.environment,
+            useCluster: props.environment === 'prod' // Use Aurora cluster for prod, single instance for dev
+        });
+        
         const api = new ApiConstruct(this, 'Api', {
             transactions: storage.transactions,
             ledgers: storage.ledgers,

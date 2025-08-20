@@ -1,19 +1,24 @@
-name: Deploy AWS Resources to Production
+name: Deploy AWS Resources to Development
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
     paths:
       - 'infra/**'
       - 'services/**'
-      - '.github/workflows/deploy-infrastructure.yml'
+      - '.github/workflows/deploy-infra-dev.yml'
+  pull_request:
+    branches: [ develop ]
+    paths:
+      - 'infra/**'
+      - 'services/**'
 
 jobs:
-  deploy-production:
-    name: Deploy CDK Infrastructure to Production
+  deploy-development:
+    name: Deploy CDK Infrastructure to Development
     runs-on: ubuntu-latest
-    environment: production
-    
+    environment: development
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -68,50 +73,50 @@ jobs:
     - name: CDK Synth
       run: |
         cd infra
-        cdk synth --context environment=prod
+        cdk synth --context environment=dev
 
-    - name: CDK Deploy to Production
+    - name: CDK Deploy to Development
       run: |
         cd infra
-        cdk deploy --context environment=prod --require-approval never --all
+        cdk deploy --context environment=dev --require-approval never --all
       env:
         # Environment-specific variables
-        ENVIRONMENT: prod
+        ENVIRONMENT: dev
         CDK_DEFAULT_REGION: ${{ secrets.AWS_REGION || 'us-east-1' }}
         CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
-        
+
         # App-specific environment variables
-        COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID_PROD }}
-        COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.COGNITO_USER_POOL_CLIENT_ID_PROD }}
-        API_DOMAIN_NAME: ${{ secrets.API_DOMAIN_NAME_PROD }}
-        
+        COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID_DEV }}
+        COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.COGNITO_USER_POOL_CLIENT_ID_DEV }}
+        API_DOMAIN_NAME: ${{ secrets.API_DOMAIN_NAME_DEV }}
+
         # Database and storage
-        DB_NAME: ${{ secrets.DB_NAME_PROD }}
-        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME_PROD }}
+        DB_NAME: ${{ secrets.DB_NAME_DEV }}
+        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME_DEV }}
 
     - name: Upload CDK outputs
       uses: actions/upload-artifact@v4
       with:
-        name: cdk-outputs-prod
+        name: cdk-outputs-dev
         path: |
           infra/cdk.out/
           infra/cdk.json
-        retention-days: 30
+        retention-days: 7
 
     - name: Post-deployment verification
       run: |
-        echo "🚀 Production deployment completed successfully!"
-        echo "Environment: prod"
+        echo "🚀 Development deployment completed successfully!"
+        echo "Environment: dev"
         echo "Commit: ${{ github.sha }}"
         echo "Deployed by: ${{ github.actor }}"
-        
+
         # Optional: Add health check or smoke tests here
-        # curl -f https://api.yourdomain.com/health || exit 1
+        # curl -f https://api-dev.yourdomain.com/health || exit 1
 
     - name: Notify on failure
       if: failure()
       run: |
-        echo "❌ Production deployment failed!"
+        echo "❌ Development deployment failed!"
         echo "Check the logs above for details."
         # Optional: Send notification to Slack, Discord, etc.
-        # curl -X POST -H 'Content-type: application/json' --data '{"text":"Production deployment failed for Sprout"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+        # curl -X POST -H 'Content-type: application/json' --data '{"text":"Development deployment failed for Sprout"}' ${{ secrets.SLACK_WEBHOOK_URL }}
