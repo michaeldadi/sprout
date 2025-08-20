@@ -1,5 +1,6 @@
 package com.michaeldadi.sprout
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -17,8 +18,9 @@ class AuthenticationFlowIntegrationTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    @Composable
     @Test
-    fun authenticationFlowCompleteSignUpFlow() {
+    fun AuthenticationFlowCompleteSignUpFlow() {
         // Start from login screen, navigate to sign up
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .assertExists()
@@ -57,8 +59,9 @@ class AuthenticationFlowIntegrationTest {
             .assertExists()
     }
 
+    @Composable
     @Test
-    fun authenticationFlowSignUpToLoginNavigation() {
+    fun AuthenticationFlowSignUpToLoginNavigation() {
         // Start from login screen, navigate to sign up
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .performClick()
@@ -76,8 +79,9 @@ class AuthenticationFlowIntegrationTest {
             .assertIsDisplayed()
     }
 
+    @Composable
     @Test
-    fun authenticationFlowLoginToForgotPasswordNavigation() {
+    fun AuthenticationFlowLoginToForgotPasswordNavigation() {
         // Start on login screen
         composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
@@ -93,8 +97,9 @@ class AuthenticationFlowIntegrationTest {
         // This test verifies the navigation works
     }
 
+    @Composable
     @Test
-    fun authenticationFlow_loginFormValidation() {
+    fun AuthenticationFlowLoginFormValidation() {
         // Start on login screen
         composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
@@ -125,14 +130,15 @@ class AuthenticationFlowIntegrationTest {
             .assertExists()
     }
 
+    @Composable
     @Test
-    fun authenticationFlow_signUpFormValidation() {
+    fun AuthenticationFlowSignUpFormValidation() {
         // Navigate to sign up
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .performClick()
 
         // Try to submit empty form
-        composeTestRule.onNodeWithText(getString(R.string.create_account))
+        composeTestRule.onNodeWithText(stringResource(R.string.create_account))
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -149,7 +155,7 @@ class AuthenticationFlowIntegrationTest {
             .performTextInput("invalid-email")
 
         // Try to submit with invalid email
-        composeTestRule.onNodeWithText(getString(R.string.create_account))
+        composeTestRule.onNodeWithText(stringResource(R.string.create_account))
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -159,8 +165,9 @@ class AuthenticationFlowIntegrationTest {
             .assertExists()
     }
 
+    @Composable
     @Test
-    fun authenticationFlowSocialLoginButtonsAreAccessible() {
+    fun AuthenticationFlowSocialLoginButtonsAreAccessible() {
         // Test Google sign in accessibility
         composeTestRule.onNodeWithText(stringResource(R.string.continue_with_google))
             .assertIsDisplayed()
@@ -186,8 +193,9 @@ class AuthenticationFlowIntegrationTest {
             .assertExists()
     }
 
+    @Composable
     @Test
-    fun authenticationFlow_passwordVisibilityToggle() {
+    fun AuthenticationFlowPasswordVisibilityToggle() {
         // Test password visibility on login screen
         composeTestRule.onNodeWithText(stringResource(R.string.enter_your_password))
             .performTextInput("testpassword")
@@ -223,28 +231,30 @@ class AuthenticationFlowIntegrationTest {
             .performClick()
     }
 
+    @Composable
     @Test
-    fun authenticationFlowAppLaunchShowsLoginScreen() {
+    fun AuthenticationFlowAppLaunchShowsLoginScreen() {
         // Verify that app launches to login screen when not authenticated
         composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
 
         // Verify key login screen elements are present
-        composeTestRule.onNodeWithText(stringResource(R.string.login_continue_journey)
+        composeTestRule.onNodeWithText(stringResource(R.string.login_continue_journey))
             .assertIsDisplayed()
 
         composeTestRule.onNodeWithText(stringResource(R.string.email))
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText(stringResource(R.string.password)
+        composeTestRule.onNodeWithText(stringResource(R.string.password))
             .assertIsDisplayed()
 
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .assertIsDisplayed()
     }
 
+    @Composable
     @Test
-    fun authenticationFlow_screenTransitions_areSmooth() {
+    fun AuthenticationFlowScreenTransitionsAreSmooth() {
         // Test smooth transitions between screens
 
         // Login -> Sign Up
@@ -278,8 +288,9 @@ class AuthenticationFlowIntegrationTest {
         composeTestRule.onRoot().assertExists()
     }
 
+    @Composable
     @Test
-    fun authenticationFlowFormInputSequenceWorks() {
+    fun AuthenticationFlowFormInputSequenceWorks() {
         // Test sequential form input without IME actions
 
         // Fill login form fields sequentially
