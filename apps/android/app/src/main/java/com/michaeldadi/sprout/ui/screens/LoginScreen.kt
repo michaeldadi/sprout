@@ -333,10 +333,10 @@ private fun LoginForm(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
-            Divider(
-                modifier = Modifier.weight(1f),
-                color = Color.White.copy(alpha = 0.3f),
-                thickness = 1.dp
+            HorizontalDivider(
+              modifier = Modifier.weight(1f),
+              thickness = 1.dp,
+              color = Color.White.copy(alpha = 0.3f)
             )
         }
 

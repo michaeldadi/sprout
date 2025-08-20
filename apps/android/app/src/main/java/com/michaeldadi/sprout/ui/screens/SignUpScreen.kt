@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,6 +45,7 @@ import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import androidx.core.net.toUri
 
 /**
  * Sign up screen that mirrors the iOS SignUpView design and functionality
@@ -471,10 +473,10 @@ private fun SignUpForm(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )
-            Divider(
-                modifier = Modifier.weight(1f),
-                color = Color.White.copy(alpha = 0.3f),
-                thickness = 1.dp
+            HorizontalDivider(
+              modifier = Modifier.weight(1f),
+              thickness = 1.dp,
+              color = Color.White.copy(alpha = 0.3f)
             )
         }
 
@@ -608,44 +610,36 @@ private fun TermsAndConditions(context: Context) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             val annotatedString = buildAnnotatedString {
-                pushStringAnnotation(tag = "terms", annotation = AppConfig.termsUrl)
-                withStyle(style = SpanStyle(
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textDecoration = TextDecoration.Underline
-                )) {
-                    append("Terms of Service")
+                val termsLink = LinkAnnotation.Url(AppConfig.termsUrl)
+                withLink(termsLink) {
+                    withStyle(style = SpanStyle(
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        textDecoration = TextDecoration.Underline
+                    )) {
+                        append("Terms of Service")
+                    }
                 }
-                pop()
 
                 withStyle(style = SpanStyle(color = Color.White.copy(alpha = 0.8f))) {
                     append(" and ")
                 }
 
-                pushStringAnnotation(tag = "privacy", annotation = AppConfig.privacyUrl)
-                withStyle(style = SpanStyle(
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium,
-                    textDecoration = TextDecoration.Underline
-                )) {
-                    append("Privacy Policy")
+                val privacyLink = LinkAnnotation.Url(AppConfig.privacyUrl)
+                withLink(privacyLink) {
+                    withStyle(style = SpanStyle(
+                        color = Color.White,
+                        fontWeight = FontWeight.Medium,
+                        textDecoration = TextDecoration.Underline
+                    )) {
+                        append("Privacy Policy")
+                    }
                 }
-                pop()
             }
 
-            ClickableText(
+            Text(
                 text = annotatedString,
-                style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
-                onClick = { offset ->
-                    annotatedString.getStringAnnotations(tag = "terms", start = offset, end = offset)
-                        .firstOrNull()?.let {
-                            openUrl(context, it.item)
-                        }
-                    annotatedString.getStringAnnotations(tag = "privacy", start = offset, end = offset)
-                        .firstOrNull()?.let {
-                            openUrl(context, it.item)
-                        }
-                }
+                fontSize = 12.sp
             )
         }
     }
@@ -680,6 +674,6 @@ private fun isValidEmail(email: String): Boolean {
 }
 
 private fun openUrl(context: Context, url: String) {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     context.startActivity(intent)
 }
