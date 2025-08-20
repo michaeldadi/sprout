@@ -16,7 +16,7 @@ export class SproutStack extends Stack {
 
         const auth = new AuthConstruct(this, 'Auth', { environment: props.environment });
         const storage = new StorageConstruct(this, 'Storage', { environment: props.environment });
-        
+
         // Add RDS database
         const database = new DatabaseConstruct(this, 'Database', {
             environment: props.environment,
@@ -24,14 +24,14 @@ export class SproutStack extends Stack {
         });
 
         // Run database migrations
-        new DatabaseMigrationConstruct(this, 'DatabaseMigration', {
+        const migration = new DatabaseMigrationConstruct(this, 'DatabaseMigration', {
             database: database.database,
             credentials: database.credentials,
             vpc: database.vpc,
             securityGroup: database.securityGroup,
             environment: props.environment
         });
-        
+
         const api = new ApiConstruct(this, 'Api', {
             transactions: storage.transactions,
             ledgers: storage.ledgers,

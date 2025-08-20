@@ -181,28 +181,29 @@ CREATE TRIGGER update_recurring_transactions_updated_at BEFORE UPDATE ON recurri
 
 export async function handler(event: any) {
     console.log('Migration event:', JSON.stringify(event, null, 2));
-    
+
     const secretsManager = new SecretsManagerClient({});
-    
+
     try {
         // Get database credentials from Secrets Manager
         const secretResponse = await secretsManager.send(new GetSecretValueCommand({
             SecretId: process.env.DB_SECRET_ARN!
         }));
-        
+
         if (!secretResponse.SecretString) {
+            console.error('No secret string found');
             throw new Error('No secret string found');
         }
-        
+
         const credentials = JSON.parse(secretResponse.SecretString);
-        
+
         // Get database endpoint from event properties
         const dbEndpoint = event.ResourceProperties.DatabaseEndpoint;
         const dbName = process.env.DB_NAME;
-        
+
         console.log('Connecting to database:', dbEndpoint);
-        
-        // Create database connection
+
+        // Create a database connection with RDS
         const client = new Client({
             host: dbEndpoint,
             port: 5432,
@@ -215,20 +216,20 @@ export async function handler(event: any) {
             connectionTimeoutMillis: 30000,
             query_timeout: 60000,
         });
-        
+
         await client.connect();
         console.log('Connected to database successfully');
-        
-        // Check if migrations table exists
+
+        // Check if the "migrations" table exists
         const migrationsTableQuery = `
             SELECT EXISTS (
-                SELECT FROM information_schema.tables 
+                SELECT FROM information_schema.tables
                 WHERE table_name = 'schema_migrations'
             );
         `;
-        
+
         const tableExists = await client.query(migrationsTableQuery);
-        
+
         if (!tableExists.rows[0].exists) {
             console.log('Creating schema_migrations table');
             await client.query(`
@@ -238,32 +239,32 @@ export async function handler(event: any) {
                 );
             `);
         }
-        
+
         // Check if migration has already been applied
         const migrationCheck = await client.query(
             'SELECT version FROM schema_migrations WHERE version = $1',
             ['001_initial_schema']
         );
-        
+
         if (migrationCheck.rows.length === 0) {
             console.log('Running initial migration...');
-            
+
             // Run the migration
             await client.query(MIGRATION_SQL);
-            
+
             // Record the migration
             await client.query(
                 'INSERT INTO schema_migrations (version) VALUES ($1)',
                 ['001_initial_schema']
             );
-            
+
             console.log('Migration completed successfully');
         } else {
             console.log('Migration already applied, skipping');
         }
-        
+
         await client.end();
-        
+
         return {
             Status: 'SUCCESS',
             PhysicalResourceId: `migration-${event.ResourceProperties.MigrationVersion}`,
@@ -272,10 +273,10 @@ export async function handler(event: any) {
                 Environment: process.env.ENVIRONMENT
             }
         };
-        
+
     } catch (error: any) {
         console.error('Migration failed:', error);
-        
+
         return {
             Status: 'FAILED',
             Reason: error.message,
