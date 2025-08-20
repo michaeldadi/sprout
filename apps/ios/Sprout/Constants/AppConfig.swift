@@ -17,6 +17,9 @@ struct AppConfig {
     let environmentName: String
     let apiKey: String
     let mixpanelProjectToken: String
+    let awsRegion: String = "us-east-1" // Default AWS region
+    let cognitoUserPoolId: String = "us-east-1_acu33uaoz" // Default User Pool ID
+    let cognitoClientId: String = "52atb5sd5p1gcn5ohlvtt9dkfp" // Default
     
     // Computed properties
     var isProduction: Bool {
@@ -63,7 +66,7 @@ struct AppConfig {
             #if DEBUG
             print("⚠️ No configuration found, using defaults")
             self.apiKey = "debug_api_key"
-            self.apiBaseURL = "https://api.example.com"
+            self.apiBaseURL = "https://gt9xp1956l.execute-api.us-east-1.amazonaws.com"
             self.mixpanelProjectToken = "debug_mixpanel_token"
             #else
             // In production, this should never happen

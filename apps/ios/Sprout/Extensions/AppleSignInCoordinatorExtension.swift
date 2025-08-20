@@ -17,20 +17,49 @@ class AppleSignInCoordinator: NSObject, ObservableObject {
 
 extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
-            let email = appleIDCredential.email
-            
-            print("Apple Sign In successful!")
-            print("User ID: \(userIdentifier)")
-            print("Full Name: \(fullName?.formatted() ?? "Not provided")")
-            print("Email: \(email ?? "Not provided")")
-            
-            // Handle successful sign-in here
-            ToastManager.shared.showSuccess("Apple Sign In successful!")
-            
-            // TODO: Send credentials to your backend API
+        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            print("Failed to get Apple ID credential")
+            ToastManager.shared.showError("Apple Sign In failed")
+            return
+        }
+        
+        // Extract the authorization code and identity token
+        guard let authorizationCodeData = appleIDCredential.authorizationCode,
+              let authorizationCode = String(data: authorizationCodeData, encoding: .utf8),
+              let identityTokenData = appleIDCredential.identityToken,
+              let identityToken = String(data: identityTokenData, encoding: .utf8) else {
+            print("Failed to extract Apple credentials")
+            ToastManager.shared.showError("Apple Sign In failed")
+            return
+        }
+        
+        let userIdentifier = appleIDCredential.user
+        let fullName = appleIDCredential.fullName
+        let email = appleIDCredential.email
+        
+        print("Apple Sign In successful!")
+        print("User ID: \(userIdentifier)")
+        print("Full Name: \(fullName?.formatted() ?? "Not provided")")
+        print("Email: \(email ?? "Not provided")")
+        
+        // Authenticate with Cognito
+        Task {
+            do {
+                try await AuthService.shared.signInWithApple(
+                    idToken: identityToken,
+                    authorizationCode: authorizationCode,
+                    fullName: fullName
+                )
+                
+                await MainActor.run {
+                    ToastManager.shared.showSuccess("Apple Sign In successful!")
+                }
+            } catch {
+                await MainActor.run {
+                    print("Apple Sign In Cognito error: \(error.localizedDescription)")
+                    ToastManager.shared.showError("Apple Sign In failed")
+                }
+            }
         }
     }
     

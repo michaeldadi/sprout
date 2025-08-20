@@ -35,6 +35,8 @@
 		141B37F12E5566DB00121BAF /* AWSS3Control in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F02E5566DB00121BAF /* AWSS3Control */; };
 		141B37F32E5566DB00121BAF /* AWSSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F22E5566DB00121BAF /* AWSSDKCommon */; };
 		141B37F62E5567ED00121BAF /* ZendeskSupportSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F52E5567ED00121BAF /* ZendeskSupportSDK */; };
+		141B37F92E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		141B37FA2E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		14B44E582E5526D40071757B /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E572E5526D40071757B /* BrazeKit */; };
 		14B44E5A2E5526D40071757B /* BrazeNotificationService in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E592E5526D40071757B /* BrazeNotificationService */; };
 		14B44E5C2E5526D40071757B /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E5B2E5526D40071757B /* BrazeUI */; };
@@ -207,7 +209,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */,
+				141B37F92E556B9A00121BAF /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,7 +217,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */,
+				141B37FA2E556B9A00121BAF /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -490,23 +492,12 @@
 			inputPaths = (
 				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
 			);
+			name = "Upload Debug Symbols to Sentry";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.
-if which sentry-cli >/dev/null; then
-  export SENTRY_ORG=michael-dadi-1b
-  export SENTRY_PROJECT=sprout-ios
-  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)
-  if [ ! $? -eq 0 ]; then
-    echo \"warning: sentry-cli - $ERROR\"
-  fi
-else
-  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"
-fi
-";
-			name = "Upload Debug Symbols to Sentry";
+			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=michael-dadi-1b\n  export SENTRY_PROJECT=sprout-ios\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -680,8 +671,10 @@ fi
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sprout/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
@@ -703,8 +696,6 @@ fi
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Debug;
 		};
@@ -717,8 +708,10 @@ fi
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sprout/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
@@ -740,8 +733,6 @@ fi
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Release;
 		};
@@ -895,8 +886,10 @@ fi
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sprout/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
@@ -918,8 +911,6 @@ fi
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Staging;
 		};

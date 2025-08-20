@@ -1,6 +1,7 @@
 import SwiftUI
 import SafariServices
 import AuthenticationServices
+import GoogleSignIn
 
 struct SignUpView: View {
     @State private var firstName = ""
@@ -14,6 +15,8 @@ struct SignUpView: View {
     @State private var agreeToTerms = false
     @State private var showingSafari = false
     @State private var safariURL: URL?
+    @State private var showingVerificationView = false
+    @State private var verificationCode = ""
     @FocusState private var firstNameFieldFocused: Bool
     @FocusState private var lastNameFieldFocused: Bool
     @FocusState private var emailFieldFocused: Bool
@@ -23,6 +26,9 @@ struct SignUpView: View {
     
     // Navigation
     @Binding var showSignUp: Bool
+    
+    // Auth service
+    @StateObject private var authService = AuthService.shared
     
     var body: some View {
         ZStack {
@@ -351,11 +357,17 @@ struct SignUpView: View {
                             }
                         }) {
                             HStack {
-                                Text("Create Account")
-                                    .font(.system(size: 16, weight: .semibold))
-                                
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 14, weight: .semibold))
+                                if authService.isLoading {
+                                    ProgressView()
+                                        .scaleEffect(0.8)
+                                        .progressViewStyle(CircularProgressViewStyle(tint: colorScheme == .dark ? Color(red: 0.15, green: 0.25, blue: 0.20) : Color(red: 0.30, green: 0.60, blue: 0.35)))
+                                } else {
+                                    Text("Create Account")
+                                        .font(.system(size: 16, weight: .semibold))
+                                    
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                }
                             }
                             .foregroundColor(colorScheme == .dark ? Color(red: 0.15, green: 0.25, blue: 0.20) : Color(red: 0.30, green: 0.60, blue: 0.35))
                             .frame(maxWidth: .infinity)
@@ -364,6 +376,8 @@ struct SignUpView: View {
                             .cornerRadius(12)
                             .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                         }
+                        .disabled(authService.isLoading)
+                        .opacity(authService.isLoading ? 0.7 : 1.0)
                         .padding(.top, 8)
                         
                         // Divider
@@ -389,14 +403,16 @@ struct SignUpView: View {
                                 icon: "applelogo",
                                 text: "Continue with Apple",
                                 backgroundColor: colorScheme == .dark ? Color.white : Color.black,
-                                textColor: colorScheme == .dark ? .black : .white
+                                textColor: colorScheme == .dark ? .black : .white,
+                                action: handleAppleSignUp
                             )
                             
                             SocialLoginButton(
                                 icon: "google",
                                 text: "Continue with Google",
                                 backgroundColor: .white,
-                                textColor: .black
+                                textColor: .black,
+                                action: handleGoogleSignUp
                             )
                         }
                     }
@@ -437,6 +453,9 @@ struct SignUpView: View {
             if let url = safariURL {
                 SafariView(url: url)
             }
+        }
+        .sheet(isPresented: $showingVerificationView) {
+            VerificationView(email: email, isPresented: $showingVerificationView)
         }
         .onAppear {
             withAnimation {
@@ -482,14 +501,27 @@ struct SignUpView: View {
             return
         }
         
-        guard agreeToTerms else {
-            ToastManager.shared.showError("Please agree to the Terms of Service")
-            return
-        }
+        // Dismiss keyboard
+        firstNameFieldFocused = false
+        lastNameFieldFocused = false
+        emailFieldFocused = false
+        passwordFieldFocused = false
+        confirmPasswordFieldFocused = false
         
-        // Add your signup logic here
-        ToastManager.shared.showSuccess("Account created successfully! Welcome to Sprout.")
-        print("Sign up with: \(firstName) \(lastName), \(email)")
+        // Sign up with Cognito
+        Task {
+            do {
+                try await authService.signUp(email: email, password: password)
+                await MainActor.run {
+                    ToastManager.shared.showSuccess("Account created! Please check your email for verification code.")
+                    showingVerificationView = true
+                }
+            } catch {
+                await MainActor.run {
+                    ToastManager.shared.showError(error.localizedDescription)
+                }
+            }
+        }
     }
     
     private func isValidEmail(_ email: String) -> Bool {
@@ -512,6 +544,91 @@ struct SignUpView: View {
             safariURL = url
             showingSafari = true
         }
+    }
+    
+    private func handleAppleSignUp() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = AppleSignInCoordinator.shared
+        authorizationController.presentationContextProvider = AppleSignInCoordinator.shared
+        authorizationController.performRequests()
+    }
+    
+    private func handleGoogleSignUp() {
+        guard let presentingViewController = getRootViewController() else {
+            print("Could not get root view controller")
+            ToastManager.shared.showError("Sign up failed. Please try again.")
+            return
+        }
+        
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: presentingViewController) { signInResult, error in
+                if let error = error {
+                    print("Google Sign Up error: \(error.localizedDescription)")
+                  
+                    // Check if user cancelled sign-in request
+                  if (error as NSError).code == GIDSignInError.Code.canceled.rawValue {
+                      print("Google Sign Up canceled by user")
+                      return
+                    }
+
+                    ToastManager.shared.showError("Google Sign Up failed")
+                    return
+                }
+                
+                guard let result = signInResult else {
+                    print("No sign in result")
+                    return
+                }
+                
+                // Successfully signed in
+                let user = result.user
+                guard let idToken = user.idToken?.tokenString,
+                      let email = user.profile?.email else {
+                    print("Missing required Google credentials")
+                    ToastManager.shared.showError("Google Sign Up failed")
+                    return
+                }
+                
+                let accessToken = user.accessToken.tokenString
+                
+                let fullName = user.profile?.name
+                
+                print("Google Sign Up successful!")
+                print("User: \(fullName ?? "No name")")
+                print("Email: \(email)")
+                
+                // Authenticate with Cognito
+                Task {
+                    do {
+                        try await authService.signInWithGoogle(
+                            idToken: idToken,
+                            accessToken: accessToken,
+                            email: email,
+                            fullName: fullName
+                        )
+                        
+                        await MainActor.run {
+                            ToastManager.shared.showSuccess("Google Sign Up successful!")
+                        }
+                    } catch {
+                        await MainActor.run {
+                            print("Google Sign Up Cognito error: \(error.localizedDescription)")
+                            ToastManager.shared.showError("Google Sign Up failed")
+                        }
+                    }
+                }
+            }
+    }
+    
+    private func getRootViewController() -> UIViewController? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            return nil
+        }
+        return window.rootViewController
     }
 }
 

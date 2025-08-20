@@ -15,6 +15,9 @@ struct LoginView: View {
     @Binding var showSignUp: Bool
     @Binding var showForgotPassword: Bool
     
+    // Auth service
+    @StateObject private var authService = AuthService.shared
+    
     var body: some View {
         ZStack {
             backgroundGradient
@@ -186,11 +189,17 @@ struct LoginView: View {
             }
         }) {
             HStack {
-                Text("Sign In")
-                    .font(.system(size: 18, weight: .semibold))
-                
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 16, weight: .semibold))
+                if authService.isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                        .progressViewStyle(CircularProgressViewStyle(tint: buttonTextColor))
+                } else {
+                    Text("Sign In")
+                        .font(.system(size: 18, weight: .semibold))
+                    
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 16, weight: .semibold))
+                }
             }
             .foregroundColor(buttonTextColor)
             .frame(maxWidth: .infinity)
@@ -199,6 +208,8 @@ struct LoginView: View {
             .cornerRadius(15)
             .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 5)
         }
+        .disabled(authService.isLoading)
+        .opacity(authService.isLoading ? 0.7 : 1.0)
         .padding(.top, 10)
     }
     
@@ -279,8 +290,22 @@ struct LoginView: View {
             return
         }
         
-        ToastManager.shared.showSuccess("Login successful! Welcome back.")
-        print("Login with email: \(email)")
+        Task {
+            do {
+                try await authService.signIn(email: email, password: password)
+                await MainActor.run {
+                    ToastManager.shared.showSuccess("Login successful! Welcome back.")
+                    focusedField = nil // Dismiss keyboard
+                }
+            } catch {
+                print("Login error: \(error.localizedDescription)")
+                dismissKeyboard()
+
+                await MainActor.run {
+                    ToastManager.shared.showError(error.localizedDescription)
+                }
+            }
+        }
     }
     
     private func showToastWithHaptic(_ message: String) {
@@ -326,17 +351,41 @@ struct LoginView: View {
                 
                 // Successfully signed in
                 let user = result.user
-                let idToken = user.idToken?.tokenString
-                let email = user.profile?.email
+                guard let idToken = user.idToken?.tokenString,
+                      let email = user.profile?.email else {
+                    print("Missing required Google credentials")
+                    ToastManager.shared.showError("Google Sign In failed")
+                    return
+                }
+                
+                let accessToken = user.accessToken.tokenString
+                
                 let fullName = user.profile?.name
                 
                 print("Google Sign In successful!")
                 print("User: \(fullName ?? "No name")")
-                print("Email: \(email ?? "No email")")
+                print("Email: \(email)")
                 
-                ToastManager.shared.showSuccess("Google Sign In successful!")
-                
-                // TODO: Send credentials to your backend API
+                // Authenticate with Cognito
+                Task {
+                    do {
+                        try await authService.signInWithGoogle(
+                            idToken: idToken,
+                            accessToken: accessToken,
+                            email: email,
+                            fullName: fullName
+                        )
+                        
+                        await MainActor.run {
+                            ToastManager.shared.showSuccess("Google Sign In successful!")
+                        }
+                    } catch {
+                        await MainActor.run {
+                            print("Google Sign In Cognito error: \(error.localizedDescription)")
+                            ToastManager.shared.showError("Google Sign In failed")
+                        }
+                    }
+                }
             }
     }
     
