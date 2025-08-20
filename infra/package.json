@@ -14,7 +14,9 @@
     "deploy:esbuild": "cdk deploy --app \"node dist/index.js\"",
     "destroy:esbuild": "cdk destroy --app \"node dist/index.js\"",
     "migrate:dev": "npx ts-node scripts/run-migration.ts --env dev",
-    "migrate:prod": "npx ts-node scripts/run-migration.ts --env prod"
+    "migrate:prod": "npx ts-node scripts/run-migration.ts --env prod",
+    "db-endpoint:dev": "npx ts-node scripts/get-db-endpoint.ts --env dev",
+    "db-endpoint:prod": "npx ts-node scripts/get-db-endpoint.ts --env prod"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
@@ -28,6 +30,7 @@
   },
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.651.1",
     "@aws-sdk/client-secrets-manager": "^3.651.1",
     "esbuild": "^0.25.9",
     "pg": "^8.12.0"

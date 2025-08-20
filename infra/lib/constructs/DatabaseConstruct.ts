@@ -3,8 +3,6 @@ import {
     DatabaseInstance,
     DatabaseInstanceEngine,
     PostgresEngineVersion,
-    InstanceClass,
-    InstanceSize,
     Credentials,
     SubnetGroup,
     ParameterGroup,
@@ -13,13 +11,15 @@ import {
     AuroraPostgresEngineVersion,
 } from 'aws-cdk-lib/aws-rds';
 import {
-    Vpc,
-    SubnetType,
-    SecurityGroup,
-    Port,
+  Vpc,
+  SubnetType,
+  SecurityGroup,
+  Port,
+  InstanceClass,
+  InstanceSize, InstanceType,
 } from 'aws-cdk-lib/aws-ec2';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { RemovalPolicy, CfnOutput } from 'aws-cdk-lib';
+import { RemovalPolicy, CfnOutput, Duration } from 'aws-cdk-lib';
 
 export interface DatabaseConstructProps {
     environment: string;
@@ -59,7 +59,7 @@ export class DatabaseConstruct extends Construct {
             ]
         });
 
-        // Create security group for database
+        // Create a security group for the RDS database
         this.securityGroup = new SecurityGroup(this, 'DatabaseSecurityGroup', {
             vpc: this.vpc,
             description: `Security group for Sprout ${props.environment} database`,
@@ -84,7 +84,7 @@ export class DatabaseConstruct extends Construct {
             }
         });
 
-        // Create subnet group
+        // Create a subnet group
         const subnetGroup = new SubnetGroup(this, 'DatabaseSubnetGroup', {
             vpc: this.vpc,
             description: `Database subnet group for Sprout ${props.environment}`,
@@ -109,23 +109,21 @@ export class DatabaseConstruct extends Construct {
                 vpc: this.vpc,
                 securityGroups: [this.securityGroup],
                 subnetGroup,
-                serverlessV2ScalingConfiguration: {
-                    minCapacity: isProduction ? 1 : 0.5,
-                    maxCapacity: isProduction ? 16 : 4
-                },
+                serverlessV2MinCapacity: isProduction ? 1 : 0.5,
+                serverlessV2MaxCapacity: isProduction ? 16 : 4,
                 backup: {
-                    retention: isProduction ? 
-                        RemovalPolicy.RETAIN : 
-                        RemovalPolicy.DESTROY,
+                    retention: isProduction ?
+                        Duration.days(60) :
+                        Duration.days(14),
                     preferredWindow: '03:00-04:00'
                 },
                 preferredMaintenanceWindow: 'sun:04:00-sun:05:00',
                 deletionProtection: isProduction,
-                removalPolicy: isProduction ? 
-                    RemovalPolicy.RETAIN : 
+                removalPolicy: isProduction ?
+                    RemovalPolicy.RETAIN :
                     RemovalPolicy.DESTROY,
                 parameterGroup: ParameterGroup.fromParameterGroupName(
-                    this, 'ClusterParameterGroup', 
+                    this, 'ClusterParameterGroup',
                     'default.aurora-postgresql15'
                 )
             });
@@ -134,11 +132,11 @@ export class DatabaseConstruct extends Construct {
             this.database = new DatabaseInstance(this, 'DatabaseInstance', {
                 instanceIdentifier: `sprout-db-${props.environment}`,
                 engine: DatabaseInstanceEngine.postgres({
-                    version: PostgresEngineVersion.VER_15_4
+                    version: PostgresEngineVersion.VER_17_4
                 }),
-                instanceType: props.environment === 'dev' ? 
-                    InstanceClass.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO) :
-                    InstanceClass.of(InstanceClass.BURSTABLE3, InstanceSize.SMALL),
+                instanceType: props.environment === 'dev' ?
+                    InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.MICRO) :
+                    InstanceType.of(InstanceClass.BURSTABLE3, InstanceSize.SMALL),
                 credentials: Credentials.fromSecret(this.credentials),
                 databaseName: process.env.DB_NAME || `sprout_${props.environment}`,
                 vpc: this.vpc,
@@ -146,14 +144,14 @@ export class DatabaseConstruct extends Construct {
                 subnetGroup,
                 allocatedStorage: 20,
                 maxAllocatedStorage: props.environment === 'dev' ? 50 : 200,
-                backupRetention: isProduction ? 
-                    RemovalPolicy.RETAIN : 
-                    RemovalPolicy.DESTROY,
+                backupRetention: isProduction ?
+                    Duration.days(30) :
+                    Duration.days(14),
                 preferredBackupWindow: '03:00-04:00',
                 preferredMaintenanceWindow: 'sun:04:00-sun:05:00',
                 deletionProtection: isProduction,
-                removalPolicy: isProduction ? 
-                    RemovalPolicy.RETAIN : 
+                removalPolicy: isProduction ?
+                    RemovalPolicy.RETAIN :
                     RemovalPolicy.DESTROY,
                 parameterGroup: ParameterGroup.fromParameterGroupName(
                     this, 'InstanceParameterGroup',
@@ -164,14 +162,16 @@ export class DatabaseConstruct extends Construct {
 
         // Outputs
         new CfnOutput(this, 'DatabaseEndpoint', {
-            value: this.database.clusterEndpoint?.hostname || 
-                   (this.database as DatabaseInstance).instanceEndpoint.hostname,
+            value: this.database instanceof DatabaseCluster 
+                ? this.database.clusterEndpoint.hostname
+                : this.database.instanceEndpoint.hostname,
             description: `Database endpoint for ${props.environment}`
         });
 
         new CfnOutput(this, 'DatabasePort', {
-            value: this.database.clusterEndpoint?.port.toString() || 
-                   (this.database as DatabaseInstance).instanceEndpoint.port.toString(),
+            value: this.database instanceof DatabaseCluster
+                ? this.database.clusterEndpoint.port.toString()
+                : this.database.instanceEndpoint.port.toString(),
             description: `Database port for ${props.environment}`
         });
 
@@ -206,12 +206,14 @@ export class DatabaseConstruct extends Construct {
      * Get connection string format for applications
      */
     public getConnectionString(): string {
-        const endpoint = this.database.clusterEndpoint?.hostname || 
-                        (this.database as DatabaseInstance).instanceEndpoint.hostname;
-        const port = this.database.clusterEndpoint?.port || 
-                    (this.database as DatabaseInstance).instanceEndpoint.port;
+        const endpoint = this.database instanceof DatabaseCluster
+            ? this.database.clusterEndpoint.hostname
+            : this.database.instanceEndpoint.hostname;
+        const port = this.database instanceof DatabaseCluster
+            ? this.database.clusterEndpoint.port
+            : this.database.instanceEndpoint.port;
         const dbName = process.env.DB_NAME || `sprout_${this.node.tryGetContext('environment') || 'dev'}`;
-        
+
         return `postgresql://{{username}}:{{password}}@${endpoint}:${port}/${dbName}`;
     }
 }

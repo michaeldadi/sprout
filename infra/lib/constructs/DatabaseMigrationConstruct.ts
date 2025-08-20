@@ -1,13 +1,12 @@
 import { Construct } from 'constructs';
 import { Function, Runtime, Code, Architecture } from 'aws-cdk-lib/aws-lambda';
-import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 import { CustomResource, Duration } from 'aws-cdk-lib';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { DatabaseInstance, DatabaseCluster } from 'aws-cdk-lib/aws-rds';
 import { SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 export interface DatabaseMigrationConstructProps {
     database: DatabaseInstance | DatabaseCluster;
@@ -86,9 +85,11 @@ export class DatabaseMigrationConstruct extends Construct {
         try {
             const migrationPath = path.join(__dirname, '../../database/migrations/001_initial_schema.sql');
             migrationSql = fs.readFileSync(migrationPath, 'utf8');
-        } catch (error) {
+        } catch (err) {
             console.warn('Could not read migration file, using inline SQL');
             migrationSql = this.getInlineMigrationSql();
+
+            throw new Error(`Migration file not found - Error: ${err} - migrationSql: ${migrationSql}`);
         }
 
         return `
@@ -99,23 +100,23 @@ const MIGRATION_SQL = \`${migrationSql.replace(/`/g, '\\`')}\`;
 
 exports.handler = async (event) => {
     console.log('Migration event:', JSON.stringify(event, null, 2));
-    
+
     const secretsManager = new SecretsManagerClient({});
-    
+
     try {
         // Get database credentials from Secrets Manager
         const secretResponse = await secretsManager.send(new GetSecretValueCommand({
             SecretId: process.env.DB_SECRET_ARN
         }));
-        
+
         const credentials = JSON.parse(secretResponse.SecretString);
-        
+
         // Get database endpoint from event properties
         const dbEndpoint = event.ResourceProperties.DatabaseEndpoint;
         const dbName = process.env.DB_NAME;
-        
+
         console.log('Connecting to database:', dbEndpoint);
-        
+
         // Create database connection
         const client = new Client({
             host: dbEndpoint,
@@ -129,20 +130,20 @@ exports.handler = async (event) => {
             connectionTimeoutMillis: 30000,
             query_timeout: 60000,
         });
-        
+
         await client.connect();
         console.log('Connected to database successfully');
-        
+
         // Check if migrations table exists
         const migrationsTableQuery = \`
             SELECT EXISTS (
-                SELECT FROM information_schema.tables 
+                SELECT FROM information_schema.tables
                 WHERE table_name = 'schema_migrations'
             );
         \`;
-        
+
         const tableExists = await client.query(migrationsTableQuery);
-        
+
         if (!tableExists.rows[0].exists) {
             console.log('Creating schema_migrations table');
             await client.query(\`
@@ -152,32 +153,32 @@ exports.handler = async (event) => {
                 );
             \`);
         }
-        
+
         // Check if migration has already been applied
         const migrationCheck = await client.query(
             'SELECT version FROM schema_migrations WHERE version = $1',
             ['001_initial_schema']
         );
-        
+
         if (migrationCheck.rows.length === 0) {
             console.log('Running initial migration...');
-            
+
             // Run the migration
             await client.query(MIGRATION_SQL);
-            
+
             // Record the migration
             await client.query(
                 'INSERT INTO schema_migrations (version) VALUES ($1)',
                 ['001_initial_schema']
             );
-            
+
             console.log('Migration completed successfully');
         } else {
             console.log('Migration already applied, skipping');
         }
-        
+
         await client.end();
-        
+
         return {
             Status: 'SUCCESS',
             PhysicalResourceId: \`migration-\${event.ResourceProperties.MigrationVersion}\`,
@@ -186,10 +187,10 @@ exports.handler = async (event) => {
                 Environment: process.env.ENVIRONMENT
             }
         };
-        
+
     } catch (error) {
         console.error('Migration failed:', error);
-        
+
         return {
             Status: 'FAILED',
             Reason: error.message,
