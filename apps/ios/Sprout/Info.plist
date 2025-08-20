@@ -61,5 +61,38 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.michaeldadi.Sprout.recentTransactions</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeTime</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Recent Transactions</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>View your latest spending</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.michaeldadi.Sprout.goals</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeTaskCompleted</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Goals</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>Track your financial goals</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.michaeldadi.Sprout.addExpense</string>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeAdd</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Add Expense</string>
+			<key>UIApplicationShortcutItemSubtitle</key>
+			<string>Quick add a new expense</string>
+		</dict>
+	</array>
 </dict>
 </plist>
