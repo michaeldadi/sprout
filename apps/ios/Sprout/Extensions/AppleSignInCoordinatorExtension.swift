@@ -78,13 +78,53 @@ extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Handle user cancel
-        if let error = error as? ASAuthorizationError, error.code == .canceled {
-            print("Apple Sign In canceled by user")
+        print("Apple Sign In error occurred: \(error)")
+        print("Error type: \(type(of: error))")
+        print("Error code: \((error as NSError).code)")
+        print("Error description: \(error.localizedDescription)")
+        
+        // Handle user cancel - check for multiple cancellation scenarios
+        if let authError = error as? ASAuthorizationError {
+            switch authError.code {
+            case .canceled:
+                print("Apple Sign In canceled by user (ASAuthorizationError.canceled)")
+                return
+            case .unknown:
+                print("Apple Sign In unknown error - might be cancellation")
+                return
+            case .invalidResponse:
+                print("Apple Sign In invalid response - might be cancellation")
+                return
+            case .notHandled:
+                print("Apple Sign In not handled - might be cancellation")
+                return
+            case .failed:
+                print("Apple Sign In failed - showing error")
+            @unknown default:
+                print("Apple Sign In unknown case - might be cancellation")
+                return
+            }
+        }
+        
+        // Check NSError codes that might indicate cancellation
+        let nsError = error as NSError
+        if nsError.code == 1000 || nsError.code == -1000 || nsError.code == 1001 {
+            print("Apple Sign In canceled via NSError code \(nsError.code)")
             return
         }
-      
-        print("Apple Sign In failed: \(error.localizedDescription)")
+        
+        // Check error description for cancellation indicators
+        let errorString = error.localizedDescription.lowercased()
+        if errorString.contains("cancel") || 
+           errorString.contains("user cancel") || 
+           errorString.contains("dismissed") ||
+           errorString.contains("abort") ||
+           errorString.contains("1000") {
+            print("Apple Sign In appears to be cancelled based on description")
+            return
+        }
+        
+        print("Apple Sign In failed with genuine error - showing toast")
         ToastManager.shared.showError("Apple Sign In failed")
     }
 }
