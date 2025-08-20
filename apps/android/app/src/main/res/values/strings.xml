@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Sprout</string>
+    <string name="not_have_an_account">Don\'t have an account?</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="continue_with_apple">Continue with Apple</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="text_sign_up">Sign Up</string>
+    <string name="create_account">Create Account</string>
+    <string name="not_receive_code">Didn\'t receive the code? Resend</string>
 </resources>

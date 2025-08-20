@@ -4,13 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.michaeldadi.sprout.navigation.AuthNavigation
+import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.ui.theme.SproutTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +21,42 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SproutTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                SproutApp()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun SproutApp() {
+    val authService: AuthService = viewModel()
+    val isAuthenticated by authService.isAuthenticated.collectAsState()
+
+    if (isAuthenticated) {
+        // Main app content (placeholder for now)
+        MainAppContent()
+    } else {
+        // Authentication flow
+        AuthNavigation()
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    SproutTheme {
-        Greeting("Android")
+fun MainAppContent() {
+    // Placeholder for the main app content after authentication
+    // This would contain your main app screens
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Welcome to Sprout! 🌱\nYou are now authenticated.",
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
     }
 }
