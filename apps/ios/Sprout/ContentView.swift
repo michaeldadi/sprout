@@ -11,59 +11,49 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-    @State private var isLoggedIn = false
+    @StateObject private var authService = AuthService.shared
     @State private var showSignUp = false
     @State private var showForgotPassword = false
 
     var body: some View {
-        if isLoggedIn {
-            NavigationSplitView {
-                List {
-                    ForEach(items) { item in
-                        NavigationLink {
-                            Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                        } label: {
-                            Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                        }
+        Group {
+            if authService.isAuthenticated {
+                // Main authenticated app with liquid glass bottom tabs
+                LiquidGlassTabView()
+                    .transition(.asymmetric(
+                        insertion: .scale.combined(with: .opacity),
+                        removal: .scale.combined(with: .opacity)
+                    ))
+            } else {
+                // Authentication flow
+                Group {
+                    if showForgotPassword {
+                        ForgotPasswordView(showForgotPassword: $showForgotPassword)
+                            .transition(.asymmetric(
+                                insertion: .move(edge: .bottom),
+                                removal: .move(edge: .bottom)
+                            ))
+                    } else if showSignUp {
+                        SignUpView(showSignUp: $showSignUp)
+                            .transition(.asymmetric(
+                                insertion: .move(edge: .trailing),
+                                removal: .move(edge: .leading)
+                            ))
+                    } else {
+                        LoginView(showSignUp: $showSignUp, showForgotPassword: $showForgotPassword)
+                            .transition(.asymmetric(
+                                insertion: .move(edge: .leading),
+                                removal: .move(edge: .trailing)
+                            ))
                     }
-                    .onDelete(perform: deleteItems)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                    ToolbarItem {
-                        Button(action: addItem) {
-                            Label("Add Item", systemImage: "plus")
-                        }
-                    }
-                }
-            } detail: {
-                Text("Select an item")
+                .animation(.easeInOut(duration: 0.3), value: showSignUp || showForgotPassword)
             }
-        } else {
-            Group {
-                if showForgotPassword {
-                    ForgotPasswordView(showForgotPassword: $showForgotPassword)
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .bottom),
-                            removal: .move(edge: .bottom)
-                        ))
-                } else if showSignUp {
-                    SignUpView(showSignUp: $showSignUp)
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .trailing),
-                            removal: .move(edge: .leading)
-                        ))
-                } else {
-                    LoginView(showSignUp: $showSignUp, showForgotPassword: $showForgotPassword)
-                        .transition(.asymmetric(
-                            insertion: .move(edge: .leading),
-                            removal: .move(edge: .trailing)
-                        ))
-                }
-            }
-            .animation(.easeInOut(duration: 0.3), value: showSignUp || showForgotPassword)
+        }
+        .animation(.easeInOut(duration: 0.5), value: authService.isAuthenticated)
+        .task {
+            // Check for existing session on app launch
+            await authService.checkExistingSession()
         }
     }
 
