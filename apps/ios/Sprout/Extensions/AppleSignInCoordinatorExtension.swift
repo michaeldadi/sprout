@@ -57,6 +57,20 @@ extension AppleSignInCoordinator: ASAuthorizationControllerDelegate {
             } catch {
                 await MainActor.run {
                     print("Apple Sign In Cognito error: \(error.localizedDescription)")
+                    
+                    // Check if this is a cancellation error (ASAuthorizationError 1000)
+                    if let authError = error as? ASAuthorizationError, authError.code == .canceled {
+                        print("Apple Sign In was cancelled by user - not showing error toast")
+                        return
+                    }
+                    
+                    // Check if the error description contains cancellation indicators
+                    let errorString = error.localizedDescription.lowercased()
+                    if errorString.contains("cancel") || errorString.contains("1000") {
+                        print("Apple Sign In appears to be cancelled - not showing error toast")
+                        return
+                    }
+                    
                     ToastManager.shared.showError("Apple Sign In failed")
                 }
             }

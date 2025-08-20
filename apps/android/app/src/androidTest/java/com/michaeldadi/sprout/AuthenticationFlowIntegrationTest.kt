@@ -18,7 +18,7 @@ class AuthenticationFlowIntegrationTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun authenticationFlow_completeSignUpFlow() {
+    fun authenticationFlowCompleteSignUpFlow() {
         // Start from login screen, navigate to sign up
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .assertExists()
@@ -35,13 +35,13 @@ class AuthenticationFlowIntegrationTest {
         composeTestRule.onNodeWithText("Last")
             .performTextInput("Test")
 
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .performTextInput("integration.test@example.com")
 
-        composeTestRule.onNodeWithText("Create password")
+        composeTestRule.onNodeWithText(stringResource(R.string.create_password))
             .performTextInput("IntegrationTest123!")
 
-        composeTestRule.onNodeWithText("Confirm password")
+        composeTestRule.onNodeWithText(stringResource(R.string.confirm_password))
             .performTextInput("IntegrationTest123!")
 
         // Submit the form
@@ -58,7 +58,7 @@ class AuthenticationFlowIntegrationTest {
     }
 
     @Test
-    fun authenticationFlow_signUpToLoginNavigation() {
+    fun authenticationFlowSignUpToLoginNavigation() {
         // Start from login screen, navigate to sign up
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .performClick()
@@ -68,18 +68,18 @@ class AuthenticationFlowIntegrationTest {
             .assertIsDisplayed()
 
         // Navigate back to login
-        composeTestRule.onNodeWithText("Sign In")
+        composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .performClick()
 
         // Verify we're back on login screen
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
     }
 
     @Test
-    fun authenticationFlow_loginToForgotPasswordNavigation() {
+    fun authenticationFlowLoginToForgotPasswordNavigation() {
         // Start on login screen
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
 
         // Navigate to forgot password
@@ -96,32 +96,32 @@ class AuthenticationFlowIntegrationTest {
     @Test
     fun authenticationFlow_loginFormValidation() {
         // Start on login screen
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
 
         // Try to submit empty form
-        composeTestRule.onNodeWithText("Sign In")
+        composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .performClick()
 
         // Wait for validation
         composeTestRule.waitForIdle()
 
         // Should still be on login screen (validation prevents submission)
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertExists()
 
         // Fill only email
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .performTextInput("test@example.com")
 
         // Try to submit with missing password
-        composeTestRule.onNodeWithText("Sign In")
+        composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .performClick()
 
         composeTestRule.waitForIdle()
 
         // Should still be on login screen
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertExists()
     }
 
@@ -142,10 +142,10 @@ class AuthenticationFlowIntegrationTest {
             .assertExists()
 
         // Fill partial form
-        composeTestRule.onNodeWithText("First")
+        composeTestRule.onNodeWithText(stringResource(R.string.label_first_name_input))
             .performTextInput("Test")
 
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .performTextInput("invalid-email")
 
         // Try to submit with invalid email
@@ -160,9 +160,9 @@ class AuthenticationFlowIntegrationTest {
     }
 
     @Test
-    fun authenticationFlow_socialLoginButtons_areAccessible() {
+    fun authenticationFlowSocialLoginButtonsAreAccessible() {
         // Test Google sign in accessibility
-        composeTestRule.onNodeWithText("Continue with Google")
+        composeTestRule.onNodeWithText(stringResource(R.string.continue_with_google))
             .assertIsDisplayed()
             .assertIsEnabled()
             .performClick()
@@ -170,11 +170,11 @@ class AuthenticationFlowIntegrationTest {
         composeTestRule.waitForIdle()
 
         // Should still be on login screen (mocked service)
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertExists()
 
         // Test Apple sign in accessibility
-        composeTestRule.onNodeWithText("Continue with Apple")
+        composeTestRule.onNodeWithText(stringResource(R.string.continue_with_apple))
             .assertIsDisplayed()
             .assertIsEnabled()
             .performClick()
@@ -182,64 +182,64 @@ class AuthenticationFlowIntegrationTest {
         composeTestRule.waitForIdle()
 
         // Should still be on login screen (mocked service)
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertExists()
     }
 
     @Test
     fun authenticationFlow_passwordVisibilityToggle() {
         // Test password visibility on login screen
-        composeTestRule.onNodeWithText("Enter your password")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_password))
             .performTextInput("testpassword")
 
         // Toggle password visibility
-        composeTestRule.onNodeWithContentDescription("Toggle password visibility")
+        composeTestRule.onNodeWithText(stringResource(R.string.content_desc_toggle_password_visibility))
             .performClick()
 
         // Password should still be there
-        composeTestRule.onNodeWithText("Enter your password")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_password))
             .assert(hasText("testpassword"))
 
         // Navigate to sign up to test confirm password toggle
         composeTestRule.onNodeWithText(stringResource(R.string.text_sign_up))
             .performClick()
 
-        composeTestRule.onNodeWithText("Create password")
+        composeTestRule.onNodeWithText(stringResource(R.string.create_password))
             .performTextInput("newpassword")
 
-        composeTestRule.onNodeWithText("Confirm password")
+        composeTestRule.onNodeWithText(stringResource(R.string.confirm_password))
             .performTextInput("newpassword")
 
         // Test both password toggles on sign up screen
-        composeTestRule.onAllNodesWithContentDescription("Toggle password visibility")
+        composeTestRule.onAllNodesWithContentDescription(stringResource(R.string.content_desc_toggle_password_visibility))
             .assertCountEquals(2)
 
         // Click first toggle
-        composeTestRule.onAllNodesWithContentDescription("Toggle password visibility")[0]
+        composeTestRule.onAllNodesWithContentDescription(stringResource(R.string.content_desc_toggle_password_visibility))[0]
             .performClick()
 
         // Click second toggle
-        composeTestRule.onAllNodesWithContentDescription("Toggle password visibility")[1]
+        composeTestRule.onAllNodesWithContentDescription(stringResource(R.string.content_desc_toggle_password_visibility))[1]
             .performClick()
     }
 
     @Test
-    fun authenticationFlow_appLaunch_showsLoginScreen() {
+    fun authenticationFlowAppLaunchShowsLoginScreen() {
         // Verify that app launches to login screen when not authenticated
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
 
         // Verify key login screen elements are present
-        composeTestRule.onNodeWithText("Sign in to continue your journey")
+        composeTestRule.onNodeWithText(stringResource(R.string.login_continue_journey)
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Email")
+        composeTestRule.onNodeWithText(stringResource(R.string.email))
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Password")
+        composeTestRule.onNodeWithText(stringResource(R.string.password)
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText("Sign In")
+        composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .assertIsDisplayed()
     }
 
@@ -258,17 +258,17 @@ class AuthenticationFlowIntegrationTest {
             .assertIsDisplayed()
 
         // Sign Up -> Login
-        composeTestRule.onNodeWithText("Sign In")
+        composeTestRule.onNodeWithText(stringResource(R.string.text_sign_in))
             .performClick()
 
         // Wait for transition
         Thread.sleep(500)
 
-        composeTestRule.onNodeWithText("Welcome Back")
+        composeTestRule.onNodeWithText(stringResource(R.string.welcome_back))
             .assertIsDisplayed()
 
         // Login -> Forgot Password (if exists)
-        composeTestRule.onNodeWithText("Forgot Password?")
+        composeTestRule.onNodeWithText(stringResource(R.string.forgot_password))
             .performClick()
 
         // Wait for potential transition
@@ -279,21 +279,21 @@ class AuthenticationFlowIntegrationTest {
     }
 
     @Test
-    fun authenticationFlow_formInputSequence_works() {
+    fun authenticationFlowFormInputSequenceWorks() {
         // Test sequential form input without IME actions
 
         // Fill login form fields sequentially
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .performTextInput("test@example.com")
 
-        composeTestRule.onNodeWithText("Enter your password")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_password))
             .performTextInput("password")
 
         // Verify both fields have content
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .assert(hasText("test@example.com"))
 
-        composeTestRule.onNodeWithText("Enter your password")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_password))
             .assert(hasText("password"))
 
         // Navigate to sign up screen to test more complex form
@@ -301,26 +301,26 @@ class AuthenticationFlowIntegrationTest {
             .performClick()
 
         // Fill sign up form fields sequentially
-        composeTestRule.onNodeWithText("First")
+        composeTestRule.onNodeWithText(stringResource(R.string.label_first_name_input))
             .performTextInput("Test")
 
-        composeTestRule.onNodeWithText("Last")
+        composeTestRule.onNodeWithText(stringResource(R.string.label_last_name_input))
             .performTextInput("User")
 
-        composeTestRule.onNodeWithText("Enter your email")
+        composeTestRule.onNodeWithText(stringResource(R.string.enter_your_email))
             .performTextInput("test@example.com")
 
-        composeTestRule.onNodeWithText("Create password")
+        composeTestRule.onNodeWithText(stringResource(R.string.create_password))
             .performTextInput("TestPassword123!")
 
-        composeTestRule.onNodeWithText("Confirm password")
+        composeTestRule.onNodeWithText(stringResource(R.string.confirm_password))
             .performTextInput("TestPassword123!")
 
         // Verify all fields have content
-        composeTestRule.onNodeWithText("First")
+        composeTestRule.onNodeWithText(stringResource(R.string.label_first_name_input))
             .assert(hasText("Test"))
 
-        composeTestRule.onNodeWithText("Last")
+        composeTestRule.onNodeWithText(stringResource(R.string.label_last_name_input))
             .assert(hasText("User"))
 
         // Email field should have new content
