@@ -9,11 +9,23 @@
 			<array>
 				<string>sprout</string>
 				<string>com.googleusercontent.apps.580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3</string>
+				<string>fb2287167571720834</string>
 			</array>
 		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3.apps.googleusercontent.com</string>
+	<key>FacebookAppID</key>
+	<string>2287167571720834</string>
+	<key>FacebookClientToken</key>
+	<string>e1679b2f8fd845e6646f7cb46fe55b0a</string>
+	<key>FacebookDisplayName</key>
+	<string>Sprout</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -30,9 +42,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Sprout needs camera access so that you can upload receipts and invoices for your records</string>
+	<string>$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Sprout needs photo library access to select receipts and invoices for you to upload to your records</string>
+	<string>$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content</string>
 	<key>UIApplicationSceneManifest</key>

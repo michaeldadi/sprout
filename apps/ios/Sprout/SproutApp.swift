@@ -12,6 +12,9 @@ import SwiftData
 import FirebaseCore
 import Mixpanel
 
+import ZendeskCoreSDK
+import SupportSDK
+
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -38,6 +41,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         // Remove the next line after confirming that your Sentry integration is working.
         SentrySDK.capture(message: "This app uses Sentry! :)")
+    
+    // Initialize Zendesk SDK
+    Zendesk.initialize(appId: Secrets.zendeskAppId, clientId: Secrets.zendeskClientId, zendeskUrl: "zendesk.sprout.io")
+    Support.initialize(withZendesk: Zendesk.instance)
 
     
     // Validate configuration early in DEBUG builds

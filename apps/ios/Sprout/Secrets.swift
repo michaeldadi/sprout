@@ -11,4 +11,6 @@ struct Secrets {
     static let apiBaseURL = ""
     static let mixpanelProjectToken = ""
     static let secretAPIKey = ""
+    static let zendeskAppId = ""
+    static let zendeskClientId = ""
 }

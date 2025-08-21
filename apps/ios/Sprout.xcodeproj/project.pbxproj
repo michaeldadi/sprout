@@ -37,6 +37,10 @@
 		141B37F62E5567ED00121BAF /* ZendeskSupportSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F52E5567ED00121BAF /* ZendeskSupportSDK */; };
 		141B37F92E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		141B37FA2E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		1463CDA02E569EE3007476A0 /* FacebookAEM in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CD9F2E569EE3007476A0 /* FacebookAEM */; };
+		1463CDA22E569EE3007476A0 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA12E569EE3007476A0 /* FacebookCore */; };
+		1463CDA42E569EE3007476A0 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA32E569EE3007476A0 /* FacebookLogin */; };
+		1463CDA62E569EE3007476A0 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA52E569EE3007476A0 /* FacebookShare */; };
 		14B44E582E5526D40071757B /* BrazeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E572E5526D40071757B /* BrazeKit */; };
 		14B44E5A2E5526D40071757B /* BrazeNotificationService in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E592E5526D40071757B /* BrazeNotificationService */; };
 		14B44E5C2E5526D40071757B /* BrazeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E5B2E5526D40071757B /* BrazeUI */; };
@@ -162,9 +166,11 @@
 				141B37E92E5566DB00121BAF /* AWSIAM in Frameworks */,
 				1417061B2E525FC2004229DD /* CoreHaptics.framework in Frameworks */,
 				1417060F2E525F7E004229DD /* AuthenticationServices.framework in Frameworks */,
+				1463CDA02E569EE3007476A0 /* FacebookAEM in Frameworks */,
 				14B44E9A2E555B020071757B /* GoogleSignIn in Frameworks */,
 				1417061D2E525FD3004229DD /* AVFoundation.framework in Frameworks */,
 				14B44E652E5528110071757B /* LinkKit in Frameworks */,
+				1463CDA62E569EE3007476A0 /* FacebookShare in Frameworks */,
 				141B37E12E5566DB00121BAF /* AWSAPIGateway in Frameworks */,
 				14B44E752E552ABD0071757B /* FirebaseAppCheck in Frameworks */,
 				141B37F12E5566DB00121BAF /* AWSS3Control in Frameworks */,
@@ -188,6 +194,7 @@
 				14B44E712E552ABD0071757B /* FirebaseAI in Frameworks */,
 				141706202E525FDC004229DD /* Photos.framework in Frameworks */,
 				14B44E5F2E5527260071757B /* AppsFlyerLib-Dynamic in Frameworks */,
+				1463CDA22E569EE3007476A0 /* FacebookCore in Frameworks */,
 				141B37E72E5566DB00121BAF /* AWSCognitoIdentityProvider in Frameworks */,
 				1417060D2E525F4F004229DD /* UniformTypeIdentifiers.framework in Frameworks */,
 				14B44E732E552ABD0071757B /* FirebaseAnalytics in Frameworks */,
@@ -196,6 +203,7 @@
 				14B44E7D2E552ABD0071757B /* FirebaseRemoteConfig in Frameworks */,
 				141B37E32E5566DB00121BAF /* AWSAppSync in Frameworks */,
 				14B44E6A2E55289A0071757B /* RevenueCatUI in Frameworks */,
+				1463CDA42E569EE3007476A0 /* FacebookLogin in Frameworks */,
 				141706172E525FA3004229DD /* CryptoKit.framework in Frameworks */,
 				141706092E525F36004229DD /* UIKit.framework in Frameworks */,
 				14B44E682E55289A0071757B /* RevenueCat in Frameworks */,
@@ -334,6 +342,10 @@
 				141B37F22E5566DB00121BAF /* AWSSDKCommon */,
 				141B37F52E5567ED00121BAF /* ZendeskSupportSDK */,
 				1AA7ECB4D81B4D319058FEAA /* Sentry */,
+				1463CD9F2E569EE3007476A0 /* FacebookAEM */,
+				1463CDA12E569EE3007476A0 /* FacebookCore */,
+				1463CDA32E569EE3007476A0 /* FacebookLogin */,
+				1463CDA52E569EE3007476A0 /* FacebookShare */,
 			);
 			productName = Sprout;
 			productReference = 141705D02E505701004229DD /* Sprout.app */;
@@ -428,6 +440,7 @@
 				141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 				141B37F42E5567ED00121BAF /* XCRemoteSwiftPackageReference "support_sdk_ios" */,
 				F0195ADB1D89449B8758F552 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 141705D12E505701004229DD /* Products */;
@@ -1016,6 +1029,14 @@
 				minimumVersion = 9.1.0;
 			};
 		};
+		1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.0;
+			};
+		};
 		14B44E562E5526D40071757B /* XCRemoteSwiftPackageReference "braze-swift-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/braze-inc/braze-swift-sdk";
@@ -1137,6 +1158,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 141B37F42E5567ED00121BAF /* XCRemoteSwiftPackageReference "support_sdk_ios" */;
 			productName = ZendeskSupportSDK;
+		};
+		1463CD9F2E569EE3007476A0 /* FacebookAEM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookAEM;
+		};
+		1463CDA12E569EE3007476A0 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		1463CDA32E569EE3007476A0 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		1463CDA52E569EE3007476A0 /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
 		};
 		14B44E572E5526D40071757B /* BrazeKit */ = {
 			isa = XCSwiftPackageProductDependency;

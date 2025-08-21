@@ -12,9 +12,6 @@ struct SignUpView: View {
     @State private var isShowingConfirmPassword = false
     @State private var isAnimating = false
     @State private var agreeToTerms = false
-    @State private var showingWebView = false
-    @State private var webViewURL: URL?
-    @State private var webViewTitle: String = ""
     @State private var showingVerificationView = false
     @State private var verificationCode = ""
     @FocusState private var firstNameFieldFocused: Bool
@@ -449,11 +446,6 @@ struct SignUpView: View {
             confirmPasswordFieldFocused = false
         }
         .toastOverlay()
-        .sheet(isPresented: $showingWebView) {
-            if let url = webViewURL {
-                WebViewSheet(url: url, title: webViewTitle, isPresented: $showingWebView)
-            }
-        }
         .sheet(isPresented: $showingVerificationView) {
             VerificationView(email: email, isPresented: $showingVerificationView)
         }
@@ -536,10 +528,8 @@ struct SignUpView: View {
             return
         }
         
-        webViewURL = url
-        webViewTitle = "Terms of Service"
-        showingWebView = true
-        print("Opening Terms in WebView: \(url.absoluteString)")
+        UIApplication.shared.open(url)
+        print("Opening Terms in System Browser: \(url.absoluteString)")
     }
     
     private func openPrivacyPolicy() {
@@ -548,10 +538,8 @@ struct SignUpView: View {
             return
         }
         
-        webViewURL = url
-        webViewTitle = "Privacy Policy"
-        showingWebView = true
-        print("Opening Privacy in WebView: \(url.absoluteString)")
+        UIApplication.shared.open(url)
+        print("Opening Privacy in System Browser: \(url.absoluteString)")
     }
     
     private func handleAppleSignUp() {
