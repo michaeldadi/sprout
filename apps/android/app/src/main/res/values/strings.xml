@@ -69,6 +69,15 @@
     <string name="toast_prompt_password_min_length">Password must be at least 8 characters</string>
     <string name="toast_prompt_passwords_not_match">Passwords do not match</string>
 
+    <string name="compose_shortcut_short_label1">Add Expense</string>
+    <string name="compose_shortcut_long_label1">Quickly add a new expense</string>
+
+    <string name="compose_shortcut_short_label2">Goals</string>
+    <string name="compose_shortcut_long_label2">Track your financial goals</string>
+
+    <string name="compose_shortcut_short_label3">Recent Transactions</string>
+    <string name="compose_shortcut_long_label3">View your latest spending</string>
+
     <string name="facebook_app_id">2287167571720834</string>
     <string name="facebook_client_token">e1679b2f8fd845e6646f7cb46fe55b0a</string>
 </resources>

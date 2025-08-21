@@ -47,6 +47,7 @@ fire-remoteconfig = "23.0.0"
 fire-perf = "22.0.0"
 gms-google-services = "4.4.3"
 plugin-fb-crashlytics = "3.0.6"
+android-shortcuts = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -91,6 +92,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+androidx-shortcuts = { group = "androidx.core", name = "core-google-shortcuts", version.ref = "android-shortcuts" }
 
 # Room dependencies
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

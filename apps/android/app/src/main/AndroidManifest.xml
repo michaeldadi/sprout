@@ -64,6 +64,9 @@
                       android:host="plaid"
                       android:path="/oauth" />
             </intent-filter>
+
+            <meta-data android:name="android.app.shortcuts"
+              android:resource="@xml/shortcuts" />
         </activity>
 
         <!-- Required: set your sentry.io project identifier (DSN) -->
@@ -79,7 +82,7 @@
         <meta-data android:name="io.sentry.attach-view-hierarchy" android:value="true" />
 
         <!-- enable the performance API by setting a sample-rate, adjust in production env -->
-        <meta-data android:name="io.sentry.traces.sample-rate" android:value="1.0" />
+        <meta-data android:name="io.sentry.traces.sample-rate" android:value="0.2" />
 
         <meta-data android:name="com.mixpanel.android.MPConfig.EnableDebugLogging"
                    android:value="false" />

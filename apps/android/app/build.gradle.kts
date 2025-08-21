@@ -99,6 +99,9 @@ dependencies {
     implementation(libs.install.referrer)
     implementation(libs.facebook.sdk)
 
+    // Android shortcuts
+    implementation(libs.androidx.shortcuts)
+
     // Firebase
     implementation(platform(libs.firebase.sdk))
     implementation(libs.firebase.dynamic)

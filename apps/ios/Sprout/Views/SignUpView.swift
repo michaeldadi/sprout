@@ -1,6 +1,7 @@
 import SwiftUI
 import AuthenticationServices
 import GoogleSignIn
+import SafariServices
 
 struct SignUpView: View {
     @State private var firstName = ""
@@ -14,6 +15,8 @@ struct SignUpView: View {
     @State private var agreeToTerms = false
     @State private var showingVerificationView = false
     @State private var verificationCode = ""
+    @State private var webDest: WebDestination?
+    @State private var hasAppeared = false
     @FocusState private var firstNameFieldFocused: Bool
     @FocusState private var lastNameFieldFocused: Bool
     @FocusState private var emailFieldFocused: Bool
@@ -449,12 +452,43 @@ struct SignUpView: View {
         .sheet(isPresented: $showingVerificationView) {
             VerificationView(email: email, isPresented: $showingVerificationView)
         }
+        .sheet(item: $webDest) { dest in
+            SafariView(url: dest.url)
+                .ignoresSafeArea()
+        }
         .onAppear {
+            hasAppeared = true
             withAnimation {
                 isAnimating = true
             }
         }
     }
+  
+    private func openInAppBrowser(_ urlString: String) {
+        guard let url = URL(string: urlString), url.scheme?.lowercased() == "https" else {
+            ToastManager.shared.showError("Invalid or non-HTTPS URL")
+            return
+        }
+
+        // Dismiss any focus/keyboard before presenting
+        firstNameFieldFocused = false
+        lastNameFieldFocused = false
+        emailFieldFocused = false
+        passwordFieldFocused = false
+        confirmPasswordFieldFocused = false
+
+        // Defer to next runloop to avoid first-launch blank sheet
+        DispatchQueue.main.async {
+            if hasAppeared {
+                webDest = WebDestination(url: url)
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    webDest = WebDestination(url: url)
+                }
+            }
+        }
+    }
+
     
     private func handleSignUp() {
         // Validate inputs
@@ -523,23 +557,11 @@ struct SignUpView: View {
     }
     
     private func openTermsOfService() {
-        guard let url = URL(string: "https://www.google.com") else {
-            print("Invalid Terms URL")
-            return
-        }
-        
-        UIApplication.shared.open(url)
-        print("Opening Terms in System Browser: \(url.absoluteString)")
+        openInAppBrowser("https://www.getsprout.io/terms-of-service")
     }
     
     private func openPrivacyPolicy() {
-        guard let url = URL(string: "https://www.apple.com") else {
-            print("Invalid Privacy URL")
-            return
-        }
-        
-        UIApplication.shared.open(url)
-        print("Opening Privacy in System Browser: \(url.absoluteString)")
+        openInAppBrowser("https://www.getsprout.io/privacy-policy")
     }
     
     private func handleAppleSignUp() {

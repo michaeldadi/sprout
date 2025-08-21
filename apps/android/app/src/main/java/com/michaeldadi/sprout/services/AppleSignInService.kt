@@ -193,7 +193,7 @@ class AppleSignInService(
                 if (parts.size >= 2) {
                     val payload = String(Base64.getUrlDecoder().decode(parts[1]))
                     val json = JSONObject(payload)
-                    email = json.optString("email", null)
+                    email = json.optString("email", "")
                 }
             } catch (e: Exception) {
                 // ID token parsing failed

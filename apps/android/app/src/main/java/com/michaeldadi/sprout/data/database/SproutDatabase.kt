@@ -17,21 +17,21 @@ import com.michaeldadi.sprout.data.entities.TransactionEntity
 )
 @TypeConverters(DateConverter::class, StringListConverter::class)
 abstract class SproutDatabase : RoomDatabase() {
-    
+
     abstract fun transactionDao(): TransactionDao
-    
+
     companion object {
         @Volatile
         private var INSTANCE: SproutDatabase? = null
-        
+
         fun getDatabase(context: Context): SproutDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    SproutDatabase::class.java,
-                    "sprout_database"
+                  context.applicationContext,
+                  SproutDatabase::class.java,
+                  "sprout_database"
                 )
-                    .fallbackToDestructiveMigration()
+                  .fallbackToDestructiveMigration(false)
                     .build()
                 INSTANCE = instance
                 instance

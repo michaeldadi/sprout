@@ -22,11 +22,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             options.dsn = "https://cc367d1e16674e8b7a63694900d28bc9@o4509872073342976.ingest.us.sentry.io/4509874072715264"
             options.debug = false
 
-            // Adds IP for users.
-            // For more information, visit: https://docs.sentry.io/platforms/apple/data-management/data-collected/
             options.sendDefaultPii = true
 
-          options.tracesSampleRate = 0.25
+          options.tracesSampleRate = 0.2
 
             options.configureProfiling = {
               $0.sessionSampleRate = 0.2
@@ -39,11 +37,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             // Enable experimental logging features
             options.experimental.enableLogs = true
         }
-        // Remove the next line after confirming that your Sentry integration is working.
-        SentrySDK.capture(message: "This app uses Sentry! :)")
     
     // Initialize Zendesk SDK
-    Zendesk.initialize(appId: Secrets.zendeskAppId, clientId: Secrets.zendeskClientId, zendeskUrl: "zendesk.sprout.io")
+    Zendesk.initialize(appId: Secrets.zendeskAppId, clientId: Secrets.zendeskClientId, zendeskUrl: "zendesk.getsprout.io")
     Support.initialize(withZendesk: Zendesk.instance)
 
     
@@ -86,9 +82,6 @@ struct SproutApp: App {
     
     init() {
         do {
-            // Initialize Safari WebKit engine on app launch
-            SafariInitializer.shared.ensureInitialized()
-
             let container = try DataContainer()
             _dataContainer = StateObject(wrappedValue: container)
             _syncService = StateObject(wrappedValue: SyncService(
