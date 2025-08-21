@@ -47,6 +47,7 @@ playground.xcworkspace
 
 # Environment variables
 .env
+!.env.example*
 .env.local*
 Sprout/Generated
 
