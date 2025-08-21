@@ -359,8 +359,8 @@
 				141705CC2E505701004229DD /* Sources */,
 				141705CD2E505701004229DD /* Frameworks */,
 				141705CE2E505701004229DD /* Resources */,
-				4957DB6FE1634E5EA256EC01 /* Upload Debug Symbols to Sentry */,
 				146656742E56DC4100016C94 /* Embed Foundation Extensions */,
+				4957DB6FE1634E5EA256EC01 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -805,8 +805,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
 				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
@@ -851,8 +851,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
 				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
@@ -1116,8 +1116,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to give you personalized savings recommendations in your area";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
 				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
