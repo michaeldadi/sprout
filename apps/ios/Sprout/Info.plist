@@ -21,16 +21,10 @@
 	<string>e1679b2f8fd845e6646f7cb46fe55b0a</string>
 	<key>FacebookDisplayName</key>
 	<string>Sprout</string>
-	<key>GIDClientID</key>
-	<string>580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
@@ -75,8 +69,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIApplicationShortcutItems</key>
