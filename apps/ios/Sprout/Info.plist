@@ -80,6 +80,7 @@
 		<string>remote-notification</string>
 		<string>fetch</string>
 		<string>location</string>
+		<string>audio</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
