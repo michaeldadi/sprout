@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Google Assistant App Actions configuration -->
+<actions>
+    <!-- Add Expense Action -->
+    <action intentName="actions.intent.CREATE_THING">
+        <fulfillment urlTemplate="sprout://add-expense?amount={amount}&amp;merchant={merchant}&amp;category={category}">
+            <parameter-mapping 
+                intentParameter="thing.name" 
+                urlParameter="merchant" />
+            <parameter-mapping 
+                intentParameter="amount" 
+                urlParameter="amount" />
+            <parameter-mapping 
+                intentParameter="category" 
+                urlParameter="category" />
+        </fulfillment>
+    </action>
+    
+    <!-- Check Balance Action -->
+    <action intentName="actions.intent.GET_ACCOUNT_BALANCE">
+        <fulfillment urlTemplate="sprout://check-balance" />
+    </action>
+    
+    <!-- View Transactions Action -->
+    <action intentName="actions.intent.GET_THING">
+        <fulfillment urlTemplate="sprout://recent-transactions?limit={limit}">
+            <parameter-mapping 
+                intentParameter="limit" 
+                urlParameter="limit" />
+        </fulfillment>
+    </action>
+    
+    <!-- Search Transactions Action -->
+    <action intentName="actions.intent.SEARCH_ACTION">
+        <fulfillment urlTemplate="sprout://search-transactions?query={query}">
+            <parameter-mapping 
+                intentParameter="query" 
+                urlParameter="query" />
+        </fulfillment>
+    </action>
+    
+    <!-- Monthly Spending Action -->
+    <action intentName="actions.intent.GET_THING">
+        <fulfillment urlTemplate="sprout://monthly-spending?month={month}&amp;year={year}">
+            <parameter-mapping 
+                intentParameter="month" 
+                urlParameter="month" />
+            <parameter-mapping 
+                intentParameter="year" 
+                urlParameter="year" />
+        </fulfillment>
+    </action>
+</actions>

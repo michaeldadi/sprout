@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sentry
+import Intents
 
 import SwiftData
 import FirebaseCore
@@ -66,7 +67,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             trackAutomaticEvents: false
             )
 
+    // Set up Siri shortcuts
+    SiriShortcutsService.shared.donateAllShortcuts()
+
     return true
+  }
+  
+  func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    // Handle Siri shortcuts
+    if userActivity.activityType.contains("com.michaeldadi.sprout") {
+      handleSiriShortcut(userActivity)
+      return true
+    }
+    return false
+  }
+  
+  private func handleSiriShortcut(_ userActivity: NSUserActivity) {
+    NotificationCenter.default.post(
+      name: .siriShortcutReceived,
+      object: userActivity
+    )
   }
 }
 

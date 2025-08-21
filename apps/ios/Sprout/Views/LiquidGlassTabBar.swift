@@ -433,6 +433,36 @@ struct ProfileTabView: View {
                 }
                 .padding(.top)
                 
+                // Siri Shortcuts section
+                VStack(spacing: 12) {
+                    NavigationLink(destination: SiriShortcutsView()) {
+                        HStack {
+                            Image(systemName: "waveform.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(.blue)
+                            
+                            VStack(alignment: .leading) {
+                                Text("Siri Shortcuts")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text("Set up voice commands")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .padding(.horizontal)
+                
                 Spacer()
                 
                 // Sign out button
