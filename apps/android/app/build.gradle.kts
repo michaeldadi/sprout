@@ -121,6 +121,9 @@ dependencies {
     // Android shortcuts
     implementation(libs.androidx.shortcuts)
 
+    // Biometric authentication
+    implementation(libs.androidx.biometric)
+
     // ZenDesk chat support SDK
     implementation(libs.zendesk.support)
 

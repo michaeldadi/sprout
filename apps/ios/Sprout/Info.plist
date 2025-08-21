@@ -47,6 +47,8 @@
 	<string>$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
