@@ -17,17 +17,21 @@ class SproutApplication : Application() {
         super.onCreate()
 
         // Initialize Zendesk SDK
-        Zendesk.initialize(
-          context = this,
-          channelKey = "<your_channel_key>",
-          successCallback = { zendesk ->
-            Log.i("ZenDesk SDK initialized successfully:", zendesk.messaging.toString())
-          },
-          failureCallback = { error ->
-            Log.e("An error occurred initializing the ZenDesk SDK:", error.message.toString())
-          },
-          messagingFactory = DefaultMessagingFactory()
-        )
+        if (BuildConfig.ZENDESK_CHANNEL_KEY.isNotEmpty()) {
+            Zendesk.initialize(
+              context = this,
+              channelKey = BuildConfig.ZENDESK_CHANNEL_KEY,
+              successCallback = { zendesk ->
+                Log.i("ZenDesk SDK initialized successfully:", zendesk.messaging.toString())
+              },
+              failureCallback = { error ->
+                Log.e("An error occurred initializing the ZenDesk SDK:", error.message.toString())
+              },
+              messagingFactory = DefaultMessagingFactory()
+            )
+        } else {
+            Log.w("SproutApplication", "Zendesk channel key not configured")
+        }
 
         // Initialize other SDKs that are already in use
         initializeMixpanel()
@@ -37,14 +41,22 @@ class SproutApplication : Application() {
     }
 
     private fun initializeMixpanel() {
-        // TODO: Replace with your actual Mixpanel token
-        val mixpanel = MixpanelAPI.getInstance(this, "YOUR_MIXPANEL_TOKEN", true)
+        if (BuildConfig.MIXPANEL_TOKEN.isNotEmpty()) {
+            MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN, true)
+            Log.i("SproutApplication", "MixPanel initialized")
+        } else {
+            Log.w("SproutApplication", "MixPanel token not configured")
+        }
     }
 
     private fun initializeAppsFlyer() {
-        // TODO: Replace with your actual AppsFlyer dev key
-        AppsFlyerLib.getInstance().init("YOUR_APPSFLYER_DEV_KEY", null, this)
-        AppsFlyerLib.getInstance().start(this)
+        if (BuildConfig.APPSFLYER_DEV_KEY.isNotEmpty()) {
+            AppsFlyerLib.getInstance().init(BuildConfig.APPSFLYER_DEV_KEY, null, this)
+            AppsFlyerLib.getInstance().start(this)
+            Log.i("SproutApplication", "AppsFlyer initialized")
+        } else {
+            Log.w("SproutApplication", "AppsFlyer dev key not configured")
+        }
     }
 
     private fun initializeFacebook() {
@@ -54,11 +66,15 @@ class SproutApplication : Application() {
     }
 
     private fun initializeRevenueCat() {
-        // TODO: Replace with your actual RevenueCat API key
-        Purchases.logLevel = LogLevel.DEBUG
-        Purchases.configure(
-            PurchasesConfiguration.Builder(this, "YOUR_REVENUECAT_API_KEY")
-                .build()
-        )
+        if (BuildConfig.REVENUECAT_API_KEY.isNotEmpty()) {
+            Purchases.logLevel = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.INFO
+            Purchases.configure(
+                PurchasesConfiguration.Builder(this, BuildConfig.REVENUECAT_API_KEY)
+                    .build()
+            )
+            Log.i("SproutApplication", "RevenueCat initialized")
+        } else {
+            Log.w("SproutApplication", "RevenueCat API key not configured")
+        }
     }
 }

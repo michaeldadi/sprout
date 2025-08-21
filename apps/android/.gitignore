@@ -16,3 +16,6 @@ local.properties
 
 # Sentry Config File
 sentry.properties
+
+# Environment variables
+.env.local

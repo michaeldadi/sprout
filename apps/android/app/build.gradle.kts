@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +10,15 @@ plugins {
     alias(libs.plugins.crashlytics)
 
     id("io.sentry.android.gradle") version "5.9.0"
+}
+
+// Load environment variables from .env file
+val envFile = file("../../.env.local")
+val envProperties = Properties()
+if (envFile.exists()) {
+    envProperties.load(FileInputStream(envFile))
+} else {
+    println("WARNING: .env.local file not found. Using default values.")
 }
 
 android {
@@ -21,6 +33,12 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Add BuildConfig fields from environment variables
+        buildConfigField("String", "ZENDESK_CHANNEL_KEY", "\"${envProperties.getProperty("ZENDESK_CHANNEL_KEY", "")}\"")
+        buildConfigField("String", "MIXPANEL_TOKEN", "\"${envProperties.getProperty("MIXPANEL_TOKEN", "")}\"")
+        buildConfigField("String", "APPSFLYER_DEV_KEY", "\"${envProperties.getProperty("APPSFLYER_DEV_KEY", "")}\"")
+        buildConfigField("String", "REVENUECAT_API_KEY", "\"${envProperties.getProperty("REVENUECAT_API_KEY", "")}\"")
     }
 
     buildTypes {
@@ -43,6 +61,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
