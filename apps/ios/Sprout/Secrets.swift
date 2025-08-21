@@ -13,4 +13,6 @@ struct Secrets {
     static let secretAPIKey = ""
     static let zendeskAppId = ""
     static let zendeskClientId = ""
+    static let brazeApiKey = ""
+    static let brazeEndpoint = "sdk.us-09.braze.com"
 }

@@ -13,23 +13,23 @@
 			</array>
 		</dict>
 	</array>
-	<key>GIDClientID</key>
-	<string>580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3.apps.googleusercontent.com</string>
 	<key>FacebookAppID</key>
 	<string>2287167571720834</string>
 	<key>FacebookClientToken</key>
 	<string>e1679b2f8fd845e6646f7cb46fe55b0a</string>
 	<key>FacebookDisplayName</key>
 	<string>Sprout</string>
+	<key>GIDClientID</key>
+	<string>580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>sprout</string>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
+		<string>fb</string>
+		<string>twitter</string>
+		<string>tiktok</string>
 	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -37,51 +37,22 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content</string>
-	<key>NSSiriUsageDescription</key>
-  <string>$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.michaeldadi.Sprout.recentTransactions</string>
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypeTime</string>
 			<key>UIApplicationShortcutItemSubtitle</key>
 			<string>View your latest spending</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Recent Transactions</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.michaeldadi.Sprout.recentTransactions</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconType</key>
@@ -94,14 +65,14 @@
 			<string>com.michaeldadi.Sprout.goals</string>
 		</dict>
 		<dict>
-			<key>UIApplicationShortcutItemType</key>
-			<string>com.michaeldadi.Sprout.addExpense</string>
 			<key>UIApplicationShortcutItemIconType</key>
 			<string>UIApplicationShortcutIconTypeAdd</string>
 			<key>UIApplicationShortcutItemSubtitle</key>
 			<string>Quick add a new expense</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Add Expense</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>com.michaeldadi.Sprout.addExpense</string>
 		</dict>
 	</array>
 	<key>UIBackgroundModes</key>
@@ -109,8 +80,13 @@
 		<string>remote-notification</string>
 		<string>fetch</string>
 		<string>processing</string>
+		<string>location</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.</string>
 </dict>
 </plist>
