@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "580971148783",
+    "project_id": "sprout-4f7bb",
+    "storage_bucket": "sprout-4f7bb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580971148783:android:1e0f0cf0b0b3dc7ad7f21a",
+        "android_client_info": {
+          "package_name": "com.michaeldadi.sprout"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8PjUHUXhOUXFzHd0JV07abw9DuuEFZkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580971148783-vtnhovcbv03fea1rmvn7hes466a6b3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.michaeldadi.sprout",
+                "app_store_id": "6751247147"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

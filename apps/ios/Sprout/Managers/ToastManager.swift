@@ -72,7 +72,7 @@ class ToastManager: ObservableObject {
     @Published var currentToast: ToastItem?
     private var workItem: DispatchWorkItem?
     
-    private init() {}
+    public init() {}
     
     func showToast(_ message: String, type: ToastType, duration: Double = 3.0) {
         // Cancel any existing work item

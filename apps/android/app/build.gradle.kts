@@ -2,6 +2,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.google.gms)
+    alias(libs.plugins.crashlytics)
+
+    id("io.sentry.android.gradle") version "5.9.0"
 }
 
 android {
@@ -31,8 +36,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         compose = true
@@ -72,7 +79,49 @@ dependencies {
     // Custom Tabs for Apple Sign In
     implementation(libs.androidx.browser)
 
-  // Unit testing
+    // Room database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.common.jvm)
+    ksp(libs.androidx.room.compiler)
+
+    // WorkManager for background sync
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // RevenueCat
+    implementation(libs.revenuecat)
+
+    // MixPanel
+    implementation(libs.android.mixpanel)
+
+    // AppsFlyer
+    implementation(libs.appsflyer.android)
+    implementation(libs.install.referrer)
+    implementation(libs.facebook.sdk)
+
+    // Firebase
+    implementation(platform(libs.firebase.sdk))
+    implementation(libs.firebase.dynamic)
+    // Individual firebase dependencies
+    implementation(libs.firebase.ai)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.appcheck)
+    implementation(libs.firebase.appdist)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.perf)
+    implementation(libs.firebase.remoteconfig)
+
+    // Plaid
+    implementation(libs.plaid.link)
+
+    // Networking
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.logging)
+    implementation(libs.gson)
+
+    // Unit testing
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
@@ -90,4 +139,14 @@ dependencies {
     // Debug dependencies
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+
+sentry {
+    org.set("michael-dadi-1b")
+    projectName.set("sprout-android")
+
+    // this will upload your source code to Sentry to show it as part of the stack traces
+    // disable if you don't want to expose your sources
+    includeSourceContext.set(true)
 }

@@ -68,4 +68,7 @@
     <string name="toast_prompt_enter_password">Please create a password</string>
     <string name="toast_prompt_password_min_length">Password must be at least 8 characters</string>
     <string name="toast_prompt_passwords_not_match">Passwords do not match</string>
+
+    <string name="facebook_app_id">2287167571720834</string>
+    <string name="facebook_client_token">e1679b2f8fd845e6646f7cb46fe55b0a</string>
 </resources>

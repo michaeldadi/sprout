@@ -71,24 +71,41 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct SproutApp: App {
     // Register the AppDelegate for
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-  
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+    
+    @StateObject private var dataContainer: DataContainer
+    @StateObject private var syncService: SyncService
+    @StateObject private var authService = AuthService.shared
+    @StateObject private var toastManager = ToastManager()
+    
+    init() {
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            // Initialize Safari WebKit engine on app launch
+            SafariInitializer.shared.ensureInitialized()
+
+            let container = try DataContainer()
+            _dataContainer = StateObject(wrappedValue: container)
+            _syncService = StateObject(wrappedValue: SyncService(
+                dataContainer: container,
+                networkManager: NetworkManager.shared
+            ))
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Failed to initialize data container: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(dataContainer)
+                .environmentObject(syncService)
+                .environmentObject(authService)
+                .environmentObject(toastManager)
+                .task {
+                    // Start sync when app launches if user is authenticated
+                    if authService.isAuthenticated {
+                        try? await syncService.syncData()
+                    }
+                }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

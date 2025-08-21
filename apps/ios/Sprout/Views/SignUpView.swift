@@ -1,5 +1,4 @@
 import SwiftUI
-import SafariServices
 import AuthenticationServices
 import GoogleSignIn
 
@@ -13,8 +12,9 @@ struct SignUpView: View {
     @State private var isShowingConfirmPassword = false
     @State private var isAnimating = false
     @State private var agreeToTerms = false
-    @State private var showingSafari = false
-    @State private var safariURL: URL?
+    @State private var showingWebView = false
+    @State private var webViewURL: URL?
+    @State private var webViewTitle: String = ""
     @State private var showingVerificationView = false
     @State private var verificationCode = ""
     @FocusState private var firstNameFieldFocused: Bool
@@ -449,9 +449,9 @@ struct SignUpView: View {
             confirmPasswordFieldFocused = false
         }
         .toastOverlay()
-        .sheet(isPresented: $showingSafari) {
-            if let url = safariURL {
-                SafariView(url: url)
+        .sheet(isPresented: $showingWebView) {
+            if let url = webViewURL {
+                WebViewSheet(url: url, title: webViewTitle, isPresented: $showingWebView)
             }
         }
         .sheet(isPresented: $showingVerificationView) {
@@ -531,19 +531,27 @@ struct SignUpView: View {
     }
     
     private func openTermsOfService() {
-        // Replace with your actual Terms of Service URL
-        if let url = URL(string: "https://your-app.com/terms") {
-            safariURL = url
-            showingSafari = true
+        guard let url = URL(string: "https://www.google.com") else {
+            print("Invalid Terms URL")
+            return
         }
+        
+        webViewURL = url
+        webViewTitle = "Terms of Service"
+        showingWebView = true
+        print("Opening Terms in WebView: \(url.absoluteString)")
     }
     
     private func openPrivacyPolicy() {
-        // Replace with your actual Privacy Policy URL
-        if let url = URL(string: "https://your-app.com/privacy") {
-            safariURL = url
-            showingSafari = true
+        guard let url = URL(string: "https://www.apple.com") else {
+            print("Invalid Privacy URL")
+            return
         }
+        
+        webViewURL = url
+        webViewTitle = "Privacy Policy"
+        showingWebView = true
+        print("Opening Privacy in WebView: \(url.absoluteString)")
     }
     
     private func handleAppleSignUp() {
@@ -629,22 +637,6 @@ struct SignUpView: View {
             return nil
         }
         return window.rootViewController
-    }
-}
-
-// Safari View Controller Wrapper
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-    
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        let safariViewController = SFSafariViewController(url: url)
-        safariViewController.preferredBarTintColor = UIColor.systemBackground
-        safariViewController.preferredControlTintColor = UIColor.systemGreen
-        return safariViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
-        // No updates needed
     }
 }
 
