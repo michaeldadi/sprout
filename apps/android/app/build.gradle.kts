@@ -102,6 +102,9 @@ dependencies {
     // Android shortcuts
     implementation(libs.androidx.shortcuts)
 
+    // ZenDesk chat support SDK
+    implementation(libs.zendesk.support)
+
     // Firebase
     implementation(platform(libs.firebase.sdk))
     implementation(libs.firebase.dynamic)

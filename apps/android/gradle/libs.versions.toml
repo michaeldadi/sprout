@@ -48,6 +48,7 @@ fire-perf = "22.0.0"
 gms-google-services = "4.4.3"
 plugin-fb-crashlytics = "3.0.6"
 android-shortcuts = "1.1.0"
+zendesk = "2.33.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -88,6 +89,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-remoteconfig = { group = "com.google.firebase", name = "firebase-config", version.ref = "fire-remoteconfig" }
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "fire-perf" }
 google-sign-in = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googleSignIn" }
+zendesk-support = { group = "zendesk.messaging", name = "messaging-android", version.ref = "zendesk" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
