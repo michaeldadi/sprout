@@ -1,76 +1,118 @@
-# sign-in-with-apple
+# 🔔 Node.js Push Notifications with FCM Function
 
-This function:
-
-1. Exchanges an authorization code with Apple to obtain the user's id token.
-1. If a user with matching id or email doesn't exist, a new user will be created.
-1. The user's email will be verified if is hasn't been already.
-1. A token will be returned allowing the user to exchange the token for a session via `account.createSession()`.
-
-> Note: this function uses an md5 hash of the `sub` as the user's id since the value from Apple is too long and has unsupported characters.
+Send push notifications to your users using Firebase Cloud Messaging (FCM).
 
 ## 🧰 Usage
 
 ### POST /
 
-**Headers**
+Send a push notification to a user.
 
-The Content-Type header must be set to `application/json` so that the request body can be properly parsed as JSON.
+**Parameters**
 
-* `Content-Type`: `application/json`
+| Name         | Description                          | Location | Type               | Sample Value   |
+| ------------ | ------------------------------------ | -------- | ------------------ | -------------- |
+| Content-Type | The content type of the request body | Header   | `application/json` | N/A            |
+| deviceToken  | FCM device identifier                | Body     | String             | `642...7cd`    |
+| message      | Message to send                      | Body     | Object             | `{"title": "hello","body": "how are you?"}` |
+| data      | Additional data to pass                         | Body     | Object             | `{"greet": "welcome"}` |
 
 **Request**
 
-This function accepts:
+`deviceToken` and `message` are required. `data` is optional.
 
-* `code` (required) - authorization code from the Sign in with Apple credential
-* `firstName` - given name from the Sign in with Apple credential
-* `lastName` - family name from the Sign in with Apple credential
-
-Sample request body:
 
 ```json
 {
-    "code": "c361a519253b3486ea3c7ecd4e9b6903f.0.suut.3LCHm9ytku1B2v4r5IayPQ",
-    "firstName": "Walter",
-    "lastName": "O'Brien",
+    "deviceToken": "642...7cd",
+    "message": {
+        "title": "hello",
+        "body": "how are you?"
+    },
+    "data": {
+        "greet": "welcome" 
+    }    
 }
 ```
 
+
 **Response**
-
-This function returns:
-
-* `secret` - `secret` to be passed to `account.createSession()` to create a session
-* `userId` - `userId` to be passed to `account.createSession()` to create a session
-* `expire` - ISO formatted timestamp for when the secret expires
 
 Sample `200` Response:
 
 ```json
 {
-  "secret": "0cbdd4fd7638e0f3f55871adf2256f8f42f6faa01c9300e482c9a585b76611343dee8562ce4421b1cf9e9de6f8341fb2286499cb7992d02accd2dc699211008c",
-  "userId": "90a5450f396c242637c39b4c39e07af4",
-  "expire": "2025-07-15T00:10:21.345+00:00",
+  "ok": true,
+  "messageId": "as4jg109cbe1"
+}
+```
+
+Sample `400` Response:
+
+```json
+{
+  "ok": false,
+  "error": "Device token and message are required."
+}
+```
+
+Sample `500` Response:
+
+```json
+{
+  "ok": false,
+  "error": "Failed to send the message."
 }
 ```
 
 ## ⚙️ Configuration
 
-| Setting           | Value                       |
-| ----------------- | ---------------             |
-| Runtime           | Dart (3.5 )                 |
-| Entrypoint        | `lib/main.dart`             |
-| Build Commands    | `dart pub get`              |
-| Permissions       | `any`                       |
-| Timeout (Seconds) | 15                          |
-| Scopes            | `users.read`, `users.write` |
+| Setting           | Value         |
+| ----------------- | ------------- |
+| Runtime           | Node (18.0)   |
+| Entrypoint        | `src/main.js` |
+| Build Commands    | `npm install` |
+| Permissions       | `any`         |
+| Timeout (Seconds) | 15            |
 
 ## 🔒 Environment Variables
 
-The following environment variables are required:
+### FCM_PROJECT_ID
 
-* `BUNDLE_ID` - the bundle Id of the app that generated the authorization code
-* `TEAM_ID` - Apple Developer team Id
-* `KEY_ID` - Id of the key from the Apple Developer portal
-* `KEY_CONTENTS_ENCODED` - base64 encoded p8 certificate
+A unique identifier for your FCM project.
+
+| Question      | Answer                                                                             |
+| ------------- | ---------------------------------------------------------------------------------- |
+| Required      | Yes                                                                                |
+| Sample Value  | `mywebapp-f6e57`                                                                   |
+| Documentation | [FCM: Project ID](https://firebase.google.com/docs/projects/learn-more#project-id) |
+
+### FCM_CLIENT_EMAIL
+
+Your FCM service account email.
+
+| Question      | Answer                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| Required      | Yes                                                                                                          |
+| Sample Value  | `fcm-adminsdk-1a0de@test-f6e57.iam.gserviceaccount.com`                                                      |
+| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
+
+### FCM_PRIVATE_KEY
+
+A unique private key used to authenticate with FCM.
+
+| Question      | Answer                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| Required      | Yes                                                                                                          |
+| Sample Value  | `0b6830cc66d92804e11af2153242d34211d675675`                                                                  |
+| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
+
+### FCM_DATABASE_URL
+
+URL of your FCM database.
+
+| Question      | Answer                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| Required      | Yes                                                                                                          |
+| Sample Value  | `https://my-app-e398e.firebaseio.com`                                                                        |
+| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
