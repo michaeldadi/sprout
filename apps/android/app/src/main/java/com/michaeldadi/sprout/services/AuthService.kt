@@ -22,15 +22,16 @@ import androidx.core.content.edit
  * Authentication service for handling Cognito authentication
  * Mirrors the iOS AuthService.swift structure and functionality
  */
-class AuthService(application: Application) : AndroidViewModel(application) {
+class AuthService @JvmOverloads constructor(
+    application: Application,
+    private val cognitoClient: CognitoIdentityProviderClient = CognitoIdentityProviderClient {
+        region = CognitoConfig.region
+    }
+) : AndroidViewModel(application) {
 
     companion object {
         private const val PREFS_NAME = "sprout_auth_prefs"
         private const val KEY_TOKENS = "cognito_tokens"
-    }
-
-    private val cognitoClient = CognitoIdentityProviderClient {
-        region = CognitoConfig.region
     }
 
     private val prefs: SharedPreferences = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

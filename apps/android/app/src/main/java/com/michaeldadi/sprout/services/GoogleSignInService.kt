@@ -15,9 +15,9 @@ import com.michaeldadi.sprout.config.AppConfig
  */
 class GoogleSignInService(
     private val context: Context,
-    private val activity: ComponentActivity
+    private val activity: ComponentActivity,
+    private val credentialManager: CredentialManager = CredentialManager.create(context)
 ) {
-    private val credentialManager = CredentialManager.create(context)
     
     suspend fun signIn(): GoogleSignInResult {
         return try {
