@@ -1,0 +1,121 @@
+name: Mobile CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Select mobile checks
+    runs-on: ubuntu-latest
+    outputs:
+      ios: ${{ steps.scope.outputs.ios }}
+      android: ${{ steps.scope.outputs.android }}
+      shared_contract: ${{ steps.scope.outputs.shared_contract }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select affected platforms
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" || -z "${BASE_SHA}" || "${BASE_SHA}" =~ ^0+$ ]] ||
+             ! git cat-file -e "${BASE_SHA}^{commit}" ||
+             ! git cat-file -e "${HEAD_SHA}^{commit}"; then
+            printf 'ios=true\nandroid=true\nshared_contract=false\n' >> "${GITHUB_OUTPUT}"
+          else
+            git diff --name-only -z "${BASE_SHA}" "${HEAD_SHA}" |
+              python3 .github/scripts/mobile-change-scope.py
+          fi
+
+  ios:
+    name: iOS build and unit smoke test
+    needs: changes
+    if: needs.changes.outputs.ios == 'true'
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Show Xcode version
+        run: xcodebuild -version
+      - name: Build and test on simulator
+        run: |
+          xcodebuild test \
+            -project apps/ios/Sprout.xcodeproj \
+            -scheme 'Sprout CI' \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
+            -resultBundlePath "$RUNNER_TEMP/Sprout-CI.xcresult" \
+            -only-testing:SproutTests/AppleSignInTests/testNSErrorCode1000Handling \
+            CODE_SIGNING_ALLOWED=NO
+      - name: Upload test result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-test-result
+          path: ${{ runner.temp }}/Sprout-CI.xcresult
+          if-no-files-found: ignore
+          retention-days: 7
+
+  android:
+    name: Android build and unit tests
+    needs: changes
+    if: needs.changes.outputs.android == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+          cache-dependency-path: |
+            apps/android/**/*.gradle.kts
+            apps/android/gradle/libs.versions.toml
+            apps/android/gradle/wrapper/gradle-wrapper.properties
+      - name: Build and run unit tests
+        working-directory: apps/android
+        run: bash ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest
+      - name: Upload unit test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-unit-test-reports
+          path: apps/android/app/build/reports/tests/testDebugUnitTest/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  mobile-ci:
+    name: Mobile CI gate
+    if: always()
+    needs: [changes, ios, android]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require selected platform checks
+        env:
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          IOS_SELECTED: ${{ needs.changes.outputs.ios }}
+          ANDROID_SELECTED: ${{ needs.changes.outputs.android }}
+          IOS_RESULT: ${{ needs.ios.result }}
+          ANDROID_RESULT: ${{ needs.android.result }}
+        run: |
+          [[ "$CHANGES_RESULT" == success ]] || exit 1
+          [[ "$IOS_SELECTED" != true || "$IOS_RESULT" == success ]] || exit 1
+          [[ "$ANDROID_SELECTED" != true || "$ANDROID_RESULT" == success ]] || exit 1

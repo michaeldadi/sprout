@@ -1,0 +1,8 @@
+# The repository currently has one verified collaborator. Keep platform paths
+# explicit so additional iOS, Android, and API owners can be assigned later.
+* @michaeldadi
+/apps/ios/ @michaeldadi
+/apps/android/ @michaeldadi
+/services/ @michaeldadi
+/infra/ @michaeldadi
+/.github/ @michaeldadi
