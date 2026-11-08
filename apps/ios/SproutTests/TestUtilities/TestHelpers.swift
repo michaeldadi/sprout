@@ -94,9 +94,10 @@ struct TestHelpers {
     
     // MARK: - Async Testing Helpers
     
+    @MainActor
     static func waitForCondition(
         timeout: TimeInterval = 5.0,
-        condition: @escaping () -> Bool
+        condition: @escaping @MainActor () -> Bool
     ) async -> Bool {
         let endTime = Date().addingTimeInterval(timeout)
         
@@ -110,6 +111,7 @@ struct TestHelpers {
         return false
     }
     
+    @MainActor
     static func waitForLoadingToComplete(
         authService: AuthService,
         timeout: TimeInterval = 5.0
@@ -229,42 +231,40 @@ struct TestHelpers {
 
 extension TestHelpers {
     
+    @MainActor
     static func expectAuthServiceState(
         _ authService: AuthService,
         isAuthenticated: Bool,
         hasUser: Bool,
-        isLoading: Bool = false,
-        file: StaticString = #file,
-        line: UInt = #line
+        isLoading: Bool = false
     ) {
-      #expect(authService.isAuthenticated == isAuthenticated, "AuthService.isAuthenticated should be \(isAuthenticated)", sourceLocation: SourceLocation(from: file as! Decoder))
-      #expect((authService.currentUser != nil) == hasUser, "AuthService.currentUser existence should be \(hasUser)", sourceLocation: SourceLocation(from: file as! Decoder))
-      #expect(authService.isLoading == isLoading, "AuthService.isLoading should be \(isLoading)", sourceLocation: SourceLocation(from: file as! Decoder))
+      #expect(authService.isAuthenticated == isAuthenticated, "AuthService.isAuthenticated should be \(isAuthenticated)")
+      #expect((authService.currentUser != nil) == hasUser, "AuthService.currentUser existence should be \(hasUser)")
+      #expect(authService.isLoading == isLoading, "AuthService.isLoading should be \(isLoading)")
     }
     
+    @MainActor
     static func expectMockAuthServiceCalls(
         _ mockService: MockAuthService,
         signUpCount: Int? = nil,
         signInCount: Int? = nil,
         signOutCount: Int? = nil,
-        confirmSignUpCount: Int? = nil,
-        file: StaticString = #file,
-        line: UInt = #line
+        confirmSignUpCount: Int? = nil
     ) {
         if let expectedSignUpCount = signUpCount {
-          #expect(mockService.signUpCallCount == expectedSignUpCount, "SignUp should be called \(expectedSignUpCount) times", sourceLocation: SourceLocation(from: file as! Decoder))
+          #expect(mockService.signUpCallCount == expectedSignUpCount, "SignUp should be called \(expectedSignUpCount) times")
         }
         
         if let expectedSignInCount = signInCount {
-          #expect(mockService.signInCallCount == expectedSignInCount, "SignIn should be called \(expectedSignInCount) times", sourceLocation: SourceLocation(from: file as! Decoder))
+          #expect(mockService.signInCallCount == expectedSignInCount, "SignIn should be called \(expectedSignInCount) times")
         }
         
         if let expectedSignOutCount = signOutCount {
-          #expect(mockService.signOutCallCount == expectedSignOutCount, "SignOut should be called \(expectedSignOutCount) times", sourceLocation: SourceLocation(from: file as! Decoder))
+          #expect(mockService.signOutCallCount == expectedSignOutCount, "SignOut should be called \(expectedSignOutCount) times")
         }
         
         if let expectedConfirmSignUpCount = confirmSignUpCount {
-          #expect(mockService.confirmSignUpCallCount == expectedConfirmSignUpCount, "ConfirmSignUp should be called \(expectedConfirmSignUpCount) times", sourceLocation: SourceLocation(from: file as! Decoder))
+          #expect(mockService.confirmSignUpCallCount == expectedConfirmSignUpCount, "ConfirmSignUp should be called \(expectedConfirmSignUpCount) times")
         }
     }
 }
@@ -287,15 +287,13 @@ extension TestHelpers {
     static func measureAndExpectPerformance<T>(
         name: String = "Async Operation",
         expectedMaxDuration: TimeInterval,
-        operation: () async throws -> T,
-        file: StaticString = #file,
-        line: UInt = #line
+        operation: () async throws -> T
     ) async rethrows -> T {
         let startTime = CFAbsoluteTimeGetCurrent()
         let result = try await operation()
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         
-      #expect(timeElapsed <= expectedMaxDuration, "\(name) should complete within \(expectedMaxDuration)s but took \(String(format: "%.3f", timeElapsed))s", sourceLocation: SourceLocation(from: file as! Decoder))
+      #expect(timeElapsed <= expectedMaxDuration, "\(name) should complete within \(expectedMaxDuration)s but took \(String(format: "%.3f", timeElapsed))s")
         
         return result
     }
