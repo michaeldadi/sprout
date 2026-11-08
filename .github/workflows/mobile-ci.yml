@@ -52,6 +52,11 @@ jobs:
           persist-credentials: false
       - name: Show Xcode version
         run: xcodebuild -version
+      - name: Generate placeholder configuration before Xcode plans sources
+        run: |
+          test ! -e apps/.env.local
+          CONFIGURATION=Debug SRCROOT="$GITHUB_WORKSPACE/apps/ios" bash apps/ios/Scripts/generate-secrets.sh
+          test -s apps/ios/Sprout/Generated/Secrets.swift
       - name: Build and test on simulator
         run: |
           xcodebuild test \
