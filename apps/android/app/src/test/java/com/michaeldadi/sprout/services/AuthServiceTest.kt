@@ -48,13 +48,7 @@ class AuthServiceTest {
         whenever(mockEditor.putString(any(), any())).thenReturn(mockEditor)
         whenever(mockEditor.apply()).then { }
 
-        // Create AuthService instance
-        authService = AuthService(mockApplication)
-
-        // Use reflection to inject mocked CognitoClient
-        val cognitoClientField = AuthService::class.java.getDeclaredField("cognitoClient")
-        cognitoClientField.isAccessible = true
-        cognitoClientField.set(authService, mockCognitoClient)
+        authService = AuthService(mockApplication, mockCognitoClient)
     }
 
     @Test
@@ -63,7 +57,6 @@ class AuthServiceTest {
         val email = "test@example.com"
         val password = "TestPassword123!"
         val mockResponse = mock(SignUpResponse::class.java)
-        whenever(mockResponse.userSub).thenReturn("test-user-sub")
 
         whenever(mockCognitoClient.signUp(any<SignUpRequest>())).thenReturn(mockResponse)
 
@@ -249,12 +242,7 @@ class AuthServiceTest {
         val email = "test@example.com"
         val fullName = "Test User"
 
-        // Mock signUp first (user doesn't exist)
-        whenever(mockCognitoClient.initiateAuth(any<InitiateAuthRequest>()))
-            .thenThrow(RuntimeException("UserNotFoundException"))
-
         val signUpResponse = mock(SignUpResponse::class.java)
-        whenever(signUpResponse.userSub).thenReturn("test-user-sub")
         whenever(mockCognitoClient.signUp(any<SignUpRequest>()))
             .thenReturn(signUpResponse)
 
@@ -268,6 +256,7 @@ class AuthServiceTest {
         whenever(signInResponse.authenticationResult).thenReturn(authResult)
 
         whenever(mockCognitoClient.initiateAuth(any<InitiateAuthRequest>()))
+            .thenThrow(RuntimeException("UserNotFoundException"))
             .thenReturn(signInResponse)
 
         // Act
@@ -275,6 +264,7 @@ class AuthServiceTest {
 
         // Assert
         assertTrue(authService.isAuthenticated.first())
+        verify(mockCognitoClient).signUp(any<SignUpRequest>())
     }
 
     @Test

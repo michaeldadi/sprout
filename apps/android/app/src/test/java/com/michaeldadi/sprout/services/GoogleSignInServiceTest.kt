@@ -5,22 +5,34 @@ import androidx.activity.ComponentActivity
 import androidx.credentials.*
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.michaeldadi.sprout.config.AppConfig
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [35])
 class GoogleSignInServiceTest {
+
+    @get:Rule
+    val mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
     private lateinit var mockContext: Context
@@ -41,18 +53,7 @@ class GoogleSignInServiceTest {
 
     @Before
     fun setup() {
-        // Mock CredentialManager.create to return our mock
-        mockStatic(CredentialManager::class.java).use { mockedStatic ->
-            mockedStatic.`when`<CredentialManager> { CredentialManager.create(any()) }
-                .thenReturn(mockCredentialManager)
-
-            googleSignInService = GoogleSignInService(mockContext, mockActivity)
-        }
-
-        // Use reflection to inject the mocked CredentialManager
-        val credentialManagerField = GoogleSignInService::class.java.getDeclaredField("credentialManager")
-        credentialManagerField.isAccessible = true
-        credentialManagerField.set(googleSignInService, mockCredentialManager)
+        googleSignInService = GoogleSignInService(mockContext, mockActivity, mockCredentialManager)
     }
 
     @Test
@@ -74,7 +75,7 @@ class GoogleSignInServiceTest {
         val result = googleSignInService.signIn()
 
         // Assert
-        assertTrue(result is GoogleSignInResult.Success)
+        assertTrue(result is GoogleSignInResult.Success, "Unexpected result: $result")
         val successResult = result
         assertEquals(mockIdToken, successResult.idToken)
         assertEquals(mockEmail, successResult.email)
@@ -84,9 +85,9 @@ class GoogleSignInServiceTest {
     @Test
     fun `signIn should return cancelled result when user cancels`() = runTest {
         // Arrange
-        val mockException = android.credentials.GetCredentialException("User cancelled")
+        val mockException = androidx.credentials.exceptions.GetCredentialCancellationException("User cancelled")
         whenever(mockCredentialManager.getCredential(any(), any<GetCredentialRequest>()))
-            .thenThrow(mockException)
+            .thenAnswer { throw mockException }
 
         // Act
         val result = googleSignInService.signIn()
@@ -100,7 +101,7 @@ class GoogleSignInServiceTest {
         // Arrange
         val mockException = NoCredentialException("No credential available")
         whenever(mockCredentialManager.getCredential(any(), any<GetCredentialRequest>()))
-            .thenThrow(mockException)
+            .thenAnswer { throw mockException }
 
         // Act
         val result = googleSignInService.signIn()
@@ -123,7 +124,7 @@ class GoogleSignInServiceTest {
 
         // Assert
         assertTrue(result is GoogleSignInResult.Error)
-        assertTrue(result.message.contains("Invalid credential type"))
+        assertTrue(result.message.contains("Unknown credential type"))
     }
 
     @Test
@@ -144,7 +145,7 @@ class GoogleSignInServiceTest {
         val result = googleSignInService.signIn()
 
         // Assert
-        assertTrue(result is GoogleSignInResult.Success)
+        assertTrue(result is GoogleSignInResult.Success, "Unexpected result: $result")
         val successResult = result
         assertEquals(mockIdToken, successResult.idToken)
         assertEquals(mockEmail, successResult.email)
@@ -169,7 +170,7 @@ class GoogleSignInServiceTest {
         val result = googleSignInService.signIn()
 
         // Assert
-        assertTrue(result is GoogleSignInResult.Success)
+        assertTrue(result is GoogleSignInResult.Success, "Unexpected result: $result")
         val successResult = result
         assertEquals(mockIdToken, successResult.idToken)
         assertEquals("", successResult.email)
@@ -190,11 +191,11 @@ class GoogleSignInServiceTest {
         // Act
         googleSignInService.signIn()
 
-        // Assert - Verify the request was made with correct parameters
-        verify(mockCredentialManager).getCredential(
-            eq(mockActivity),
-            any<GetCredentialRequest>()
-        )
+        val requestCaptor = argumentCaptor<GetCredentialRequest>()
+        verify(mockCredentialManager).getCredential(eq(mockActivity), requestCaptor.capture())
+        val googleOption = requestCaptor.firstValue.credentialOptions.single() as GetGoogleIdOption
+        assertEquals(AppConfig.googleSignInClientId, googleOption.serverClientId)
+        assertEquals(false, googleOption.filterByAuthorizedAccounts)
     }
 
     @Test

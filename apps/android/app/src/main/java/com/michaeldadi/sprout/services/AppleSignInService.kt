@@ -23,7 +23,8 @@ import org.json.JSONObject
  */
 class AppleSignInService(
     private val context: Context,
-    private val activity: ComponentActivity
+    private val activity: ComponentActivity,
+    private val tokenExchanger: (suspend (String) -> AppleTokens)? = null
 ) {
     companion object {
         // Apple Sign In REST API endpoints
@@ -101,7 +102,7 @@ class AppleSignInService(
                 code != null -> {
                     // Exchange authorization code for access token
                     try {
-                        val tokens = exchangeCodeForTokens(code)
+                        val tokens = tokenExchanger?.invoke(code) ?: exchangeCodeForTokens(code)
                         val userInfo = parseUserInfo(idToken, user)
 
                         AppleSignInResult.Success(

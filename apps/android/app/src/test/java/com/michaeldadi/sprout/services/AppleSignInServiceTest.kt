@@ -128,7 +128,8 @@ class AppleSignInServiceTest {
         whenever(mockUriBuilder.build()).thenReturn(mockUri)
         whenever(mockUri.toString()).thenReturn("https://appleid.apple.com/auth/authorize?client_id=test")
 
-        mockedUriStatic.`when`<Uri.Builder> { Uri.parse(any()).buildUpon() }.thenReturn(mockUriBuilder)
+        mockedUriStatic.`when`<Uri> { Uri.parse(AppleSignInService.APPLE_AUTH_URL) }.thenReturn(mockUri)
+        whenever(mockUri.buildUpon()).thenReturn(mockUriBuilder)
 
         val url = method.invoke(
             appleSignInService,
@@ -139,6 +140,9 @@ class AppleSignInServiceTest {
         ) as String
 
         assertTrue(url.contains("appleid.apple.com"))
+        verify(mockUriBuilder).appendQueryParameter("client_id", "com.example.app")
+        verify(mockUriBuilder).appendQueryParameter("state", "test-state")
+        verify(mockUriBuilder).appendQueryParameter("code_challenge", "test-challenge")
     }
 
     @Test
@@ -192,15 +196,17 @@ class AppleSignInServiceTest {
         whenever(mockUri.getQueryParameter("error")).thenReturn(null)
         whenever(mockUri.getQueryParameter("user")).thenReturn(null)
 
-        // Set up code verifier for token exchange
-        AppleSignInService.codeVerifier = "test-verifier"
+        val service = AppleSignInService(mockContext, mockActivity) { code ->
+            assertEquals("auth-code", code)
+            AppleTokens("access-token", "id-token", "refresh-token", "Bearer", 3600)
+        }
 
         // Mock the completion deferred
         val completion = kotlinx.coroutines.CompletableDeferred<AppleSignInResult>()
         AppleSignInService.currentSignInCompletion = completion
 
         // Act
-        appleSignInService.handleCallback(mockIntent)
+        service.handleCallback(mockIntent)
 
         // Wait for completion
         val result = completion.await()
@@ -208,6 +214,8 @@ class AppleSignInServiceTest {
         // Assert
         assertTrue(result is AppleSignInResult.Success)
         assertEquals("auth-code", result.authorizationCode)
+        assertEquals("access-token", result.accessToken)
+        assertEquals("refresh-token", result.refreshToken)
     }
 
     @Test
