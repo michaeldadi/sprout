@@ -1,0 +1,51 @@
+name: Web CI
+on:
+  pull_request:
+    paths:
+      [
+        'apps/web/**',
+        'package.json',
+        'package-lock.json',
+        'yarn.lock',
+        '.yarnrc.yml',
+        '.github/workflows/web-ci.yml',
+        'infra/appwrite/**',
+      ]
+  push:
+    branches: [main, 'codex/sprout-clear-sky']
+    paths:
+      [
+        'apps/web/**',
+        'package.json',
+        'package-lock.json',
+        'yarn.lock',
+        '.yarnrc.yml',
+        '.github/workflows/web-ci.yml',
+        'infra/appwrite/**',
+      ]
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn workspace @sprout/web check
+      - run: yarn workspace @sprout/web exec playwright install --with-deps chromium firefox webkit
+      - run: yarn workspace @sprout/web test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-browser-evidence
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 7

@@ -1,0 +1,6 @@
+# Keep the state in Sprout's separate HCP Terraform organization.
+hostname     = "app.terraform.io"
+organization = "sprout-finance"
+workspaces {
+  prefix = "sprout-appwrite-"
+}

@@ -5,13 +5,16 @@ on:
     branches: [ develop ]
     paths:
       - 'infra/**'
+      - '!infra/appwrite/**'
       - 'services/**'
-      - '.github/workflows/deploy-infra-dev.yml'
+      - '!services/appwrite/**'
   pull_request:
     branches: [ develop ]
     paths:
       - 'infra/**'
+      - '!infra/appwrite/**'
       - 'services/**'
+      - '!services/appwrite/**'
 
 jobs:
   deploy-development:

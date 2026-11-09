@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-09",
+  "origin": "https://getsprout.appwrite.network",
+  "deployment": "6af1efadbc0574af4565",
+  "request_origin": "https://getsprout.appwrite.network",
+  "results": {
+    "waitlist_first": {
+      "status": 200,
+      "body": {
+        "ok": true
+      },
+      "no_store": true
+    },
+    "persistence": {
+      "waitlist_rows": 1,
+      "contact_rows": 1,
+      "duplicate_preference_retained": true,
+      "contact_retry_idempotent": true,
+      "private_reads_denied": true,
+      "anonymous_writes_denied": true,
+      "request_scoped_hosted_credential_works": true
+    },
+    "waitlist_edge": {
+      "next_four_statuses": [
+        200,
+        200,
+        200,
+        429
+      ],
+      "recovery_status": 200
+    },
+    "contact_edge": {
+      "next_four_statuses": [
+        200,
+        200,
+        200,
+        429
+      ],
+      "recovery_status": 200
+    },
+    "cleanup_verified": true
+  }
+}

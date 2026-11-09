@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-09",
+  "origin": "https://staging-getsprout.appwrite.network",
+  "deployment": "6af1e833e1abab3ef3b2",
+  "browser_checks": {
+    "engines": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "passed": 33,
+    "failed": 0
+  },
+  "canonical": "https://staging-getsprout.appwrite.network/",
+  "meta_robots": "noindex, nofollow",
+  "robots_txt": "User-agent: *\nDisallow: /\n",
+  "get_form_status": 405,
+  "cross_origin_post_status": 403,
+  "malformed_post_status": 400,
+  "api_cache_control": "no-store",
+  "asset_transport": {
+    "content_encoding": "br",
+    "encoded_bytes": 118553,
+    "cache_control": "public, max-age=31536000, immutable"
+  }
+}

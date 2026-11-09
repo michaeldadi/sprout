@@ -1,74 +1,61 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-
-import appCss from "../styles.css?url";
-import "@appwrite.io/pink-icons";
-
+import {
+  createRootRoute,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from '@tanstack/react-router';
+import { SiteShell } from '../components/SiteShell';
+import appCss from '../styles.css?url';
+import { ErrorPage } from '../components/Pages';
 export const Route = createRootRoute({
-	head: () => ({
-		meta: [
-			{
-				charSet: "utf-8",
-			},
-			{
-				name: "viewport",
-				content: "width=device-width, initial-scale=1",
-			},
-			{
-				title: "Appwrite + TanStack Start",
-			},
-		],
-		links: [
-			{
-				rel: "stylesheet",
-				href: appCss,
-			},
-			{
-				rel: "preconnect",
-				href: "https://fonts.googleapis.com",
-			},
-			{
-				rel: "preconnect",
-				href: "https://fonts.gstatic.com",
-				crossOrigin: "anonymous",
-			},
-			{
-				rel: "stylesheet",
-				href: "https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:opsz,wght@14..32,100..900&family=Poppins:wght@300;400&display=swap",
-			},
-			{
-				rel: "icon",
-				type: "image/svg+xml",
-				href: "/appwrite.svg",
-			},
-		],
-	}),
-
-	shellComponent: RootDocument,
+  head: () => ({
+    meta: [
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'theme-color', content: '#F6F8F4' },
+    ],
+    links: [
+      { rel: 'stylesheet', href: appCss },
+      {
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/brand/sprout-app-icon.svg',
+      },
+      {
+        rel: 'preload',
+        as: 'font',
+        href: '/fonts/inter-latin-wght-normal.woff2',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'preload',
+        as: 'font',
+        href: '/fonts/fraunces-latin-full-normal.woff2',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
+    ],
+  }),
+  component: () => (
+    <SiteShell>
+      <Outlet />
+    </SiteShell>
+  ),
+  notFoundComponent: () => <ErrorPage />,
+  errorComponent: () => <ErrorPage error />,
+  shellComponent: Document,
 });
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="en">
-			<head>
-				<HeadContent />
-			</head>
-			<body className="bg-[#FAFAFB] font-[Inter] text-sm text-[#56565C]">
-				{children}
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-					]}
-				/>
-				<Scripts />
-			</body>
-		</html>
-	);
+function Document({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
 }

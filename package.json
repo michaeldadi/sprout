@@ -1,18 +1,52 @@
 {
-  "name": "push-notifications-with-fcm",
+  "name": "@sprout/source",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/main.js",
-  "type": "module",
+  "packageManager": "yarn@4.9.2",
+  "workspaces": [
+    "services/*",
+    "apps/*",
+    "infra",
+    "services"
+  ],
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write . && swiftformat ios-app --quiet",
+    "lint": "eslint \"{infra,services}/**/*.{ts,tsx}\" --max-warnings=0",
+    "prepare": "husky",
+    "web:dev": "yarn workspace @sprout/web dev",
+    "web:build": "yarn workspace @sprout/web build",
+    "web:check": "yarn workspace @sprout/web check"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "{infra,services}/**/*.{ts,tsx}": [
+      "eslint --fix"
+    ],
+    "apps/ios/**/*.{swift}": [
+      "swiftformat --quiet"
+    ]
   },
   "devDependencies": {
-    "prettier": "^3.2.5"
+    "@typescript-eslint/eslint-plugin": "^8.40.0",
+    "@typescript-eslint/parser": "^8.40.0",
+    "aws-cdk-lib": "2.204.0",
+    "constructs": "^10.0.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "9.1.7",
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.4",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
+    "esbuild": "^0.25.9",
     "firebase-admin": "^13.10.0"
   },
+  "main": "src/main.js",
+  "type": "module",
+  "private": true,
   "overrides": {
     "uuid": "^11.1.1"
   }

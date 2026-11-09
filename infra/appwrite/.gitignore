@@ -1,0 +1,15 @@
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/backend.hcl
+**/.plans/
+**/*.tfplan
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+**/secrets.tfvars
+**/secrets.tfvars.json
+**/crash.log
+**/crash.*.log
+**/__pycache__/
+
+**/.artifacts/

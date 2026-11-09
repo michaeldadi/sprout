@@ -1,118 +1,78 @@
-# 🔔 Node.js Push Notifications with FCM Function
+# Sprout
 
-Send push notifications to your users using Firebase Cloud Messaging (FCM).
+Sprout is a personal finance app under development for iOS and Android. This repository contains the native apps, the Clear sky marketing website, Appwrite Terraform, and legacy TypeScript/AWS services. The product aims to help people understand their finances, subscriptions, and goals; some flows and integrations are still incomplete.
 
-## 🧰 Usage
+## Repository layout
 
-### POST /
+| Path                 | Contents                                                                      |
+| -------------------- | ----------------------------------------------------------------------------- |
+| `apps/ios/`          | SwiftUI app, Xcode project, and iOS tests                                     |
+| `apps/android/`      | Jetpack Compose app, Gradle project, and Android tests                        |
+| `apps/web/`          | TanStack Start marketing website, journal, waitlist, and inquiry forms        |
+| `infra/appwrite/`    | Audited staging/production Appwrite configuration                             |
+| `services/api/`      | TypeScript handlers for authentication, transactions, sync, chat, and uploads |
+| `infra/`             | AWS CDK stack, deployment scripts, and database migrations                    |
+| `.github/workflows/` | Mobile CI and deployment workflows                                            |
 
-Send a push notification to a user.
+The mobile apps have their own build systems. The root Yarn workspace is for the website, TypeScript services, and infrastructure; there is no single command that starts the entire product locally.
 
-**Parameters**
+## Prerequisites
 
-| Name         | Description                          | Location | Type               | Sample Value   |
-| ------------ | ------------------------------------ | -------- | ------------------ | -------------- |
-| Content-Type | The content type of the request body | Header   | `application/json` | N/A            |
-| deviceToken  | FCM device identifier                | Body     | String             | `642...7cd`    |
-| message      | Message to send                      | Body     | Object             | `{"title": "hello","body": "how are you?"}` |
-| data      | Additional data to pass                         | Body     | Object             | `{"greet": "welcome"}` |
+- **iOS:** macOS, Xcode, and an iOS Simulator.
+- **Android:** Android Studio or the Android SDK with API 36, plus JDK 17. The Gradle wrapper is included.
+- **Services and infrastructure:** Node.js with Corepack, which selects the repository's Yarn 4.9.2 version. AWS credentials are needed only for AWS operations.
 
-**Request**
+## Run the website
 
-`deviceToken` and `message` are required. `data` is optional.
+Use Node 22.12+ and the root Yarn 4.9.2 workspace:
 
-
-```json
-{
-    "deviceToken": "642...7cd",
-    "message": {
-        "title": "hello",
-        "body": "how are you?"
-    },
-    "data": {
-        "greet": "welcome" 
-    }    
-}
+```bash
+corepack yarn install --immutable
+corepack yarn web:dev
+corepack yarn web:check
 ```
 
+See [website setup](apps/web/README.md), [implementation and acceptance](docs/web/implementation-plan.md), and [release status](docs/web/validation.md). Appwrite is the target backend; AWS code is migration inventory. Hosted form writes require the selected environment's exact origin and private table configuration.
 
-**Response**
+## Run the mobile apps
 
-Sample `200` Response:
+### Android
 
-```json
-{
-  "ok": true,
-  "messageId": "as4jg109cbe1"
-}
+Open `apps/android/` in Android Studio and run the `app` configuration on an emulator or device. To build the debug APK and run the JVM unit tests from a terminal:
+
+```bash
+cd apps/android
+./gradlew :app:assembleDebug :app:testDebugUnitTest
 ```
 
-Sample `400` Response:
+Gradle reads optional third-party SDK values from `apps/.env.local`. The Android variable names are listed in `apps/android/.env.local.example`. A build can succeed without working credentials for every external service.
 
-```json
-{
-  "ok": false,
-  "error": "Device token and message are required."
-}
+### iOS
+
+Open `apps/ios/Sprout.xcodeproj` in Xcode, select the shared **Sprout CI** scheme and a simulator, then build or run the app. Xcode resolves the project's Swift package dependencies.
+
+The build script creates ignored `Secrets.swift` files. For Debug builds it reads `apps/.env.local` when present and otherwise generates placeholder values. Placeholders satisfy that configuration input but do not provide working service connections. Keep local configuration and generated secrets out of Git.
+
+As of November 2026, a full local build with Xcode 27.2 stops in pinned third-party Swift packages before Sprout source compiles. The [Mobile CI workflow](.github/workflows/mobile-ci.yml) uses a separate macOS runner; its result should be checked independently.
+
+## Work on services and infrastructure
+
+Install the root workspace dependencies with the pinned Yarn version:
+
+```bash
+corepack yarn install --immutable
 ```
 
-Sample `500` Response:
+The API handlers live in `services/api/`; the AWS resources that use them are defined in `infra/`. To type-check and build the infrastructure package:
 
-```json
-{
-  "ok": false,
-  "error": "Failed to send the message."
-}
+```bash
+corepack yarn workspace infra build
 ```
 
-## ⚙️ Configuration
+Review the environment-specific scripts in `infra/` before any deployment or migration. The repository does not define a local API server or a root `start` script.
 
-| Setting           | Value         |
-| ----------------- | ------------- |
-| Runtime           | Node (18.0)   |
-| Entrypoint        | `src/main.js` |
-| Build Commands    | `npm install` |
-| Permissions       | `any`         |
-| Timeout (Seconds) | 15            |
+## Checks
 
-## 🔒 Environment Variables
+The [Mobile CI workflow](.github/workflows/mobile-ci.yml) selects iOS and Android jobs from the changed paths. Android CI builds the debug app and runs the JVM unit suite. iOS CI builds the app and runs a focused simulator smoke test. These checks do not establish that every integration or user journey is complete.
 
-### FCM_PROJECT_ID
-
-A unique identifier for your FCM project.
-
-| Question      | Answer                                                                             |
-| ------------- | ---------------------------------------------------------------------------------- |
-| Required      | Yes                                                                                |
-| Sample Value  | `mywebapp-f6e57`                                                                   |
-| Documentation | [FCM: Project ID](https://firebase.google.com/docs/projects/learn-more#project-id) |
-
-### FCM_CLIENT_EMAIL
-
-Your FCM service account email.
-
-| Question      | Answer                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| Required      | Yes                                                                                                          |
-| Sample Value  | `fcm-adminsdk-1a0de@test-f6e57.iam.gserviceaccount.com`                                                      |
-| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
-
-### FCM_PRIVATE_KEY
-
-A unique private key used to authenticate with FCM.
-
-| Question      | Answer                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| Required      | Yes                                                                                                          |
-| Sample Value  | `0b6830cc66d92804e11af2153242d34211d675675`                                                                  |
-| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
-
-### FCM_DATABASE_URL
-
-URL of your FCM database.
-
-| Question      | Answer                                                                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| Required      | Yes                                                                                                          |
-| Sample Value  | `https://my-app-e398e.firebaseio.com`                                                                        |
-| Documentation | [FCM: SDK Setup](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |
+The [Web CI workflow](.github/workflows/web-ci.yml) checks the website independently: strict TypeScript, lint, form tests, production build, and Chromium/Firefox/WebKit browser checks. Website-only Appwrite infrastructure changes are excluded from the legacy AWS deployment triggers.

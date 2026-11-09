@@ -1,0 +1,17 @@
+{
+  "name": "sprout-manual-transactions-function",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "tsc --noEmit && esbuild index.ts --bundle --platform=node --target=node22 --format=esm --outfile=index.js",
+    "test": "node --import tsx --test index.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "24.3.0",
+    "esbuild": "0.25.9",
+    "tsx": "4.20.4",
+    "typescript": "5.9.2"
+  }
+}
