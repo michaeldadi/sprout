@@ -62,7 +62,10 @@ case "$operation" in
         exit 2
       fi
       shasum -a 256 "$plan_file"
-      terraform -chdir="$root" apply -input=false "$plan_file"
+      # Appwrite project setting updates share a project document. Serialize
+      # bridge provisioners so concurrent PATCH requests cannot overwrite one
+      # another's native OAuth settings.
+      terraform -chdir="$root" apply -input=false -parallelism=1 "$plan_file"
     fi
     ;;
   *)

@@ -78,16 +78,26 @@ Google sign-in.
 
 The landing sites point to `./apps/web`, which is absent from this checkout.
 No site or function deployment is imported or activated by this configuration.
-The only live Appwrite write so far is the staging Terraform project key.
-No Terraform state import or apply has completed. A staging plan with the
-project key reached the project settings, but the provider rejected that
-standard key for project and key imports: it requires a separate organization
-credential with project and key scopes. The Sprout Finance console displayed
-General, Members, and Billing under organization Settings on 2026-11-09, but
-no Partners key section. The same plan also encountered intermittent Appwrite
-read timeouts. Resolve organization credential access and rerun a complete
-plan before importing state. Production still needs access to its existing
-project key credential.
+
+On 2026-11-09, the staging Terraform project key was bootstrapped in Appwrite.
+Seven existing staging resources were imported into the `sprout-appwrite-staging`
+HCP state: the project, project key, TablesDB database, site, and three site
+variables. The subsequent apply recorded 56 Terraform tracking entries,
+hydrated the site and public variable resources, and corrected the iOS
+platform bundle ID and Apple/Google native client IDs. The OAuth providers
+remain disabled. Concurrent Apple and Google PATCH requests initially caused
+Apple's readback to fail; a serial recovery apply completed, and a fresh
+`terraform plan -detailed-exitcode` returned 0 (no changes). `tf.sh apply`
+now uses `-parallelism=1` to avoid this race. Both temporary four-scope
+organization keys were revoked and their local secrets and plan files removed.
+
+OAuth refuses to mint a key that outlives its grant. The Sprout Finance console
+did not show the documented Partners key section, so future local plans need a
+newly minted short-lived organization key or another supported organization
+credential. Production has no Terraform state yet and its existing project key
+secret is unavailable locally. Bootstrap a scoped production project key or
+recover the existing secret before its state imports. The production function
+secret value must also be supplied outside source control for a full plan.
 
 Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraform),
 [provider schema](https://registry.terraform.io/providers/appwrite/appwrite/latest/docs).
