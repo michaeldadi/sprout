@@ -27,9 +27,11 @@ Source inspection used the current original checkout without modifying it. Its u
 
 ## Final publication record
 
-- Product/security commitments: awaiting owner confirmation.
-- Supporting/legal copy: awaiting internal acceptance.
-- Inquiry review operator/process: awaiting confirmation.
-- Manual VoiceOver, native browser zoom, and enlarged-text acceptance: not yet recorded.
-- Release commit and non-active production deployment: record after final build checks.
-- Public activation: pending the above acceptance; do not infer it from a ready branch deployment.
+- Product/security commitments: Michael approved the copy as intended pre-launch commitments on November 9, 2026, after the source gaps above were disclosed. This acceptance does not establish completed mobile implementation.
+- Supporting/legal copy: Michael accepted the current copy in the same publication approval.
+- Inquiry review operator/process: Michael owns manual review in the Appwrite Console; no automatic outbound email is configured.
+- Actual Safari 200% page zoom: observed reflow without overlap. VoiceOver spoken/rotor output and a separate enlarged-text session remain unverified; the temporary settings were restored.
+- Tested release commit: `cca23a0f47b92f114a699cef7786bea02b3b8ca6`. Both hosted builds and GitHub Web CI passed.
+- Active staging deployment: `6af1efb7a629d486ef08`; all 33 hosted browser checks passed again.
+- Active production deployment: `6af1efadbc0574af4565` at https://getsprout.appwrite.network. All 33 browser checks passed on the public origin. Canonical, sitemap, indexing, assets, private forms, duplicate/retry behavior, rate-limit recovery, and disposable-data cleanup were verified after activation.
+- Public activation: completed November 9, 2026, after Michael replied “Approve copy and publish” with the outstanding VoiceOver limitation and product source gaps disclosed. The mobile launch still needs the actual product behavior verified; this website release does not certify it.

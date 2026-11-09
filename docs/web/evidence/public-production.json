@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-09",
+  "origin": "https://getsprout.appwrite.network",
+  "commit": "cca23a0f47b92f114a699cef7786bea02b3b8ca6",
+  "deployment": "6af1efadbc0574af4565",
+  "checks": {
+    "/": {
+      "status": 200,
+      "x_robots_tag": null,
+      "deployment": "6af1efadbc0574af4565",
+      "canonical": "https://getsprout.appwrite.network/"
+    },
+    "/about": {
+      "status": 200,
+      "x_robots_tag": null,
+      "deployment": "6af1efadbc0574af4565"
+    },
+    "/robots.txt": {
+      "status": 200,
+      "x_robots_tag": null,
+      "deployment": "6af1efadbc0574af4565"
+    },
+    "/sitemap.xml": {
+      "status": 200,
+      "x_robots_tag": null,
+      "deployment": "6af1efadbc0574af4565"
+    },
+    "preview": {
+      "status": 401,
+      "private": true
+    }
+  },
+  "browser_checks": {
+    "engines": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ],
+    "passed": 33,
+    "failed": 0
+  },
+  "assets": {
+    "/social.png": {
+      "status": 200,
+      "content_type": "image/png"
+    },
+    "/brand/sprout-app-icon.svg": {
+      "status": 200,
+      "content_type": "image/svg+xml"
+    },
+    "/brand/sprout-mark.svg": {
+      "status": 200,
+      "content_type": "image/svg+xml"
+    }
+  },
+  "public_preview_badge_count": 0,
+  "desktop_overflow": false
+}

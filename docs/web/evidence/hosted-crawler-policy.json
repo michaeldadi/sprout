@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-09",
+  "origin": "https://staging-getsprout.appwrite.network",
+  "commit": "cca23a0f47b92f114a699cef7786bea02b3b8ca6",
+  "checks": {
+    "/": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow"
+    },
+    "/about": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow"
+    },
+    "/robots.txt": {
+      "status": 200,
+      "x_robots_tag": "noindex, nofollow"
+    }
+  },
+  "production_git_preview": "HTTP 401 preview_signin for unauthenticated clients; private by Appwrite policy."
+}

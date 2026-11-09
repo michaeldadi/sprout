@@ -41,4 +41,8 @@ Apply a reviewed production Terraform plan using production credentials. Create 
 
 ## Rollback
 
+Published November 9, 2026: https://getsprout.appwrite.network, active deployment `6af1efadbc0574af4565`, tested source commit `cca23a0f47b92f114a699cef7786bea02b3b8ca6`. The prior active deployment `6af0f34ec8e168e35a1c` is the rollback target. Public browser, forms, crawler, and asset checks passed; see [validation.md](validation.md). Michael accepted the pre-launch copy, policies, inquiry ownership, and disclosed VoiceOver limitation before activation.
+
+The source remains in the isolated `codex/sprout-clear-sky` branch and PR #3. No merge to `main` was performed; several legacy Appwrite functions also deploy from that branch. Review their build impact before merging rather than using an unreviewed main-branch push to redeploy the website.
+
 Record the current active deployment ID before publication. If acceptance fails, keep the previous active deployment and fix the branch. If a newly activated site regresses, reactivate the recorded previous ready deployment through Appwrite Sites. Do not roll back by deleting tables, changing native app resources, or destroying Terraform state. New form tables are protected with `prevent_destroy`; preserve accepted submissions. After a rollback, verify the public origin, forms, and crawler behavior again.
