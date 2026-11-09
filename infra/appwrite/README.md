@@ -113,5 +113,36 @@ bridge reports `Missing Authority Key Identifier` under the machine's managed
 CA bundle, use `/usr/bin/python3` for the bridge after verifying its TLS
 connection. Do not disable certificate verification.
 
+## Proposed first financial schema (approval gate)
+
+The current TablesDB databases are empty. The iOS SwiftData and Android Room
+transaction models store amounts as `Double`, while the legacy API's storage
+implementation fails closed. Creating an Appwrite table before choosing a
+canonical money representation and ownership rule would make the two clients'
+sync behavior ambiguous. No financial table or row has been created.
+
+The first proposed slice is **manual transactions only**, starting in staging.
+Define one `transactions` table through Terraform in the selected environment:
+stable client-generated row ID for idempotent retries; authenticated owner ID;
+signed integer amount in the currency's minor unit and ISO currency code;
+type, category, description, merchant, and transaction date; source and source
+ID; server version, modified timestamp, and deletion marker. Keep Plaid-linked
+accounts, recurring-charge detection, budgets, and goals out of this first
+schema until their source and reconciliation rules are specified. Define an
+explicit conversion for existing local data and migrate both local models
+before Appwrite sync, avoiding a direct binary floating-point conversion into
+a remote financial value.
+
+Use row security with no broad table read, update, or delete grant. A server
+function should derive the owner from a verified Appwrite session, set the
+row's user-specific permissions, validate money and currency, and enforce
+version checks and tombstones. The client must not provide the authoritative
+owner or bypass the function with a project API key. Before any live financial
+write, test two-user isolation, idempotent create/update/delete, retry after a
+lost response, concurrent edits, cursor pagination, and two-device restore.
+Only then plan a staging apply; production needs a separate reviewed plan and
+data-migration decision. See [TablesDB Terraform resources](https://appwrite.io/docs/tooling/terraform/resources/databases)
+and [Appwrite permissions](https://appwrite.io/docs/advanced/security/permissions).
+
 Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraform),
 [provider schema](https://registry.terraform.io/providers/appwrite/appwrite/latest/docs).
