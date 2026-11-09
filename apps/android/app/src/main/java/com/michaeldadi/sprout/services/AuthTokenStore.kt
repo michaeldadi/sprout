@@ -46,12 +46,14 @@ class AuthTokenStore(context: Context) {
         }
 
         val legacy = prefs.getString(LEGACY_TOKENS, null)?.let(::parse) ?: return null
-        try {
+        return try {
             save(legacy)
+            legacy
         } catch (_: Exception) {
-            // Preserve the previous session if migration could not be persisted yet.
+            // Keep the old value for a later retry, but do not authenticate from
+            // plaintext when device-bound storage could not be established.
+            null
         }
-        return legacy
     }
 
     fun clear() {

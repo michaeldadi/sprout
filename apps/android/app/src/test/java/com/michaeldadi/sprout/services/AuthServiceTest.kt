@@ -148,6 +148,22 @@ class AuthServiceTest {
     }
 
     @Test
+    fun `signIn rejects a response without a complete session`() = runTest {
+        val incomplete = mock(AuthenticationResultType::class.java)
+        whenever(incomplete.accessToken).thenReturn("access-token")
+        whenever(incomplete.idToken).thenReturn("id-token")
+        val response = mock(InitiateAuthResponse::class.java)
+        whenever(response.authenticationResult).thenReturn(incomplete)
+        whenever(mockCognitoClient.initiateAuth(any<InitiateAuthRequest>())).thenReturn(response)
+
+        assertFailsWith<AuthError.SignInFailed> {
+            authService.signIn("test@example.com", "password")
+        }
+        assertFalse(authService.isAuthenticated.first())
+        verify(mockTokenStore, never()).save(any())
+    }
+
+    @Test
     fun `signIn should throw AuthError when authentication fails`() = runTest {
         // Arrange
         val email = "test@example.com"

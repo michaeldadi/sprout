@@ -112,31 +112,24 @@ class AuthService @JvmOverloads constructor(
 
             val response = cognitoClient.initiateAuth(authRequest)
 
-            response.authenticationResult?.let { authResult ->
-                val accessToken = authResult.accessToken
-                val idToken = authResult.idToken
-                val refreshToken = authResult.refreshToken
-
-                if (accessToken != null && idToken != null && refreshToken != null) {
-                    // Store tokens securely
-                    storeTokens(accessToken, idToken, refreshToken)
-
-                    // Create user object
-                    val user = CognitoUser(
-                        email = email,
-                        accessToken = accessToken,
-                        idToken = idToken,
-                        refreshToken = refreshToken
-                    )
-
-                    _currentUser.value = user
-                    _isAuthenticated.value = true
-                }
-            } ?: run {
+            val authResult = response.authenticationResult ?: run {
                 response.challengeName?.let { challengeName ->
                     throw AuthError.ChallengeRequired(challengeName.toString())
                 }
+                throw AuthError.SignInFailed("No session was returned")
             }
+            val accessToken = authResult.accessToken ?: throw AuthError.SignInFailed("Missing session token")
+            val idToken = authResult.idToken ?: throw AuthError.SignInFailed("Missing identity token")
+            val refreshToken = authResult.refreshToken ?: throw AuthError.SignInFailed("Missing refresh token")
+
+            storeTokens(accessToken, idToken, refreshToken)
+            _currentUser.value = CognitoUser(
+                email = email,
+                accessToken = accessToken,
+                idToken = idToken,
+                refreshToken = refreshToken
+            )
+            _isAuthenticated.value = true
 
         } catch (e: AuthError) {
             throw e
@@ -232,16 +225,16 @@ class AuthService @JvmOverloads constructor(
                 val response = cognitoClient.getUser(getUserRequest)
 
                 // Create user from stored data
-                response.userAttributes.find { it.name == "email" }?.value?.let { email ->
-                    val user = CognitoUser(
-                        email = email,
-                        accessToken = storedTokens.accessToken,
-                        idToken = storedTokens.idToken,
-                        refreshToken = storedTokens.refreshToken
-                    )
-                    _currentUser.value = user
-                    _isAuthenticated.value = true
-                }
+                val email = response.userAttributes.find { it.name == "email" }?.value
+                    ?.takeIf { it.isNotBlank() }
+                    ?: throw AuthError.SignInFailed("Account identity is unavailable")
+                _currentUser.value = CognitoUser(
+                    email = email,
+                    accessToken = storedTokens.accessToken,
+                    idToken = storedTokens.idToken,
+                    refreshToken = storedTokens.refreshToken
+                )
+                _isAuthenticated.value = true
             } catch (e: Exception) {
                 // Tokens are invalid, try to refresh
                 try {
@@ -266,23 +259,20 @@ class AuthService @JvmOverloads constructor(
 
             val response = cognitoClient.initiateAuth(refreshRequest)
 
-            response.authenticationResult?.let { authResult ->
-                val accessToken = authResult.accessToken
-                val idToken = authResult.idToken
+            val authResult = response.authenticationResult
+                ?: throw AuthError.TokenRefreshFailed("No session was returned")
+            val accessToken = authResult.accessToken
+                ?: throw AuthError.TokenRefreshFailed("Missing session token")
+            val idToken = authResult.idToken
+                ?: throw AuthError.TokenRefreshFailed("Missing identity token")
+            val refreshedUser = cognitoClient.getUser(GetUserRequest { this.accessToken = accessToken })
+            val email = refreshedUser.userAttributes.find { it.name == "email" }?.value
+                ?.takeIf { it.isNotBlank() }
+                ?: throw AuthError.TokenRefreshFailed("Account identity is unavailable")
 
-                if (accessToken != null && idToken != null) {
-                    // Update tokens
-                    storeTokens(accessToken, idToken, storedTokens.refreshToken)
-
-                    _currentUser.value?.let { currentUser ->
-                        val updatedUser = currentUser.copy(
-                            accessToken = accessToken,
-                            idToken = idToken
-                        )
-                        _currentUser.value = updatedUser
-                    }
-                }
-            }
+            storeTokens(accessToken, idToken, storedTokens.refreshToken)
+            _currentUser.value = CognitoUser(email, accessToken, idToken, storedTokens.refreshToken)
+            _isAuthenticated.value = true
 
         } catch (e: Exception) {
             println("Token refresh error: ${e.message}")
