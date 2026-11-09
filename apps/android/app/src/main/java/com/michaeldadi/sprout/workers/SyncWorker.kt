@@ -9,9 +9,8 @@ import com.michaeldadi.sprout.data.entities.SyncStatus
 import com.michaeldadi.sprout.data.repository.TransactionRepository
 import com.michaeldadi.sprout.network.ApiService
 import com.michaeldadi.sprout.network.models.TransactionSyncData
-import android.content.SharedPreferences
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.michaeldadi.sprout.services.AuthTokenStore
+import com.michaeldadi.sprout.config.AppConfig
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,18 +24,14 @@ class SyncWorker(
     
     override suspend fun doWork(): Result {
         return try {
+            val accessToken = AuthTokenStore(applicationContext).read()?.accessToken
+                ?.takeIf { it.isNotBlank() }
+                ?: return Result.success() // No legacy session to sync.
+            if (AppConfig.apiBaseUrl.isBlank()) {
+                return Result.failure(workDataOf("reason" to "API base URL is not configured"))
+            }
             if (!isNetworkAvailable()) {
                 return Result.retry()
-            }
-            
-            // Check if user is authenticated by looking at stored tokens
-            if (!isUserAuthenticated()) {
-                return Result.success() // Skip sync if not authenticated
-            }
-            
-            val accessToken = getStoredAccessToken()
-            if (accessToken == null) {
-                return Result.success() // Skip sync if no access token
             }
             
             // Perform sync operations
@@ -191,36 +186,17 @@ class SyncWorker(
         prefs.edit().putLong("last_sync", date.time).apply()
     }
     
-    private fun isUserAuthenticated(): Boolean {
-        val authPrefs = applicationContext.getSharedPreferences("sprout_auth_prefs", Context.MODE_PRIVATE)
-        val tokensJson = authPrefs.getString("cognito_tokens", null)
-        return !tokensJson.isNullOrBlank()
-    }
-    
-    private fun getStoredAccessToken(): String? {
-        val authPrefs = applicationContext.getSharedPreferences("sprout_auth_prefs", Context.MODE_PRIVATE)
-        val tokensJson = authPrefs.getString("cognito_tokens", null) ?: return null
-        
-        return try {
-            // Simple JSON parsing to extract access token
-            tokensJson.substringAfter("\"accessToken\": \"").substringBefore("\",")
-        } catch (e: Exception) {
-            null
-        }
-    }
 }
 
 // Factory for creating API service
 object ApiServiceFactory {
     fun create(): ApiService {
+        require(AppConfig.apiBaseUrl.startsWith("https://")) { "API base URL must use HTTPS" }
         val okHttpClient = okhttp3.OkHttpClient.Builder()
-            .addInterceptor(okhttp3.logging.HttpLoggingInterceptor().apply {
-                level = okhttp3.logging.HttpLoggingInterceptor.Level.BODY
-            })
             .build()
             
         val retrofit = retrofit2.Retrofit.Builder()
-            .baseUrl("https://api.sprout.com/") // Replace with your actual API base URL
+            .baseUrl(AppConfig.apiBaseUrl.trimEnd('/') + "/")
             .client(okHttpClient)
             .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
             .build()
