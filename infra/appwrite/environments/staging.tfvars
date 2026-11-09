@@ -124,3 +124,7 @@ project_keys = {
     ]
   }
 }
+
+# Confirmed by Michael, 2026-11-09.
+marketing_site_origin    = "https://staging-getsprout.appwrite.network"
+marketing_site_indexable = false
