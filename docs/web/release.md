@@ -4,7 +4,7 @@
 
 The existing Appwrite sites are staging `6af0f8bf003d74b49da3` and production `6af0f34a002cee7f0cfb`. They use separate projects, databases, state, credentials, and form rows.
 
-Set `marketing_site_origin` in each environment's `.tfvars` to its exact generated primary HTTPS origin, without a path or trailing slash. Set `marketing_site_indexable=true` only for the public production release. Do not reuse `getsprout.io`: its observed site belongs to another product. The connector cannot currently list proxy rules (`rules.read` is missing), so the origins must be read from Appwrite's Sites → Domains UI by an authorized operator.
+The confirmed primary origins are `https://staging-getsprout.appwrite.network` and `https://getsprout.appwrite.network`. Both are recorded in their environment `.tfvars`; staging remains non-indexable. Production indexing is enabled only on its configured primary host. Request middleware adds `X-Robots-Tag: noindex, nofollow` and disallows crawling on other hosts, including branch previews. Do not reuse `getsprout.io`: its observed site belongs to another product.
 
 Terraform creates the runtime variables `SPROUT_MARKETING_DATABASE_ID`, `SPROUT_WAITLIST_TABLE_ID`, `SPROUT_INQUIRIES_TABLE_ID`, and `SPROUT_SITE_ORIGIN`, plus build variables `VITE_SITE_ORIGIN` and `VITE_SITE_INDEXABLE`. Hosted SSR uses the injected project/endpoint and `x-appwrite-key`; no permanent website API key is stored.
 
@@ -19,7 +19,9 @@ Terraform creates the runtime variables `SPROUT_MARKETING_DATABASE_ID`, `SPROUT_
 5. Run `infra/appwrite/tf.sh staging validate`, then a complete staging plan with both required Terraform credentials. Review the saved plan before applying.
 6. Confirm the plan preserves existing projects, buckets, native auth/platform settings, functions, and manual-transactions resources. Do not apply an old configuration snapshot that proposes deleting unrelated resources.
 
-Targeted staging applies were used during this implementation because only the existing project key and narrower short-lived website credentials were available. They provisioned and verified website resources without making organization-wide changes. A targeted plan is not evidence of zero drift across the whole project. Complete full-environment refresh/plan before production application.
+Targeted staging applies provisioned website resources without organization-wide changes. A full production refresh/plan subsequently completed using the existing project credential and a temporary read-only organization key. That plan includes unrelated native authentication and function adoption changes, so a separately reviewed website-only plan was applied. A targeted apply is not evidence of zero drift across the whole project. The sanitized review is in [production-terraform-review.json](evidence/production-terraform-review.json).
+
+WAF rule IDs share a global namespace. Production uses its site ID plus endpoint; the existing staging IDs are retained. The bridge never deletes remote rules or tables when Terraform tracking entries are replaced.
 
 ## Staging deployment
 
@@ -33,7 +35,7 @@ Use fictional `example.test` addresses for live tests. Inspect records through a
 
 ## Public activation
 
-Before activation, record internal review of product/security claims and legal copy, assign an operator to the inquiry queue, and confirm origin, indexing, rate limits, privacy, and asset checks. This review record stays in the repository; no review banners belong in the published website.
+Before activation, complete [the internal review](internal-review.md), assign an operator to the inquiry queue, and confirm origin, indexing, rate limits, privacy, and asset checks. This review record stays in the repository; no review banners belong in the published website. Website acceptance cannot verify the mobile app's 24-hour deletion or other intended launch commitments.
 
 Apply a reviewed production Terraform plan using production credentials. Create a deployment from the tested release commit and verify the same hosted checks. Only then activate it. Do not merge to `main` merely to obtain a preview: Appwrite can automatically activate deployments triggered by its configured production branch.
 

@@ -12,6 +12,8 @@ corepack yarn workspace @sprout/web test:e2e
 
 Browser tests target a production build. `web:check` builds first; Playwright starts the production server if no local server is running. Run `yarn workspace @sprout/web start` to inspect the built SSR site.
 
+Set `SPROUT_TEST_ORIGIN=https://staging-getsprout.appwrite.network` when running `test:e2e` to exercise a hosted deployment instead. The suite mocks form replies; separate live acceptance verifies persistence and removes its fictional test records.
+
 Copy `.env.example` to a local ignored environment file for local staging submissions. The development server reads Vite environment files; the production Node entrypoint requires runtime variables supplied by the process/host. Do not prefix credentials with `VITE_`. Hosted Appwrite SSR uses its injected endpoint/project and per-request `x-appwrite-key`, never a browser SDK or stored production key. Each environment needs the exact site origin, marketing database ID, and table IDs. Until configured, endpoints return a retryable error and never claim a submission was saved.
 
 The waitlist and inquiry pages work without an account. No outbound email is sent. Review private submissions in the Appwrite Console. Deletion requests require operator identity verification before account changes.

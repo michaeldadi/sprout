@@ -40,9 +40,10 @@ locals {
     {
       for index, endpoint in ["waitlist", "contact"] : "marketing_rate_${endpoint}" => {
         kind = "waf_rate"
-        id   = "marketing_${endpoint}_rate"
+        # WAF IDs share a global namespace. Retain the existing staging IDs.
+        id = var.environment == "staging" ? "marketing_${endpoint}_rate" : "${var.site.id}_${endpoint}"
         desired = {
-          id           = "marketing_${endpoint}_rate"
+          id           = var.environment == "staging" ? "marketing_${endpoint}_rate" : "${var.site.id}_${endpoint}"
           resourceType = "sites"
           resourceId   = module.core.site_id
           name         = "Marketing ${endpoint} submissions"

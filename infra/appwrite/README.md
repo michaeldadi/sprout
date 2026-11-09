@@ -76,7 +76,7 @@ client ID as its Appwrite audience. Verify that web client in Google Cloud
 and configure the same server client ID in the iOS build before activating
 Google sign-in.
 
-The landing sites point to `./apps/web`, which is absent from this checkout.
+The Clear sky implementation now lives in `apps/web`; the website settings below supersede the original landing-site build configuration.
 No site or function deployment is imported or activated by this configuration.
 
 On 2026-11-09, the staging Terraform project key was bootstrapped in Appwrite.
@@ -151,4 +151,6 @@ Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraf
 
 `marketing.tf` defines two private website-form tables, a unique normalized-email index, and site environment variables. It also declares site key scopes, deployment branch/path filters, and separate five-per-minute per-IP WAF rules. `scripts/manage_setting.py` manages the provider gaps with semantic readback. The optional `APPWRITE_WEBSITE_API_KEY` lets those calls use a narrow short-lived website credential without expanding the existing infrastructure key.
 
-The site now builds the root Yarn workspace and packages `apps/web/.output`. Before accepting hosted form submissions, set the exact `marketing_site_origin` in the selected environment. Enable indexing only for the approved public release. See [the website release runbook](../../docs/web/release.md) for deployment, validation, operator review, credential handling, and rollback. Generated branch previews are not the public active deployment.
+Both sites now build the root Yarn workspace and package `apps/web/.output`. Their exact generated primary origins are configured in the environment files. Staging is non-indexable; production indexing is limited to its configured primary host. WAF IDs share a global namespace: production IDs include the site ID, while existing staging IDs are retained. See [the website release runbook](../../docs/web/release.md) for deployment, validation, operator review, credential handling, and rollback. Generated branch previews are not the public active deployment.
+
+The website release completed a full production refresh/plan, then applied only the reviewed marketing resources. Unrelated native authentication and existing function adoption changes remain unapplied. The previous active production deployment is preserved until the internal publication gates are accepted. Detailed, sanitized evidence lives under `docs/web/evidence`.

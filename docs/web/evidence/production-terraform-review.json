@@ -1,0 +1,1231 @@
+{
+  "date": "2026-11-09",
+  "review_type": "Full refresh and plan completed; production website-only apply selected separately.",
+  "summary": [
+    {
+      "address": "appwrite_function.existing[\"apple_sign_in\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "deployment_retention",
+        "events",
+        "execute",
+        "provider_silent_mode",
+        "scopes",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "appwrite_function.existing[\"fcm_push\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "deployment_retention",
+        "events",
+        "execute",
+        "provider_silent_mode",
+        "scopes",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "appwrite_function.existing[\"monthly_pdf\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "deployment_retention",
+        "events",
+        "execute",
+        "provider_silent_mode",
+        "scopes",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "appwrite_function.existing[\"speech_recognition\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "deployment_retention",
+        "events",
+        "execute",
+        "provider_silent_mode",
+        "scopes",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "appwrite_function.existing[\"url_shortener\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "deployment_retention",
+        "events",
+        "execute",
+        "provider_silent_mode",
+        "scopes",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"apple_bundle_id\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"apple_key_contents\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"apple_key_id\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"apple_team_id\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"fcm_client_email\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"fcm_database_url\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"fcm_private_key\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"fcm_project_id\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"shortener_base_url\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"shortener_collection\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"shortener_database\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"speech_bucket\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"speech_collection\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"speech_database\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_function_variable.existing[\"speech_huggingface_token\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value_wo_version"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"SPROUT_INQUIRIES_TABLE_ID\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"SPROUT_MARKETING_DATABASE_ID\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"SPROUT_SITE_ORIGIN\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"SPROUT_WAITLIST_TABLE_ID\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"VITE_SITE_INDEXABLE\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_site_variable.marketing[\"VITE_SITE_ORIGIN\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "key",
+        "project_id",
+        "secret",
+        "site_id",
+        "value"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"inquiry_category\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"inquiry_email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"inquiry_message\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"inquiry_name\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"inquiry_status\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"waitlist_consent\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"waitlist_email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"waitlist_placement\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"waitlist_platform\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_column.marketing[\"waitlist_time\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "array",
+        "database_id",
+        "encrypt",
+        "key",
+        "project_id",
+        "required",
+        "size",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_index.marketing_email",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "columns",
+        "database_id",
+        "key",
+        "project_id",
+        "table_id",
+        "type"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_table.marketing[\"marketing_inquiries_v1\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "database_id",
+        "enabled",
+        "id",
+        "name",
+        "permissions",
+        "project_id",
+        "row_security"
+      ]
+    },
+    {
+      "address": "appwrite_tablesdb_table.marketing[\"marketing_waitlist_v1\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "database_id",
+        "enabled",
+        "id",
+        "name",
+        "permissions",
+        "project_id",
+        "row_security"
+      ]
+    },
+    {
+      "address": "terraform_data.environment_guard",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input"
+      ]
+    },
+    {
+      "address": "terraform_data.setting[\"auth_anonymous\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_email-otp\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_email-password\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_invites\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_jwt\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_magic-url\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_passkey\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"auth_phone\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"bucket\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"marketing_rate_contact\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"marketing_rate_waitlist\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"marketing_site\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"oauth_apple\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"oauth_google\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"platform_android\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"platform_ios\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": true
+    },
+    {
+      "address": "terraform_data.setting[\"policy_account-devices\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_deny-aliased-email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_deny-corporate-email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_deny-disposable-email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_deny-free-email\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_deny-realtime-guests\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_membership-privacy\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_mfa-factors\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_passkey\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-dictionary\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-history\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-personal-data\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-pwned\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-rotation\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_password-strength\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_session-alert\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_session-duration\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_session-invalidation\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_session-limit\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"policy_user-limit\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"protocol_graphql\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"protocol_rest\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"protocol_websocket\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_account\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_advisor\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_avatars\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_databases\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_functions\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_graphql\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_health\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_locale\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_messaging\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_migrations\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_oauth2\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_project\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_proxy\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_sites\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_storage\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_tablesdb\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_teams\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_users\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "terraform_data.setting[\"service_vcs\"]",
+      "actions": [
+        "create"
+      ],
+      "changed_fields": [
+        "input",
+        "triggers_replace"
+      ],
+      "remote_change_needed": false
+    },
+    {
+      "address": "module.core.appwrite_site.landing",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "build_command",
+        "deployment_retention",
+        "fallback_file",
+        "install_command",
+        "output_directory",
+        "provider_root_directory",
+        "provider_silent_mode",
+        "start_command",
+        "updated_at"
+      ]
+    },
+    {
+      "address": "module.core.appwrite_site_variable.landing[\"VITE_APPWRITE_ENDPOINT\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "module.core.appwrite_site_variable.landing[\"VITE_APPWRITE_PROJECT_ID\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    },
+    {
+      "address": "module.core.appwrite_site_variable.landing[\"VITE_APPWRITE_PROJECT_NAME\"]",
+      "actions": [
+        "update"
+      ],
+      "changed_fields": [
+        "secret",
+        "updated_at",
+        "value"
+      ]
+    }
+  ],
+  "unrelated_changes": "Not applied. Existing functions, write-only variable adoption, auth/platform settings and organization resources remain outside the website release."
+}

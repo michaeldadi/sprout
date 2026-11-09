@@ -165,13 +165,14 @@ test('help search returns useful results', async ({ page }) => {
 
 test('content and store-link fallback remain usable without JavaScript', async ({
   browser,
+  baseURL,
 }) => {
   const context = await browser.newContext({
     javaScriptEnabled: false,
     viewport: { width: 390, height: 844 },
   });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:3000/');
+  await page.goto(`${baseURL}/`);
   await expect(
     page.getByRole('heading', { name: 'Every subscription, before it renews.' })
   ).toBeVisible();
@@ -200,13 +201,14 @@ test('a throttled signup keeps its values and explains retry timing', async ({
 });
 test('layouts reflow at a 200% zoom-equivalent viewport', async ({
   browser,
+  baseURL,
 }) => {
   const context = await browser.newContext({
     viewport: { width: 720, height: 450 },
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
-  await page.goto('http://127.0.0.1:3000/');
+  await page.goto(`${baseURL}/`);
   await page.locator('html[data-hydrated=true]').waitFor();
   expect(
     await page.evaluate(
