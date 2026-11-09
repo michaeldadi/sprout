@@ -1,8 +1,9 @@
 # Snapshot of existing Appwrite Cloud configuration, read 2026-11-09.
 # No credentials belong in this file.
-environment     = "staging"
-endpoint        = "https://nyc.cloud.appwrite.io/v1"
-organization_id = "6af0e4a5003dead0e791"
+environment                 = "staging"
+manual_transactions_enabled = true
+endpoint                    = "https://nyc.cloud.appwrite.io/v1"
+organization_id             = "6af0e4a5003dead0e791"
 
 project = {
   id     = "6af0f72200383d2f1084"

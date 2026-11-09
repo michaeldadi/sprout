@@ -26,6 +26,12 @@ variable "database" {
   })
 }
 
+variable "manual_transactions_enabled" {
+  type        = bool
+  default     = false
+  description = "Opt in to the manual transaction table and function for this environment."
+}
+
 variable "bucket" {
   type = object({
     id                      = string

@@ -25,11 +25,17 @@ fi
 
 case "$operation" in
   validate)
+    if grep -Eq '^[[:space:]]*manual_transactions_enabled[[:space:]]*=[[:space:]]*true([[:space:]]|$)' "$config"; then
+      /usr/bin/python3 "$root/scripts/package_manual_transactions.py"
+    fi
     terraform -chdir="$root" fmt -check -recursive
     terraform -chdir="$root" init -backend=false -input=false
     terraform -chdir="$root" validate
     ;;
   plan|apply)
+    if [[ "$operation" == "plan" ]] && grep -Eq '^[[:space:]]*manual_transactions_enabled[[:space:]]*=[[:space:]]*true([[:space:]]|$)' "$config"; then
+      /usr/bin/python3 "$root/scripts/package_manual_transactions.py"
+    fi
     if [[ ! -f "$root/backend.hcl" ]]; then
       echo "Create untracked backend.hcl from backend.hcl.example first." >&2
       exit 2

@@ -3,6 +3,7 @@
 **/*.tfstate.*
 **/backend.hcl
 **/.plans/
+**/.artifacts/
 **/*.tfplan
 **/*.auto.tfvars
 **/*.auto.tfvars.json
