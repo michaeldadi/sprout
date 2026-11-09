@@ -58,17 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Apple Sign In OAuth Callback -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="com.michaeldadi.sprout"
-                      android:host="auth"
-                      android:path="/apple" />
-            </intent-filter>
-
             <!-- Plaid Link OAuth Callback -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

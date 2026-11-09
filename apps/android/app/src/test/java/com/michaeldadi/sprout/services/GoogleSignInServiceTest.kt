@@ -50,10 +50,11 @@ class GoogleSignInServiceTest {
     private lateinit var mockGoogleIdTokenCredential: GoogleIdTokenCredential
 
     private lateinit var googleSignInService: GoogleSignInService
+    private val testServerClientId = "test-web-client.apps.googleusercontent.com"
 
     @Before
     fun setup() {
-        googleSignInService = GoogleSignInService(mockContext, mockActivity, mockCredentialManager)
+        googleSignInService = GoogleSignInService(mockContext, mockActivity, mockCredentialManager, testServerClientId)
     }
 
     @Test
@@ -194,7 +195,7 @@ class GoogleSignInServiceTest {
         val requestCaptor = argumentCaptor<GetCredentialRequest>()
         verify(mockCredentialManager).getCredential(eq(mockActivity), requestCaptor.capture())
         val googleOption = requestCaptor.firstValue.credentialOptions.single() as GetGoogleIdOption
-        assertEquals(AppConfig.googleSignInClientId, googleOption.serverClientId)
+        assertEquals(testServerClientId, googleOption.serverClientId)
         assertEquals(false, googleOption.filterByAuthorizedAccounts)
     }
 

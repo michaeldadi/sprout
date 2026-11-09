@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import androidx.activity.ComponentActivity
 import aws.sdk.kotlin.services.cognitoidentityprovider.CognitoIdentityProviderClient
 import aws.sdk.kotlin.services.cognitoidentityprovider.model.*
-import com.michaeldadi.sprout.services.AppleSignInResult
 import com.michaeldadi.sprout.services.GoogleSignInResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
@@ -145,38 +144,6 @@ object TestUtils {
         val password: String = "TestPassword123!",
         val confirmationCode: String = "123456"
     )
-
-    /**
-     * Creates test data for Apple Sign In
-     */
-    data class TestAppleSignInData(
-        val idToken: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmV4YW1wbGUuYXBwIiwiZXhwIjoxNjAwMDAwMDAwLCJpYXQiOjE2MDAwMDAwMDAsInN1YiI6IjAwMDAwMC4xMjM0NTY3ODkwYWJjZGVmIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIn0.signature",
-        val authorizationCode: String = "c12345abcdef.0.123456789",
-        val email: String = "test@example.com",
-        val fullName: String = "Test User"
-    )
-
-    /**
-     * Creates mock Apple Sign In results
-     */
-    fun createSuccessfulAppleSignInResult(data: TestAppleSignInData = TestAppleSignInData()): AppleSignInResult.Success {
-        return AppleSignInResult.Success(
-            authorizationCode = data.authorizationCode,
-            idToken = data.idToken,
-            accessToken = "",
-            refreshToken = "",
-            email = data.email,
-            fullName = data.fullName
-        )
-    }
-
-    fun createCancelledAppleSignInResult(): AppleSignInResult.Cancelled {
-        return AppleSignInResult.Cancelled
-    }
-
-    fun createErrorAppleSignInResult(message: String = "Apple Sign In failed"): AppleSignInResult.Error {
-        return AppleSignInResult.Error(message)
-    }
 
     /**
      * Creates mock Google Sign In results

@@ -1,6 +1,5 @@
 package com.michaeldadi.sprout
 
-import android.content.Intent
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -12,6 +11,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,14 +24,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.michaeldadi.sprout.navigation.AuthNavigation
-import com.michaeldadi.sprout.services.AppleSignInService
 import com.michaeldadi.sprout.services.AuthService
+import com.michaeldadi.sprout.services.AppwriteNativeSession
+import com.michaeldadi.sprout.services.AppwriteAccountIdentity
 import com.michaeldadi.sprout.ui.theme.SproutTheme
 import com.michaeldadi.sprout.ui.activity.ActivityDetailScreen
 import com.michaeldadi.sprout.ui.activity.ActivityFilter
@@ -44,7 +47,6 @@ import com.michaeldadi.sprout.ui.components.SproutAuthenticatedNavigationBar
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import java.util.Date
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import io.sentry.Sentry
 
@@ -62,9 +64,6 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         
-        // Handle Apple Sign In callback if this is a redirect
-        handleAppleSignInCallback(intent)
-        
         setContent {
             SproutTheme {
                 SproutApp()
@@ -72,34 +71,53 @@ class MainActivity : ComponentActivity() {
         }
     }
     
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleAppleSignInCallback(intent)
-    }
-    
-    private fun handleAppleSignInCallback(intent: Intent) {
-        val data = intent.data
-        if (data != null && data.scheme == "com.michaeldadi.sprout" && data.host == "auth" && data.path == "/apple") {
-            // Handle Apple Sign In callback in a coroutine since it's suspend
-            val appleService = AppleSignInService(this, this)
-            lifecycleScope.launch {
-                appleService.handleCallback(intent)
-            }
-        }
-    }
 }
 
 @Composable
 fun SproutApp() {
     val authService: AuthService = viewModel()
     val isAuthenticated by authService.isAuthenticated.collectAsState()
+    val appwriteIdentity by AppwriteNativeSession.identity.collectAsState()
+
+    LaunchedEffect(Unit) {
+        AppwriteNativeSession.restore()
+    }
 
     if (isAuthenticated) {
         val currentUser by authService.currentUser.collectAsState()
         MainAppContent(currentUser)
+    } else if (appwriteIdentity != null) {
+        AppwriteAccountGate(appwriteIdentity!!)
     } else {
         // Authentication flow
         AuthNavigation()
+    }
+}
+
+@Composable
+private fun AppwriteAccountGate(identity: AppwriteAccountIdentity) {
+    val scope = rememberCoroutineScope()
+    var signOutError by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Signed in to Sprout", style = MaterialTheme.typography.headlineSmall)
+            Text(identity.email, style = MaterialTheme.typography.bodyMedium)
+            Text("Your financial data isn't available in this build yet.")
+            if (signOutError) Text("Could not sign out. Try again.", color = MaterialTheme.colorScheme.error)
+            Button(onClick = {
+                scope.launch {
+                    try {
+                        AppwriteNativeSession.signOut()
+                    } catch (_: Exception) {
+                        signOutError = true
+                    }
+                }
+            }) { Text("Sign out") }
+        }
     }
 }
 

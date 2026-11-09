@@ -1,8 +1,6 @@
 package com.michaeldadi.sprout.services
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.michaeldadi.sprout.config.CognitoConfig
@@ -16,7 +14,6 @@ import kotlinx.coroutines.launch
 import aws.sdk.kotlin.services.cognitoidentityprovider.CognitoIdentityProviderClient
 import aws.sdk.kotlin.services.cognitoidentityprovider.model.*
 import java.util.*
-import androidx.core.content.edit
 
 /**
  * Authentication service for handling Cognito authentication
@@ -26,15 +23,9 @@ class AuthService @JvmOverloads constructor(
     application: Application,
     private val cognitoClient: CognitoIdentityProviderClient = CognitoIdentityProviderClient {
         region = CognitoConfig.region
-    }
+    },
+    private val tokenStore: AuthTokenStore = AuthTokenStore(application)
 ) : AndroidViewModel(application) {
-
-    companion object {
-        private const val PREFS_NAME = "sprout_auth_prefs"
-        private const val KEY_TOKENS = "cognito_tokens"
-    }
-
-    private val prefs: SharedPreferences = application.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     // State management
     private val _isAuthenticated = MutableStateFlow(false)
@@ -87,6 +78,20 @@ class AuthService @JvmOverloads constructor(
         } catch (e: Exception) {
             println("Confirmation error: ${e.message}")
             throw AuthError.ConfirmationFailed(e.message ?: "Unknown error")
+        } finally {
+            _isLoading.value = false
+        }
+    }
+
+    suspend fun resendConfirmationCode(email: String) {
+        _isLoading.value = true
+        try {
+            cognitoClient.resendConfirmationCode(ResendConfirmationCodeRequest {
+                clientId = CognitoConfig.clientId
+                username = email
+            })
+        } catch (e: Exception) {
+            throw AuthError.ConfirmationFailed(e.message ?: "Could not resend the code")
         } finally {
             _isLoading.value = false
         }
@@ -205,311 +210,14 @@ class AuthService @JvmOverloads constructor(
         }
     }
 
-    // MARK: - Apple Sign In
-    suspend fun signInWithApple(idToken: String, email: String?, fullName: String?) {
-        _isLoading.value = true
-        try {
-            println("Apple Sign In - ID Token: $idToken")
-            println("Apple Sign In - Email: $email")
-            println("Apple Sign In - Full Name: $fullName")
-            
-            // Validate the Apple ID token first
-            if (!validateAppleIdToken(idToken)) {
-                throw AuthError.SignInFailed("Invalid Apple ID token")
-            }
-            
-            // Extract user information
-            val userEmail = email ?: extractEmailFromAppleIdToken(idToken)
-            
-            if (userEmail.isNullOrBlank()) {
-                throw AuthError.SignInFailed("Email is required for Apple Sign In")
-            }
-            
-            // Try to find existing user or create new one
-            try {
-                // First, try to sign in existing user with Apple identity
-                signInExistingAppleUser(userEmail, idToken)
-            } catch (e: Exception) {
-                println("Existing user sign in failed, trying to create new user: ${e.message}")
-                // If user doesn't exist, create a new one
-                createAppleUser(userEmail, idToken, fullName)
-            }
-
-        } catch (e: Exception) {
-            println("Apple Sign In error: ${e.message}")
-            throw AuthError.SignInFailed("Apple Sign In failed: ${e.message}")
-        } finally {
-            _isLoading.value = false
-        }
+    // Social identity exchange needs a configured, server-verified provider flow.
+    // Never create password users from a client-provided social token.
+    suspend fun signInWithApple(idToken: String, email: String?, fullName: String?): Nothing {
+        throw AuthError.SignInFailed("Apple sign-in is not available yet")
     }
 
-    private suspend fun signUpOrLinkAppleUser(email: String, idToken: String, fullName: String?) {
-        // First, try to see if user exists
-        try {
-            // Check if user already exists by trying to sign in
-            val testAuthRequest = InitiateAuthRequest {
-                authFlow = AuthFlowType.UserPasswordAuth
-                clientId = CognitoConfig.clientId
-                authParameters = mapOf(
-                    "USERNAME" to email,
-                    "PASSWORD" to "DummyPassword123!" // This will fail but tells us if user exists
-                )
-            }
-            cognitoClient.initiateAuth(testAuthRequest)
-        } catch (e: Exception) {
-            if (e.message?.contains("NotAuthorizedException") == true) {
-                // User exists but password is wrong - this means they signed up with Apple before
-                // In production, you'd link the Apple ID to the existing user
-                println("User exists, would link Apple ID: $email")
-                throw AuthError.SignInFailed("Please sign in with your original method")
-            } else if (e.message?.contains("UserNotFoundException") == true) {
-                // User doesn't exist, create new user
-                signUpWithApple(email, idToken, fullName)
-            }
-        }
-    }
-
-    private suspend fun signUpWithApple(email: String, idToken: String, fullName: String?) {
-        val names = fullName?.split(" ") ?: listOf()
-        val givenName = names.firstOrNull() ?: ""
-        val familyName = if (names.size > 1) names.drop(1).joinToString(" ") else ""
-
-        val signUpRequest = SignUpRequest {
-            clientId = CognitoConfig.clientId
-            username = email
-            password = UUID.randomUUID().toString() // Generate random password for Apple users
-            userAttributes = listOf(
-                AttributeType {
-                    name = "email"
-                    value = email
-                },
-                AttributeType {
-                    name = "email_verified"
-                    value = "true"
-                },
-                AttributeType {
-                    name = "given_name"
-                    value = givenName
-                },
-                AttributeType {
-                    name = "family_name"
-                    value = familyName
-                }
-            )
-        }
-
-        val response = cognitoClient.signUp(signUpRequest)
-        println("Apple user sign up successful: $response")
-
-        // Note: AdminConfirmSignUp requires admin privileges
-        // In production, you'd handle this server-side
-        println("Would auto-confirm Apple user: $email")
-    }
-
-    private fun extractEmailFromAppleIdToken(idToken: String): String? {
-        try {
-            // Split the JWT token
-            val parts = idToken.split(".")
-            if (parts.size >= 2) {
-                // Decode the payload (second part)
-                val payload = String(Base64.getUrlDecoder().decode(parts[1]))
-
-                // Simple JSON parsing - extract email
-                val emailPattern = """"email":\s*"([^"]+)"""".toRegex()
-                val emailMatch = emailPattern.find(payload)
-                return emailMatch?.groupValues?.get(1)
-            }
-        } catch (e: Exception) {
-            println("Error extracting email from Apple ID token: ${e.message}")
-        }
-        return null
-    }
-
-    private fun handleAuthenticationResult(authResult: AuthenticationResultType, email: String) {
-        val accessToken = authResult.accessToken
-        val idToken = authResult.idToken
-        val refreshToken = authResult.refreshToken
-
-        if (accessToken != null && idToken != null && refreshToken != null) {
-            // Store tokens securely
-            storeTokens(accessToken, idToken, refreshToken)
-
-            // Create user object
-            val user = CognitoUser(
-                email = email,
-                accessToken = accessToken,
-                idToken = idToken,
-                refreshToken = refreshToken
-            )
-
-            _currentUser.value = user
-            _isAuthenticated.value = true
-        }
-    }
-    
-    private suspend fun signInExistingAppleUser(email: String, idToken: String) {
-        // Try to find and authenticate existing user
-        // For Apple users, we'll use a special Apple-specific password
-        val applePassword = generateAppleUserPassword(email, idToken)
-        
-        val authRequest = InitiateAuthRequest {
-            authFlow = AuthFlowType.UserPasswordAuth
-            clientId = CognitoConfig.clientId
-            authParameters = mapOf(
-                "USERNAME" to email,
-                "PASSWORD" to applePassword
-            )
-        }
-        
-        val response = cognitoClient.initiateAuth(authRequest)
-        
-        response.authenticationResult?.let { authResult ->
-            handleAuthenticationResult(authResult, email)
-        } ?: run {
-            throw Exception("Authentication failed for existing Apple user")
-        }
-    }
-    
-    private suspend fun createAppleUser(email: String, idToken: String, fullName: String?) {
-        val names = fullName?.split(" ") ?: listOf()
-        val givenName = names.firstOrNull() ?: ""
-        val familyName = if (names.size > 1) names.drop(1).joinToString(" ") else ""
-        
-        // Generate a deterministic password for Apple users
-        val applePassword = generateAppleUserPassword(email, idToken)
-        
-        val signUpRequest = SignUpRequest {
-            clientId = CognitoConfig.clientId
-            username = email
-            password = applePassword
-            userAttributes = listOf(
-                AttributeType {
-                    name = "email"
-                    value = email
-                },
-                AttributeType {
-                    name = "email_verified"
-                    value = "true" // Apple has already verified the email
-                },
-                AttributeType {
-                    name = "given_name"
-                    value = givenName
-                },
-                AttributeType {
-                    name = "family_name"
-                    value = familyName
-                },
-                AttributeType {
-                    name = "custom:auth_provider"
-                    value = "apple"
-                }
-            )
-        }
-        
-        val response = cognitoClient.signUp(signUpRequest)
-        println("Apple user created: $response")
-        
-        // Auto-confirm the user since Apple has already verified them
-        try {
-            // Note: AdminConfirmSignUp requires admin privileges - should be done on backend
-            println("Would auto-confirm Apple user: $email")
-        } catch (e: Exception) {
-            println("Auto-confirm failed (expected - requires admin): ${e.message}")
-        }
-        
-        // Now sign in the user
-        signInExistingAppleUser(email, idToken)
-    }
-    
-    private fun generateAppleUserPassword(email: String, idToken: String): String {
-        // Generate a deterministic password based on email and ID token
-        // This ensures Apple users can sign in consistently
-        val combined = "$email:$idToken:apple_signin"
-        val bytes = combined.toByteArray()
-        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(bytes)
-        return java.util.Base64.getEncoder().encodeToString(digest).take(16) + "Aa1!"
-    }
-    
-    private fun validateAppleIdToken(idToken: String): Boolean {
-        // Basic validation - in production you should:
-        // 1. Verify the token signature using Apple's public keys
-        // 2. Check the audience (aud) claim
-        // 3. Check the issuer (iss) claim
-        // 4. Check the expiration time
-        
-        return try {
-            val parts = idToken.split(".")
-            parts.size == 3 && parts.all { it.isNotBlank() }
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    // MARK: - Google Sign In
-    suspend fun signInWithGoogle(idToken: String, email: String, fullName: String?) {
-        _isLoading.value = true
-        try {
-            // Use federated sign in with Google ID token
-            val authRequest = InitiateAuthRequest {
-                authFlow = AuthFlowType.CustomAuth
-                clientId = CognitoConfig.clientId
-                authParameters = mapOf(
-                    "PROVIDER_NAME" to "Google",
-                    "ID_TOKEN" to idToken
-                )
-            }
-
-            val response = cognitoClient.initiateAuth(authRequest)
-
-            response.authenticationResult?.let { authResult ->
-                handleAuthenticationResult(authResult, email)
-            } ?: run {
-                // If custom auth is not set up, fall back to creating a regular user
-                signUpWithGoogle(email, idToken, fullName)
-            }
-
-        } catch (e: Exception) {
-            println("Google Sign In error: ${e.message}")
-            throw AuthError.SignInFailed("Google Sign In failed: ${e.message}")
-        } finally {
-            _isLoading.value = false
-        }
-    }
-
-    private suspend fun signUpWithGoogle(email: String, idToken: String, fullName: String?) {
-        val names = fullName?.split(" ") ?: listOf()
-        val givenName = names.firstOrNull() ?: ""
-        val familyName = if (names.size > 1) names.drop(1).joinToString(" ") else ""
-
-        val signUpRequest = SignUpRequest {
-            clientId = CognitoConfig.clientId
-            username = email
-            password = UUID.randomUUID().toString() // Generate random password for Google users
-            userAttributes = listOf(
-                AttributeType {
-                    name = "email"
-                    value = email
-                },
-                AttributeType {
-                    name = "email_verified"
-                    value = "true"
-                },
-                AttributeType {
-                    name = "given_name"
-                    value = givenName
-                },
-                AttributeType {
-                    name = "family_name"
-                    value = familyName
-                }
-            )
-        }
-
-        val response = cognitoClient.signUp(signUpRequest)
-        println("Google user sign up successful: $response")
-
-        // Auto-confirm the user since Google has already verified the email
-        println("Would auto-confirm Google user: $email")
+    suspend fun signInWithGoogle(idToken: String, email: String, fullName: String?): Nothing {
+        throw AuthError.SignInFailed("Google sign-in is not available yet")
     }
 
     // MARK: - Check Existing Session
@@ -588,44 +296,13 @@ class AuthService @JvmOverloads constructor(
 
     // MARK: - Token Storage
     private fun storeTokens(accessToken: String, idToken: String, refreshToken: String) {
-        val tokens = StoredTokens(
-            accessToken = accessToken,
-            idToken = idToken,
-            refreshToken = refreshToken
-        )
-
-        // Convert to JSON string for storage
-        // In a real app, you'd use a more secure storage solution like EncryptedSharedPreferences
-        val tokensJson = """
-            {
-                "accessToken": "${tokens.accessToken}",
-                "idToken": "${tokens.idToken}",
-                "refreshToken": "${tokens.refreshToken}"
-            }
-        """.trimIndent()
-
-        prefs.edit().putString(KEY_TOKENS, tokensJson).apply()
+        tokenStore.save(StoredTokens(accessToken, idToken, refreshToken))
     }
 
-    private fun getStoredTokens(): StoredTokens? {
-        val tokensJson = prefs.getString(KEY_TOKENS, null) ?: return null
-
-        // In a real app, you'd use a proper JSON parsing library like Gson or Moshi
-        // This is a simplified parsing for demonstration
-        return try {
-            // Simple JSON parsing - replace with proper library in production
-            val accessToken = tokensJson.substringAfter("\"accessToken\": \"").substringBefore("\",")
-            val idToken = tokensJson.substringAfter("\"idToken\": \"").substringBefore("\",")
-            val refreshToken = tokensJson.substringAfter("\"refreshToken\": \"").substringBefore("\"")
-
-            StoredTokens(accessToken, idToken, refreshToken)
-        } catch (e: Exception) {
-            null
-        }
-    }
+    private fun getStoredTokens(): StoredTokens? = tokenStore.read()
 
     private fun clearStoredTokens() {
-        prefs.edit { remove(KEY_TOKENS) }
+        tokenStore.clear()
     }
 
     // Initialize the service by checking for existing session

@@ -1,7 +1,6 @@
 package com.michaeldadi.sprout.services
 
 import android.app.Application
-import android.content.SharedPreferences
 import aws.sdk.kotlin.services.cognitoidentityprovider.CognitoIdentityProviderClient
 import aws.sdk.kotlin.services.cognitoidentityprovider.model.*
 import com.michaeldadi.sprout.models.AuthError
@@ -32,23 +31,13 @@ class AuthServiceTest {
     private lateinit var mockCognitoClient: CognitoIdentityProviderClient
 
     @Mock
-    private lateinit var mockSharedPreferences: SharedPreferences
-
-    @Mock
-    private lateinit var mockEditor: SharedPreferences.Editor
+    private lateinit var mockTokenStore: AuthTokenStore
 
     private lateinit var authService: AuthService
 
     @Before
     fun setup() {
-        // Mock SharedPreferences
-        whenever(mockApplication.getSharedPreferences(any<String>(), any<Int>()))
-            .thenReturn(mockSharedPreferences)
-        whenever(mockSharedPreferences.edit()).thenReturn(mockEditor)
-        whenever(mockEditor.putString(any(), any())).thenReturn(mockEditor)
-        whenever(mockEditor.apply()).then { }
-
-        authService = AuthService(mockApplication, mockCognitoClient)
+        authService = AuthService(mockApplication, mockCognitoClient, mockTokenStore)
     }
 
     @Test
@@ -236,99 +225,18 @@ class AuthServiceTest {
     }
 
     @Test
-    fun `signInWithApple should create new user when email extraction succeeds`() = runTest {
-        // Arrange
-        val idToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImZoNmFjIn0.eyJpc3MiOiJodHRwczovL2FwcGxlaWQuYXBwbGUuY29tIiwiYXVkIjoiY29tLmV4YW1wbGUuYXBwIiwiZXhwIjoxNjAwMDAwMDAwLCJpYXQiOjE2MDAwMDAwMDAsInN1YiI6IjAwMDAwMC4xMjM0NTY3ODkwYWJjZGVmIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOiJ0cnVlIn0.signature"
-        val email = "test@example.com"
-        val fullName = "Test User"
-
-        val signUpResponse = mock(SignUpResponse::class.java)
-        whenever(mockCognitoClient.signUp(any<SignUpRequest>()))
-            .thenReturn(signUpResponse)
-
-        // Then mock successful sign in
-        val authResult = mock(AuthenticationResultType::class.java)
-        whenever(authResult.accessToken).thenReturn("access-token")
-        whenever(authResult.idToken).thenReturn("id-token")
-        whenever(authResult.refreshToken).thenReturn("refresh-token")
-
-        val signInResponse = mock(InitiateAuthResponse::class.java)
-        whenever(signInResponse.authenticationResult).thenReturn(authResult)
-
-        whenever(mockCognitoClient.initiateAuth(any<InitiateAuthRequest>()))
-            .thenThrow(RuntimeException("UserNotFoundException"))
-            .thenReturn(signInResponse)
-
-        // Act
-        authService.signInWithApple(idToken, email, fullName)
-
-        // Assert
-        assertTrue(authService.isAuthenticated.first())
-        verify(mockCognitoClient).signUp(any<SignUpRequest>())
+    fun `legacy Apple token method fails closed without creating a Cognito user`() = runTest {
+        assertFailsWith<AuthError.SignInFailed> {
+            authService.signInWithApple("provider-token", "test@example.com", "Test User")
+        }
+        verifyNoInteractions(mockCognitoClient)
     }
 
     @Test
-    fun `signInWithGoogle should authenticate successfully`() = runTest {
-        // Arrange
-        val idToken = "google-id-token"
-        val email = "test@example.com"
-        val fullName = "Test User"
-
-        val authResult = mock(AuthenticationResultType::class.java)
-        whenever(authResult.accessToken).thenReturn("access-token")
-        whenever(authResult.idToken).thenReturn("id-token")
-        whenever(authResult.refreshToken).thenReturn("refresh-token")
-
-        val mockResponse = mock(InitiateAuthResponse::class.java)
-        whenever(mockResponse.authenticationResult).thenReturn(authResult)
-
-        whenever(mockCognitoClient.initiateAuth(any<InitiateAuthRequest>()))
-            .thenReturn(mockResponse)
-
-        // Act
-        authService.signInWithGoogle(idToken, email, fullName)
-
-        // Assert
-        assertTrue(authService.isAuthenticated.first())
-        assertEquals(email, authService.currentUser.first()?.email)
-    }
-
-    @Test
-    fun `generateAppleUserPassword should create deterministic password`() {
-        // Test the deterministic password generation
-        val email = "test@example.com"
-        val idToken = "test-token"
-
-        // Use reflection to access private method
-        val method = AuthService::class.java.getDeclaredMethod("generateAppleUserPassword", String::class.java, String::class.java)
-        method.isAccessible = true
-
-        val password1 = method.invoke(authService, email, idToken) as String
-        val password2 = method.invoke(authService, email, idToken) as String
-
-        // Same inputs should generate same password
-        assertEquals(password1, password2)
-
-        // Password should meet requirements (contains Aa1!)
-        assertTrue(password1.contains("Aa1!"))
-        assertTrue(password1.length > 10)
-    }
-
-    @Test
-    fun `validateAppleIdToken should validate token format`() {
-        // Use reflection to access private method
-        val method = AuthService::class.java.getDeclaredMethod("validateAppleIdToken", String::class.java)
-        method.isAccessible = true
-
-        // Valid JWT format (3 parts separated by dots)
-        val validToken = "header.payload.signature"
-        assertTrue(method.invoke(authService, validToken) as Boolean)
-
-        // Invalid format
-        val invalidToken = "invalid.token"
-        assertFalse(method.invoke(authService, invalidToken) as Boolean)
-
-        // Empty token
-        assertFalse(method.invoke(authService, "") as Boolean)
+    fun `legacy Google token method fails closed without creating a Cognito user`() = runTest {
+        assertFailsWith<AuthError.SignInFailed> {
+            authService.signInWithGoogle("provider-token", "test@example.com", "Test User")
+        }
+        verifyNoInteractions(mockCognitoClient)
     }
 }

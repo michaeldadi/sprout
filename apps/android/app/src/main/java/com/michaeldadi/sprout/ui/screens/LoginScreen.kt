@@ -28,17 +28,19 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.michaeldadi.sprout.BuildConfig
 import com.michaeldadi.sprout.R
 import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.managers.rememberToastState
 import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.services.GoogleSignInService
 import com.michaeldadi.sprout.services.GoogleSignInResult
-import com.michaeldadi.sprout.services.AppleSignInService
-import com.michaeldadi.sprout.services.AppleSignInResult
+import com.michaeldadi.sprout.services.AppwriteNativeSession
+import com.michaeldadi.sprout.services.AppwriteConnection
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import androidx.activity.ComponentActivity
+import kotlinx.coroutines.launch
 
 /**
  * Login screen that mirrors the iOS LoginView design and functionality
@@ -53,6 +55,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val toastState = rememberToastState()
+    val pingScope = rememberCoroutineScope()
 
     // State
     var email by remember { mutableStateOf("") }
@@ -60,7 +63,8 @@ fun LoginScreen(
     var isPasswordVisible by remember { mutableStateOf(false) }
     var shouldTriggerLogin by remember { mutableStateOf(false) }
     var shouldTriggerGoogleLogin by remember { mutableStateOf(false) }
-    var shouldTriggerAppleLogin by remember { mutableStateOf(false) }
+    var isPingingAppwrite by remember { mutableStateOf(false) }
+    var appwritePingStatus by remember { mutableStateOf<String?>(null) }
 
     val textLoginFailure = stringResource(R.string.login_failed)
 
@@ -89,10 +93,9 @@ fun LoginScreen(
                     val googleSignInService = GoogleSignInService(context, activity)
                     when (val result = googleSignInService.signIn()) {
                         is GoogleSignInResult.Success -> {
-                            authService.signInWithGoogle(
+                            AppwriteNativeSession.signInWithGoogle(
                                 idToken = result.idToken,
-                                email = result.email,
-                                fullName = result.displayName
+                                name = result.displayName
                             )
                             // Success message is handled by LaunchedEffect
                         }
@@ -110,42 +113,6 @@ fun LoginScreen(
                 ToastManager.showError(context, e.message ?: textGoogleSignInFailure)
             } finally {
                 shouldTriggerGoogleLogin = false
-            }
-        }
-    }
-
-    val textAppleSignInFailure = stringResource(R.string.login_failed_apple)
-
-    // Handle Apple login attempts
-    LaunchedEffect(shouldTriggerAppleLogin) {
-        if (shouldTriggerAppleLogin) {
-            try {
-                val activity = context as? ComponentActivity
-                if (activity != null) {
-                    val appleSignInService = AppleSignInService(context, activity)
-                    when (val result = appleSignInService.signIn()) {
-                        is AppleSignInResult.Success -> {
-                            authService.signInWithApple(
-                                idToken = result.idToken,
-                                email = result.email,
-                                fullName = result.fullName
-                            )
-                            // Success message is handled by LaunchedEffect
-                        }
-                        is AppleSignInResult.Cancelled -> {
-                            ToastManager.showInfo(context, "Sign in cancelled")
-                        }
-                        is AppleSignInResult.Error -> {
-                            ToastManager.showError(context, result.message)
-                        }
-                    }
-                } else {
-                    ToastManager.showError(context, "Unable to get activity context")
-                }
-            } catch (e: Exception) {
-                ToastManager.showError(context, e.message ?: textAppleSignInFailure)
-            } finally {
-                shouldTriggerAppleLogin = false
             }
         }
     }
@@ -230,14 +197,41 @@ fun LoginScreen(
                 },
                 isLoading = isLoading,
                 focusManager = focusManager,
-                onTriggerGoogleLogin = { shouldTriggerGoogleLogin = true },
-                onTriggerAppleLogin = { shouldTriggerAppleLogin = true }
+                onTriggerGoogleLogin = { shouldTriggerGoogleLogin = true }
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             // Sign Up Link
             SignUpLink(onNavigateToSignUp = onNavigateToSignUp)
+
+            if (BuildConfig.DEBUG) {
+                TextButton(
+                    onClick = {
+                        isPingingAppwrite = true
+                        appwritePingStatus = null
+                        pingScope.launch {
+                            appwritePingStatus = try {
+                                AppwriteConnection.ping()
+                                "Appwrite ping succeeded"
+                            } catch (error: Exception) {
+                                "Appwrite ping failed: ${error.localizedMessage ?: "Unknown error"}"
+                            }
+                            isPingingAppwrite = false
+                        }
+                    },
+                    enabled = !isPingingAppwrite
+                ) {
+                    Text(if (isPingingAppwrite) "Checking Appwrite…" else "Test Appwrite connection")
+                }
+                appwritePingStatus?.let { status ->
+                    Text(
+                        text = status,
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -312,8 +306,7 @@ private fun LoginForm(
     onLogin: () -> Unit,
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
-    onTriggerGoogleLogin: () -> Unit,
-    onTriggerAppleLogin: () -> Unit
+    onTriggerGoogleLogin: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -454,13 +447,7 @@ private fun LoginForm(
               onClick = onTriggerGoogleLogin
             )
 
-            SocialLoginButton(
-                text = stringResource(R.string.continue_with_apple),
-                backgroundColor = Color.Black,
-                textColor = Color.White,
-                icon = "apple",
-                onClick = onTriggerAppleLogin
-            )
+
         }
     }
 }

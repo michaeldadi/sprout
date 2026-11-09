@@ -39,6 +39,10 @@ android {
         buildConfigField("String", "MIXPANEL_TOKEN", "\"${envProperties.getProperty("MIXPANEL_TOKEN", "")}\"")
         buildConfigField("String", "APPSFLYER_DEV_KEY", "\"${envProperties.getProperty("APPSFLYER_DEV_KEY", "")}\"")
         buildConfigField("String", "REVENUECAT_API_KEY", "\"${envProperties.getProperty("REVENUECAT_API_KEY", "")}\"")
+        buildConfigField("String", "SPROUT_API_BASE_URL", "\"${envProperties.getProperty("SPROUT_API_BASE_URL", "")}\"")
+        buildConfigField("String", "SPROUT_APPWRITE_ENDPOINT", "\"${envProperties.getProperty("SPROUT_APPWRITE_ENDPOINT", "")}\"")
+        buildConfigField("String", "SPROUT_APPWRITE_PROJECT_ID", "\"${envProperties.getProperty("SPROUT_APPWRITE_PROJECT_ID", "")}\"")
+        buildConfigField("String", "SPROUT_GOOGLE_WEB_CLIENT_ID", "\"${envProperties.getProperty("SPROUT_GOOGLE_WEB_CLIENT_ID", "")}\"")
     }
 
     buildTypes {
@@ -67,6 +71,8 @@ android {
 
 dependencies {
 
+    implementation(libs.appwrite.android)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -94,9 +100,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.foundation)
-
-    // Custom Tabs for Apple Sign In
-    implementation(libs.androidx.browser)
 
     // Room database
     implementation(libs.androidx.room.runtime)
