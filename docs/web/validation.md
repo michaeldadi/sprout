@@ -46,7 +46,7 @@ The signed website implementation `0b7f9cffc8459b0493e2a2084fe35bcb81d4d0fb` pas
 
 The unchanged production site's automatic non-active branch build compiled the website, then failed because its existing output directory is `./dist`. The Terraform change to root build context and `./apps/web/.output` is the prepared correction, not a production configuration already applied.
 
-Production function preview logs exposed a missing `husky` dependency in the restored root manifest's existing prepare script. The follow-up adds that declared dependency and preserves the original function template's npm UUID override. No function source or active function deployment was changed.
+Production function preview logs exposed a missing `husky` dependency in the restored root manifest's existing prepare script. The follow-up adds that declared dependency and preserves the original function template's npm UUID override. No function source or active function deployment was changed. The obsolete root npm lockfile from the template was removed so Yarn owns the single root lockfile; legacy functions use `npm install`, not `npm ci`.
 
 ## Infrastructure limits and release state
 
