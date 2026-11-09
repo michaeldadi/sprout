@@ -40,6 +40,14 @@ Terraform created the two private tables, ten required columns, and unique email
 
 These checks do not establish a hosted site's request-scoped key injection or edge rate-limit behavior. Verify those after the site builds in Appwrite.
 
+## Hosted build and GitHub CI
+
+The signed website implementation `0b7f9cffc8459b0493e2a2084fe35bcb81d4d0fb` passed [Web CI](https://github.com/michaeldadi/sprout/actions/runs/42640988729): 16 unit tests and 33 browser checks. The staging Appwrite VCS deployment `6af1e0f752d1f0370856` built successfully, reached `ready`, and distributed to all six edges with `activate=false`. This verifies the locked root-workspace install, Node 22 build, Nitro output selection, and Appwrite packaging; it does not establish hosted form-origin or firewall acceptance without the preview URL.
+
+The unchanged production site's automatic non-active branch build compiled the website, then failed because its existing output directory is `./dist`. The Terraform change to root build context and `./apps/web/.output` is the prepared correction, not a production configuration already applied.
+
+Production function preview logs exposed a missing `husky` dependency in the restored root manifest's existing prepare script. The follow-up adds that declared dependency and preserves the original function template's npm UUID override. No function source or active function deployment was changed.
+
 ## Infrastructure limits and release state
 
 Staging resource changes are in the existing HCP Terraform state. Applies were deliberately targeted because available credentials cover the project/website resources but not the whole organization's administration. No production infrastructure changes, native auth changes, mobile changes, or public activation were performed.
