@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-09",
+  "project": "6af0f72200383d2f1084",
+  "results": {
+    "waitlist": {
+      "simultaneous_requests": 4,
+      "saved_rows": 1,
+      "duplicate_response_identical": true,
+      "original_preference_retained": true
+    },
+    "contact": {
+      "replays": 2,
+      "saved_rows": 1,
+      "private": true
+    },
+    "marketing_waitlist_v1_anonymous": {
+      "read_denied": true,
+      "write_denied": true
+    },
+    "marketing_inquiries_v1_anonymous": {
+      "read_denied": true,
+      "write_denied": true
+    },
+    "cleanup_verified": true
+  }
+}

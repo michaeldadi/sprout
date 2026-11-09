@@ -131,3 +131,13 @@ dist
 
 # Directory used by Appwrite CLI for local development
 .appwrite
+# Web and Terraform local artifacts
+**/.output/
+**/.nitro/
+**/.tanstack/
+**/playwright-report/
+**/test-results/
+**/.terraform/
+**/*.tfstate*
+**/.plans/
+**/backend.hcl

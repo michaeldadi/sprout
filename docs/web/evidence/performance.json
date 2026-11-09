@@ -1,0 +1,64 @@
+{
+  "profile": {
+    "width": 390,
+    "cpuSlowdown": 4,
+    "latencyMs": 150,
+    "downloadKbps": 1600
+  },
+  "metrics": {
+    "lcp": 1420,
+    "cls": 0.0038148231978110013,
+    "tbt": 62,
+    "resources": [
+      {
+        "name": "/assets/styles-CLl6g8JW.css",
+        "transferSize": 27608,
+        "encodedBodySize": 27308,
+        "duration": 824.0999999940395
+      },
+      {
+        "name": "/assets/index-CNR_p5Em.js",
+        "transferSize": 367797,
+        "encodedBodySize": 367497,
+        "duration": 4074.7000000029802
+      },
+      {
+        "name": "/assets/routes-BAxtanRW.js",
+        "transferSize": 27015,
+        "encodedBodySize": 26715,
+        "duration": 830.2999999970198
+      },
+      {
+        "name": "/fonts/inter-latin-wght-normal.woff2",
+        "transferSize": 48556,
+        "encodedBodySize": 48256,
+        "duration": 1196.6000000014901
+      },
+      {
+        "name": "/fonts/fraunces-latin-full-normal.woff2",
+        "transferSize": 121316,
+        "encodedBodySize": 121016,
+        "duration": 2441.39999999851
+      },
+      {
+        "name": "/fonts/jetbrains-mono-latin-wght-normal.woff2",
+        "transferSize": 40704,
+        "encodedBodySize": 40404,
+        "duration": 999.6000000014901
+      },
+      {
+        "name": "/fonts/fraunces-latin-full-italic.woff2",
+        "transferSize": 150020,
+        "encodedBodySize": 149720,
+        "duration": 2230.8000000044703
+      }
+    ],
+    "navigation": [
+      {
+        "responseStart": 157.20000000298023,
+        "domContentLoaded": 1027.3999999985099,
+        "load": 4375.79999999702
+      }
+    ]
+  }
+}

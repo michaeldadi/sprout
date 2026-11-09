@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sprout — Money that finally explains itself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      canvas:'#F6F8F4', surface:'#FFFFFF', subtle:'#EBF2EA', ink:'#16271D', ink2:'#526258', line:'#D7E2D7',
+      action:'#1C6A3D', actionSubtle:'#D8ECDD', success:'#227047', warning:'#8B5B11', mint:'#8BDD9D', mint2:'#6FCF8A',
+      dcanvas:'#101B16', dsurface:'#17241D', dline:'#35493B', dtext:'#B9CCBC'
+    },
+    fontFamily: { sans:['Inter','ui-sans-serif','system-ui','sans-serif'], serif:['Fraunces','Georgia','serif'], mono:['"JetBrains Mono"','ui-monospace','monospace'] },
+    maxWidth: { page:'1200px' }
+  } }
+}
+</script>
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#16271D;background:#F6F8F4;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Fraunces,Georgia,serif;font-variation-settings:"opsz" 144;font-weight:400;letter-spacing:-0.02em}
+  .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+  .caps{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
+  .hero-field{
+    background-color:#F6F8F4;
+    background-image:
+      radial-gradient(circle, rgba(28,106,61,0.07) 1px, transparent 1.2px),
+      radial-gradient(60% 50% at 20% 20%, #D8ECDD 0%, rgba(216,236,221,0) 70%),
+      radial-gradient(55% 45% at 85% 70%, #EBF2EA 0%, rgba(235,242,234,0) 70%);
+    background-size:24px 24px, 100% 100%, 100% 100%;
+  }
+  .btn-primary{background:#1C6A3D;color:#fff;border-radius:12px;height:48px;padding:0 20px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;transition:background .15s}
+  .btn-primary:hover{background:#17582F}
+  .btn-secondary{background:#fff;color:#16271D;border:1px solid #D7E2D7;border-radius:12px;height:48px;padding:0 20px;display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+  .store{display:inline-flex;align-items:center;gap:10px;background:#0b0b0b;color:#fff;border-radius:12px;height:52px;padding:0 16px 0 14px;min-width:168px;transition:transform .15s}
+  .store:hover{transform:translateY(-1px)}
+  .store small{display:block;font-size:10px;line-height:1;opacity:.8;font-weight:500;letter-spacing:.02em}
+  .store b{display:block;font-size:16px;line-height:1.15;font-weight:600;letter-spacing:-0.01em}
+  .hair{border-color:#D7E2D7}
+  /* phone */
+  .phone{width:320px;max-width:100%;background:#0b0b0b;border-radius:58px;padding:14px;box-shadow:0 30px 60px rgba(22,39,29,0.18), 0 0 0 1px rgba(0,0,0,.6) inset}
+  .screen{background:#F6F8F4;border-radius:44px;overflow:hidden;position:relative;height:620px}
+  .bar{height:8px;border-radius:999px;background:#EBF2EA;overflow:hidden}
+  .bar i{display:block;height:100%;background:#1C6A3D;border-radius:999px}
+  /* AI pill stack */
+  .pill{background:#fff;border:1px solid #D7E2D7;border-radius:999px;box-shadow:0 8px 24px rgba(22,39,29,0.06)}
+  .pill-ghost{position:absolute;left:0;right:0;top:0;height:100%;pointer-events:none}
+  .msg{position:absolute;inset:0;display:flex;align-items:center;gap:14px;padding:0 24px 0 16px;opacity:0;visibility:hidden}
+  .msg.on{opacity:1;visibility:visible}
+  /* reveal & intro (gated) */
+  @media (prefers-reduced-motion: no-preference){
+    .w{display:inline-block;opacity:0;filter:blur(10px);transform:translateY(24px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i) * 60ms + 50ms)}
+    .hero-block{opacity:0;filter:blur(10px);transform:translateY(24px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:500ms}
+    .hero-phone{opacity:0;transform:translateY(80px);animation:phone .9s cubic-bezier(.16,1,.3,1) forwards;animation-delay:650ms}
+    .nav-in{opacity:0;animation:fade .4s ease forwards;animation-delay:700ms}
+    @keyframes rise{to{opacity:1;filter:blur(0);transform:translateY(0)}}
+    @keyframes phone{to{opacity:1;transform:translateY(0)}}
+    @keyframes fade{to{opacity:1}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+    .reveal.in{opacity:1;transform:none}
+    .msg{transition:opacity .3s ease,filter .3s ease,visibility 0s linear .3s;filter:blur(6px)}
+    .msg.on{filter:blur(0);transition:opacity .3s ease,filter .3s ease,visibility 0s}
+    .store,.btn-primary{transition:transform .15s,background .15s}
+  }
+</style>
+</head>
+<body class="bg-canvas text-ink overflow-x-hidden">
+
+<!-- NAV -->
+<header data-aid="nav" class="fixed top-6 left-0 right-0 z-50 px-4 md:px-8">
+  <div class="nav-in mx-auto max-w-page flex items-center justify-between h-14 px-3 md:px-4 rounded-2xl border border-line" style="background:rgba(246,248,244,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">
+    <a href="#" class="flex items-center gap-2.5" aria-label="sprout home">
+      <span class="inline-flex w-8 h-8 rounded-[10px] items-center justify-center" style="background:linear-gradient(135deg,#8BDD9D,#6FCF8A)">
+        <svg viewBox="0 0 256 256" class="w-5 h-5" fill="#fff" aria-hidden="true"><path d="M62 54c-3-3-8-1-9 3C40 104 46 152 80 178c30 23 70 22 98 0-12-14-28-26-48-32-13-4-22-10-29-20 10 7 23 12 38 13 24 2 42-4 54-12 2-1 3-4 2-6-6-22-20-38-42-46-26-9-56-2-91-21z"/><path d="M146 150c22 12 36 26 44 38 2 3 0 7-3 8-4 1-7-1-9-4-8-13-20-25-36-34 1-3 2-5 4-8z"/></svg>
+      </span>
+      <span class="text-[19px] font-semibold tracking-[-0.02em] text-ink">sprout</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 caps text-ink2">
+      <a href="#subscriptions" class="hover:text-ink">Subscriptions</a>
+      <a href="#ai" class="hover:text-ink">Insights</a>
+      <a href="#voice" class="hover:text-ink">Voice</a>
+      <a href="#security" class="hover:text-ink">Security</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#cta" class="btn-primary !h-10 !px-4 !text-[14px]">Get the app</a>
+      <button class="md:hidden inline-flex w-10 h-10 items-center justify-center rounded-xl border border-line bg-white" aria-label="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16271D" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section data-aid="hero" class="hero-field relative overflow-hidden flex flex-col min-h-[760px] md:min-h-[860px] pt-36 md:pt-44">
+  <div class="relative z-10 mx-auto max-w-page px-5 text-center">
+    <p class="hero-block caps text-action mb-6" style="animation-delay:0ms">Personal finance · iOS &amp; Android</p>
+    <h1 data-aid="hero-title" class="serif text-[44px] md:text-[64px] lg:text-[72px] leading-[1.02] text-ink mx-auto max-w-[14ch]">
+      <span class="w" style="--i:0">Money</span> <span class="w" style="--i:1">that</span> <span class="w" style="--i:2">finally</span><br>
+      <em class="w text-action not-italic" style="--i:3;font-style:italic">explains</em> <em class="w text-action" style="--i:4;font-style:italic">itself.</em>
+    </h1>
+    <div class="hero-block">
+      <p class="mt-6 text-[17px] md:text-[18px] leading-7 text-ink2 mx-auto max-w-[48ch]">Link your accounts once. sprout sorts every charge, spots the subscriptions you forgot, and tells you what's safe to spend.</p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="#" class="store" aria-label="Download on the App Store">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.37 12.63c-.03-2.6 2.13-3.86 2.22-3.92-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.9-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.24 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.14-2.52.99-1.45 1.4-2.85 1.42-2.92-.03-.01-2.72-1.04-2.74-4.12zM13.8 4.97c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.29.69-3.03 1.56-.66.77-1.25 2-1.09 3.18 1.15.09 2.33-.58 3.05-1.45z"/></svg>
+          <span><small>Download on the</small><b>App Store</b></span>
+        </a>
+        <a href="#" class="store" aria-label="Get it on Google Play">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.4c-.3.3-.5.8-.5 1.4v16.4c0 .6.2 1.1.5 1.4L12.7 12 3.6 2.4z" fill="#34A853"/><path d="M15.8 15.1L12.7 12l-9.1 9.6c.4.4 1 .4 1.7 0l10.5-6.5z" fill="#EA4335"/><path d="M15.8 8.9L5.3 2.4c-.7-.4-1.3-.4-1.7 0L12.7 12l3.1-3.1z" fill="#FBBC04"/><path d="M15.8 8.9L12.7 12l3.1 3.1 3.7-2.1c1-.6 1-1.5 0-2.1l-3.7-2z" fill="#4285F4"/></svg>
+          <span><small>Get it on</small><b>Google Play</b></span>
+        </a>
+      </div>
+      <p class="mt-5 text-[13px] text-ink2">Free to download. Read-only bank connection via Plaid.</p>
+    </div>
+  </div>
+
+  <!-- PHONE -->
+  <div data-aid="phone" class="relative z-10 mx-auto mt-auto pt-12 md:pt-16 w-[300px] md:w-[320px] h-[378px] md:h-[424px] overflow-hidden">
+    <div class="hero-phone phone">
+      <div class="screen text-ink">
+        <!-- status bar -->
+        <div class="flex items-center justify-between px-6 pt-4 text-[12px] font-semibold tnum">
+          <span>9:41</span>
+          <span class="absolute left-1/2 -translate-x-1/2 top-3 w-[88px] h-[26px] bg-black rounded-full"></span>
+          <span class="flex items-center gap-1.5">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="#16271D"><rect x="0" y="7" width="3" height="4" rx=".6"/><rect x="4.3" y="5" width="3" height="6" rx=".6"/><rect x="8.6" y="2.5" width="3" height="8.5" rx=".6"/><rect x="13" y="0" width="3" height="11" rx=".6"/></svg>
+            <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x=".5" y=".5" width="20" height="10" rx="2.5" stroke="#16271D" opacity=".4"/><rect x="2" y="2" width="16" height="7" rx="1.5" fill="#16271D"/><path d="M22 4v3" stroke="#16271D" stroke-width="1.4" opacity=".4"/></svg>
+          </span>
+        </div>
+        <div class="px-5 pt-7">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-[13px] text-ink2">Good morning, Maya</p>
+              <p class="text-[26px] font-semibold tracking-[-0.02em] leading-8 mt-0.5">Home</p>
+            </div>
+            <span class="w-9 h-9 rounded-full bg-actionSubtle flex items-center justify-center text-[12px] font-semibold text-action">M</span>
+          </div>
+          <div class="mt-5 bg-white border border-line rounded-2xl p-4">
+            <p class="text-[12px] font-medium text-ink2">Total balance</p>
+            <p class="text-[36px] font-semibold tnum tracking-[-0.02em] leading-10 mt-1">$4,812.40</p>
+            <div class="mt-3 flex items-center gap-2 text-[13px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+              <span class="text-ink2">Safe to spend · Nov</span>
+              <span class="ml-auto font-semibold tnum text-success">$1,260</span>
+            </div>
+          </div>
+          <div class="mt-4 bg-white border border-line rounded-2xl p-4">
+            <div class="flex items-center justify-between">
+              <p class="text-[14px] font-semibold">November budget</p>
+              <span class="text-[12px] text-ink2 tnum">21 days left</span>
+            </div>
+            <div class="mt-3 space-y-3 text-[12px]">
+              <div><div class="flex justify-between mb-1.5"><span class="font-medium">Food</span><span class="tnum text-ink2">$412 / $600</span></div><div class="bar"><i style="width:69%"></i></div></div>
+              <div><div class="flex justify-between mb-1.5"><span class="font-medium">Bills</span><span class="tnum text-ink2">$318 / $450</span></div><div class="bar"><i style="width:71%"></i></div></div>
+              <div><div class="flex justify-between mb-1.5"><span class="font-medium">Shopping</span><span class="tnum text-ink2">$96 / $250</span></div><div class="bar"><i style="width:38%"></i></div></div>
+            </div>
+          </div>
+          <div class="mt-5 flex items-center justify-between">
+            <p class="text-[14px] font-semibold">Latest activity</p>
+            <span class="text-[12px] font-medium text-action">View all</span>
+          </div>
+          <ul class="mt-2 divide-y divide-line text-[13px]">
+            <li class="flex items-center gap-3 py-3">
+              <span class="w-9 h-9 rounded-xl bg-actionSubtle flex items-center justify-center text-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></span>
+              <span class="flex-1 min-w-0"><span class="block font-medium truncate">Trader Joe's</span><span class="block text-[12px] text-ink2">Food · Today</span></span>
+              <span class="font-semibold tnum">−$62.18</span>
+            </li>
+            <li class="flex items-center gap-3 py-3">
+              <span class="w-9 h-9 rounded-xl bg-actionSubtle flex items-center justify-center text-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14.5c2.5-1 5.5-1 8 .5M7.5 11c3-1.2 7-1.2 10 .6M7 8c3.5-1.5 8-1.5 11.5.8"/></svg></span>
+              <span class="flex-1 min-w-0"><span class="block font-medium truncate">Spotify</span><span class="block text-[12px] text-ink2">Entertainment · Recurring</span></span>
+              <span class="font-semibold tnum">−$10.99</span>
+            </li>
+            <li class="flex items-center gap-3 py-3">
+              <span class="w-9 h-9 rounded-xl bg-actionSubtle flex items-center justify-center text-action"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+              <span class="flex-1 min-w-0"><span class="block font-medium truncate">Con Edison</span><span class="block text-[12px] text-ink2">Bills · Nov 6</span></span>
+              <span class="font-semibold tnum">−$118.40</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTIONS -->
+<section id="subscriptions" data-aid="subscriptions" class="bg-canvas py-20 md:py-32">
+  <div class="mx-auto max-w-page px-5 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+    <div class="lg:col-span-5 reveal">
+      <p class="caps text-action">Recurring</p>
+      <h2 class="serif text-[36px] md:text-[48px] leading-[1.05] mt-4">Every subscription, <em class="text-action">before</em> it renews.</h2>
+      <p class="mt-5 text-[17px] leading-7 text-ink2 max-w-[44ch]">sprout finds the charges that repeat, lines them up by renewal date, and sends a note a few days before each one. Set a cancel reminder and it stays on your list until you deal with it.</p>
+      <ul class="mt-8 space-y-3 text-[15px]">
+        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Detects subscriptions automatically</li>
+        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>Notification 3 days before each renewal</li>
+        <li class="flex items-center gap-3"><span class="w-6 h-6 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>One monthly total you can actually read</li>
+      </ul>
+    </div>
+    <div class="lg:col-span-7 reveal" style="transition-delay:120ms">
+      <div class="bg-white border border-line rounded-3xl p-5 md:p-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-[18px] font-semibold">Upcoming renewals</p>
+            <p class="text-[14px] text-ink2 mt-0.5">November 2026</p>
+          </div>
+          <span class="caps text-ink2 hidden sm:inline">5 recurring</span>
+        </div>
+        <ul class="mt-6 divide-y divide-line">
+          <li class="flex items-center gap-4 py-4">
+            <span class="w-10 h-10 rounded-xl bg-subtle text-ink2 flex items-center justify-center text-[14px] font-semibold">N</span>
+            <span class="flex-1 min-w-0"><span class="block text-[16px] font-medium">Netflix</span><span class="block text-[14px] text-ink2">Renews Nov 14 · Monthly</span></span>
+            <span class="text-[17px] font-semibold tnum text-right">$15.49</span>
+          </li>
+          <li class="flex items-center gap-4 py-4">
+            <span class="w-10 h-10 rounded-xl bg-subtle text-ink2 flex items-center justify-center text-[14px] font-semibold">A</span>
+            <span class="flex-1 min-w-0"><span class="block text-[16px] font-medium">Adobe Creative Cloud</span><span class="block text-[14px] text-ink2">Renews Nov 21 · Monthly</span></span>
+            <span class="text-[17px] font-semibold tnum text-right">$59.99</span>
+          </li>
+          <li class="flex items-center gap-4 py-4">
+            <span class="w-10 h-10 rounded-xl bg-subtle text-ink2 flex items-center justify-center text-[14px] font-semibold">i</span>
+            <span class="flex-1 min-w-0"><span class="block text-[16px] font-medium">iCloud+</span><span class="block text-[14px] text-ink2">Renews Nov 12 · Monthly</span></span>
+            <span class="text-[17px] font-semibold tnum text-right">$2.99</span>
+          </li>
+          <li class="flex items-center gap-4 py-4">
+            <span class="w-10 h-10 rounded-xl bg-subtle text-ink2 flex items-center justify-center text-[14px] font-semibold">P</span>
+            <span class="flex-1 min-w-0">
+              <span class="flex items-center gap-2 flex-wrap"><span class="text-[16px] font-medium">Paramount+</span><span class="inline-flex items-center gap-1 h-6 px-2 rounded-full bg-actionSubtle text-action text-[12px] font-medium"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Reminder set</span></span>
+              <span class="block text-[14px] text-ink2">Renews Nov 18 · Monthly</span>
+            </span>
+            <span class="text-[17px] font-semibold tnum text-right">$11.99</span>
+          </li>
+          <li class="flex items-center gap-4 py-4">
+            <span class="w-10 h-10 rounded-xl bg-subtle text-ink2 flex items-center justify-center text-[14px] font-semibold">T</span>
+            <span class="flex-1 min-w-0"><span class="block text-[16px] font-medium">The New York Times</span><span class="block text-[14px] text-ink2">Renews Nov 30 · Monthly</span></span>
+            <span class="text-[17px] font-semibold tnum text-right">$17.00</span>
+          </li>
+        </ul>
+        <div class="mt-2 pt-5 border-t border-line flex items-center justify-between">
+          <span class="text-[15px] text-ink2">Monthly total, 9 subscriptions</span>
+          <span class="text-[22px] font-semibold tnum">$214.46<span class="text-[14px] text-ink2 font-medium">/mo</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI -->
+<section id="ai" data-aid="ai" class="bg-white border-y border-line py-24 md:py-36 overflow-hidden">
+  <div class="mx-auto max-w-page px-5 text-center reveal">
+    <span class="block w-2.5 h-2.5 rounded-full bg-success mx-auto" style="box-shadow:0 0 0 6px rgba(34,112,71,0.12)"></span>
+    <h2 class="serif text-[36px] md:text-[48px] leading-[1.05] mt-8"><em class="text-action">Always-on</em> advice.</h2>
+    <p class="mt-5 text-[17px] leading-7 text-ink2 mx-auto max-w-[46ch]">Ask sprout anything about your money in the in-app chat, or let it come to you. It reads your activity and says the useful thing, plainly.</p>
+
+    <div class="relative mx-auto mt-12 max-w-[720px] h-[150px] sm:h-[96px]">
+      <div class="pill pill-ghost mx-auto w-[88%]" style="transform:translateY(-36px) scale(.88);opacity:.25"></div>
+      <div class="pill pill-ghost mx-auto w-[94%]" style="transform:translateY(-18px) scale(.94);opacity:.5"></div>
+      <div class="pill relative h-full text-left" id="pillStack">
+        <div class="msg on" data-msg>
+          <span class="shrink-0 w-10 h-10 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M17 2l-5 5-5-5"/></svg></span>
+          <p class="flex-1 text-[14px] md:text-[15px] leading-6 text-ink">You've paid for Paramount+ three months without watching. <a href="#" class="font-bold text-ink">Cancel before Nov 18?</a></p>
+          <span class="shrink-0 text-[12px] text-ink2 self-start sm:self-center pt-1 sm:pt-0">2m ago</span>
+        </div>
+        <div class="msg" data-msg>
+          <span class="shrink-0 w-10 h-10 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
+          <p class="flex-1 text-[14px] md:text-[15px] leading-6 text-ink">Food is at $412 of $600 with 21 days left. Around $9 a day keeps you under. <a href="#" class="font-bold text-ink">See the plan</a></p>
+          <span class="shrink-0 text-[12px] text-ink2 self-start sm:self-center pt-1 sm:pt-0">1h ago</span>
+        </div>
+        <div class="msg" data-msg>
+          <span class="shrink-0 w-10 h-10 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+          <p class="flex-1 text-[14px] md:text-[15px] leading-6 text-ink">Con Edison was $118.40, up 31% from October. Usually a seasonal jump. <a href="#" class="font-bold text-ink">Compare months</a></p>
+          <span class="shrink-0 text-[12px] text-ink2 self-start sm:self-center pt-1 sm:pt-0">Yesterday</span>
+        </div>
+      </div>
+    </div>
+    <p class="mt-8 caps text-ink2">Insights · Chat · Renewal notices</p>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section id="voice" data-aid="voice" class="bg-subtle py-20 md:py-28">
+  <div class="mx-auto max-w-page px-5 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+    <div class="lg:col-span-7 reveal">
+      <p class="caps text-action">Voice entry</p>
+      <blockquote class="serif mt-5 text-[28px] md:text-[32px] lg:text-[36px] leading-[1.25] text-ink" style="font-style:italic">“Hey Siri, add a $14 lunch to sprout.”</blockquote>
+      <p class="mt-5 text-[17px] leading-7 text-ink2 max-w-[48ch]">Cash and split bills never show up in a bank feed. Say them out loud and they land in Activity, categorised, before you've put your phone away.</p>
+    </div>
+    <div class="lg:col-span-5 reveal" style="transition-delay:120ms">
+      <div class="bg-white border border-line rounded-2xl divide-y divide-line">
+        <div class="flex items-center gap-4 p-5">
+          <span class="w-11 h-11 rounded-xl bg-subtle flex items-center justify-center text-ink"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></span>
+          <span class="flex-1"><span class="block text-[16px] font-medium">Siri Shortcuts</span><span class="block text-[14px] text-ink2">iPhone, Apple Watch, CarPlay</span></span>
+          <span class="w-6 h-6 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        </div>
+        <div class="flex items-center gap-4 p-5">
+          <span class="w-11 h-11 rounded-xl bg-subtle flex items-center justify-center text-ink"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></span>
+          <span class="flex-1"><span class="block text-[16px] font-medium">Google Assistant</span><span class="block text-[14px] text-ink2">Android phones, Wear OS</span></span>
+          <span class="w-6 h-6 rounded-full bg-actionSubtle text-action flex items-center justify-center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        </div>
+        <div class="p-5 flex items-center gap-3 text-[14px] text-ink2">
+          <span class="caps text-action">Added</span>
+          <span class="flex-1 text-ink font-medium">Lunch · Food</span>
+          <span class="font-semibold tnum text-ink">−$14.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="security" data-aid="security" class="bg-canvas border-b border-line">
+  <div class="mx-auto max-w-page px-5 md:px-8 py-14 md:py-16 reveal">
+    <div class="grid grid-cols-1 md:grid-cols-4 md:divide-x divide-y md:divide-y-0 divide-line">
+      <div class="py-5 md:py-0 md:px-8 first:pl-0">
+        <div class="flex items-center gap-2 text-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="caps">Encrypted</span></div>
+        <p class="mt-3 text-[15px] leading-6 text-ink2">Bank-grade encryption in transit and at rest.</p>
+      </div>
+      <div class="py-5 md:py-0 md:px-8">
+        <div class="flex items-center gap-2 text-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span class="caps">Read-only</span></div>
+        <p class="mt-3 text-[15px] leading-6 text-ink2">Connected through Plaid. sprout can see, never move, your money.</p>
+      </div>
+      <div class="py-5 md:py-0 md:px-8">
+        <div class="flex items-center gap-2 text-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M9 9h.01M15 9h.01M9.5 15a3.5 3.5 0 0 0 5 0"/></svg><span class="caps">Face ID</span></div>
+        <p class="mt-3 text-[15px] leading-6 text-ink2">Biometric lock on every open, on iPhone and Android.</p>
+      </div>
+      <div class="py-5 md:py-0 md:px-8 last:pr-0">
+        <div class="flex items-center gap-2 text-action"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg><span class="caps">Yours</span></div>
+        <p class="mt-3 text-[15px] leading-6 text-ink2">Delete your data any time from Profile. It's gone within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section data-aid="steps" class="bg-canvas py-20 md:py-32">
+  <div class="mx-auto max-w-page px-5 md:px-8">
+    <div class="reveal max-w-[60ch]">
+      <p class="caps text-action">How it starts</p>
+      <h2 class="serif text-[36px] md:text-[48px] leading-[1.05] mt-4">Ten minutes, <em class="text-action">then</em> it runs itself.</h2>
+    </div>
+    <div class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+      <div class="reveal border-t border-line pt-6">
+        <p class="serif text-[56px] md:text-[64px] leading-none text-action">01</p>
+        <h3 class="mt-6 text-[20px] font-semibold">Download</h3>
+        <p class="mt-2 text-[16px] leading-6 text-ink2">Free on the App Store and Google Play. Sign in with email, Apple or Google.</p>
+      </div>
+      <div class="reveal border-t border-line pt-6" style="transition-delay:100ms">
+        <p class="serif text-[56px] md:text-[64px] leading-none text-action">02</p>
+        <h3 class="mt-6 text-[20px] font-semibold">Link your accounts</h3>
+        <p class="mt-2 text-[16px] leading-6 text-ink2">Checking, savings and cards through Plaid. Read-only, and you can unlink any time.</p>
+      </div>
+      <div class="reveal border-t border-line pt-6" style="transition-delay:200ms">
+        <p class="serif text-[56px] md:text-[64px] leading-none text-action">03</p>
+        <h3 class="mt-6 text-[20px] font-semibold">Let sprout sort it</h3>
+        <p class="mt-2 text-[16px] leading-6 text-ink2">Categories, budgets, subscriptions and a safe-to-spend number, kept current while you get on with your week.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta" data-aid="cta" class="hero-field border-t border-line py-24 md:py-36">
+  <div class="mx-auto max-w-page px-5 text-center reveal">
+    <span class="inline-flex w-14 h-14 rounded-2xl items-center justify-center" style="background:linear-gradient(135deg,#8BDD9D,#6FCF8A)">
+      <svg viewBox="0 0 256 256" class="w-8 h-8" fill="#fff" aria-hidden="true"><path d="M62 54c-3-3-8-1-9 3C40 104 46 152 80 178c30 23 70 22 98 0-12-14-28-26-48-32-13-4-22-10-29-20 10 7 23 12 38 13 24 2 42-4 54-12 2-1 3-4 2-6-6-22-20-38-42-46-26-9-56-2-91-21z"/><path d="M146 150c22 12 36 26 44 38 2 3 0 7-3 8-4 1-7-1-9-4-8-13-20-25-36-34 1-3 2-5 4-8z"/></svg>
+    </span>
+    <h2 class="serif text-[40px] md:text-[64px] leading-[1.02] mt-8 mx-auto max-w-[16ch]">Start with a <em class="text-action">clear</em> picture.</h2>
+    <p class="mt-5 text-[17px] md:text-[18px] leading-7 text-ink2 mx-auto max-w-[44ch]">Free to download. Light and dark mode. Works on iPhone and Android.</p>
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <a href="#" class="store" aria-label="Download on the App Store">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.37 12.63c-.03-2.6 2.13-3.86 2.22-3.92-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.9-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.24 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.14-2.52.99-1.45 1.4-2.85 1.42-2.92-.03-.01-2.72-1.04-2.74-4.12zM13.8 4.97c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.29.69-3.03 1.56-.66.77-1.25 2-1.09 3.18 1.15.09 2.33-.58 3.05-1.45z"/></svg>
+        <span><small>Download on the</small><b>App Store</b></span>
+      </a>
+      <a href="#" class="store" aria-label="Get it on Google Play">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.4c-.3.3-.5.8-.5 1.4v16.4c0 .6.2 1.1.5 1.4L12.7 12 3.6 2.4z" fill="#34A853"/><path d="M15.8 15.1L12.7 12l-9.1 9.6c.4.4 1 .4 1.7 0l10.5-6.5z" fill="#EA4335"/><path d="M15.8 8.9L5.3 2.4c-.7-.4-1.3-.4-1.7 0L12.7 12l3.1-3.1z" fill="#FBBC04"/><path d="M15.8 8.9L12.7 12l3.1 3.1 3.7-2.1c1-.6 1-1.5 0-2.1l-3.7-2z" fill="#4285F4"/></svg>
+        <span><small>Get it on</small><b>Google Play</b></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer data-aid="footer" class="bg-ink text-dtext">
+  <div class="mx-auto max-w-page px-5 md:px-8 py-16">
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-10">
+      <div class="col-span-2">
+        <a href="#" class="flex items-center gap-2.5">
+          <span class="inline-flex w-8 h-8 rounded-[10px] items-center justify-center" style="background:linear-gradient(135deg,#8BDD9D,#6FCF8A)">
+            <svg viewBox="0 0 256 256" class="w-5 h-5" fill="#101B16" aria-hidden="true"><path d="M62 54c-3-3-8-1-9 3C40 104 46 152 80 178c30 23 70 22 98 0-12-14-28-26-48-32-13-4-22-10-29-20 10 7 23 12 38 13 24 2 42-4 54-12 2-1 3-4 2-6-6-22-20-38-42-46-26-9-56-2-91-21z"/><path d="M146 150c22 12 36 26 44 38 2 3 0 7-3 8-4 1-7-1-9-4-8-13-20-25-36-34 1-3 2-5 4-8z"/></svg>
+          </span>
+          <span class="text-[19px] font-semibold tracking-[-0.02em] text-[#F0F6EF]">sprout</span>
+        </a>
+        <p class="mt-4 text-[14px] leading-6 max-w-[30ch]">A calm view of your money, on your phone. Made in New York.</p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <a href="#" class="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-dline text-[13px] font-medium text-[#F0F6EF] hover:bg-dsurface"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 12.63c-.03-2.6 2.13-3.86 2.22-3.92-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.9-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.89 2.65 3.24 2.6 1.3-.05 1.79-.84 3.36-.84 1.57 0 2.01.84 3.39.81 1.4-.02 2.29-1.27 3.14-2.52.99-1.45 1.4-2.85 1.42-2.92-.03-.01-2.72-1.04-2.74-4.12zM13.8 4.97c.72-.87 1.2-2.08 1.07-3.29-1.03.04-2.29.69-3.03 1.56-.66.77-1.25 2-1.09 3.18 1.15.09 2.33-.58 3.05-1.45z"/></svg>App Store</a>
+          <a href="#" class="inline-flex items-center gap-2 h-10 px-3 rounded-xl border border-dline text-[13px] font-medium text-[#F0F6EF] hover:bg-dsurface"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.4c-.3.3-.5.8-.5 1.4v16.4c0 .6.2 1.1.5 1.4L12.7 12 3.6 2.4zm12.2 12.7L12.7 12l-9.1 9.6c.4.4 1 .4 1.7 0l10.5-6.5zm0-6.2L5.3 2.4c-.7-.4-1.3-.4-1.7 0L12.7 12l3.1-3.1zm0 0L12.7 12l3.1 3.1 3.7-2.1c1-.6 1-1.5 0-2.1l-3.7-2z"/></svg>Google Play</a>
+        </div>
+      </div>
+      <div>
+        <p class="caps text-[#F0F6EF]">Product</p>
+        <ul class="mt-4 space-y-3 text-[14px]">
+          <li><a href="#" class="hover:text-[#F0F6EF]">Home</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Budget</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Activity</a></li>
+          <li><a href="#subscriptions" class="hover:text-[#F0F6EF]">Subscriptions</a></li>
+          <li><a href="#voice" class="hover:text-[#F0F6EF]">Voice entry</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="caps text-[#F0F6EF]">Company</p>
+        <ul class="mt-4 space-y-3 text-[14px]">
+          <li><a href="#" class="hover:text-[#F0F6EF]">About</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Blog</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Careers</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="caps text-[#F0F6EF]">Support</p>
+        <ul class="mt-4 space-y-3 text-[14px]">
+          <li><a href="#" class="hover:text-[#F0F6EF]">Help centre</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Chat in app</a></li>
+          <li><a href="#security" class="hover:text-[#F0F6EF]">Security</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Status</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="caps text-[#F0F6EF]">Legal</p>
+        <ul class="mt-4 space-y-3 text-[14px]">
+          <li><a href="#" class="hover:text-[#F0F6EF]">Privacy</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Terms</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Delete your data</a></li>
+          <li><a href="#" class="hover:text-[#F0F6EF]">Licences</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-14 pt-6 border-t border-dline flex flex-col md:flex-row gap-3 md:items-center justify-between text-[13px]">
+      <p>© 2026 sprout. All rights reserved.</p>
+      <p>Bank connections provided by Plaid. sprout is not a bank.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // scroll reveals
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); }
+  else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    els.forEach(function(e){ io.observe(e); });
+    setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 500);
+  }
+  // rotating advice pill
+  if (!reduce) {
+    var msgs = document.querySelectorAll('[data-msg]'), i = 0;
+    setInterval(function(){
+      msgs[i].classList.remove('on');
+      i = (i + 1) % msgs.length;
+      msgs[i].classList.add('on');
+    }, 3000);
+  }
+})();
+</script>
+</body>
+</html>

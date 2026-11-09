@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'infra/**'
+      - '!infra/appwrite/**'
       - 'services/**'
       - '.github/workflows/deploy-infra.yml'
 

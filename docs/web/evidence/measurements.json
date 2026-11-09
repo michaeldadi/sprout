@@ -1,0 +1,287 @@
+{
+  "measurements": {
+    "reference-1440": {
+      "height": 4855,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 992.375
+        },
+        {
+          "name": "subscriptions",
+          "top": 992.375,
+          "height": 847
+        },
+        {
+          "name": "ai",
+          "top": 1839.375,
+          "height": 680.390625
+        },
+        {
+          "name": "voice",
+          "top": 2519.765625,
+          "height": 459
+        },
+        {
+          "name": "security",
+          "top": 2978.765625,
+          "height": 231
+        },
+        {
+          "name": "steps",
+          "top": 3209.765625,
+          "height": 627.390625
+        },
+        {
+          "name": "cta",
+          "top": 3837.15625,
+          "height": 602.265625
+        },
+        {
+          "name": "footer",
+          "top": 4439.421875,
+          "height": 415.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    },
+    "implementation-1440": {
+      "height": 4855,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 992.375
+        },
+        {
+          "name": "subscriptions",
+          "top": 992.375,
+          "height": 847
+        },
+        {
+          "name": "ai",
+          "top": 1839.375,
+          "height": 680.390625
+        },
+        {
+          "name": "voice",
+          "top": 2519.765625,
+          "height": 459
+        },
+        {
+          "name": "security",
+          "top": 2978.765625,
+          "height": 231
+        },
+        {
+          "name": "steps",
+          "top": 3209.765625,
+          "height": 627.390625
+        },
+        {
+          "name": "cta",
+          "top": 3837.15625,
+          "height": 602.265625
+        },
+        {
+          "name": "footer",
+          "top": 4439.421875,
+          "height": 415.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    },
+    "reference-834": {
+      "height": 5570,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 976.03125
+        },
+        {
+          "name": "subscriptions",
+          "top": 976.03125,
+          "height": 1239.390625
+        },
+        {
+          "name": "ai",
+          "top": 2215.421875,
+          "height": 680.390625
+        },
+        {
+          "name": "voice",
+          "top": 2895.8125,
+          "height": 681
+        },
+        {
+          "name": "security",
+          "top": 3576.8125,
+          "height": 279
+        },
+        {
+          "name": "steps",
+          "top": 3855.8125,
+          "height": 675.390625
+        },
+        {
+          "name": "cta",
+          "top": 4531.203125,
+          "height": 602.265625
+        },
+        {
+          "name": "footer",
+          "top": 5133.46875,
+          "height": 436.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    },
+    "implementation-834": {
+      "height": 5570,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 976.03125
+        },
+        {
+          "name": "subscriptions",
+          "top": 976.03125,
+          "height": 1239.390625
+        },
+        {
+          "name": "ai",
+          "top": 2215.421875,
+          "height": 680.390625
+        },
+        {
+          "name": "voice",
+          "top": 2895.8125,
+          "height": 681
+        },
+        {
+          "name": "security",
+          "top": 3576.8125,
+          "height": 279
+        },
+        {
+          "name": "steps",
+          "top": 3855.8125,
+          "height": 675.390625
+        },
+        {
+          "name": "cta",
+          "top": 4531.203125,
+          "height": 602.265625
+        },
+        {
+          "name": "footer",
+          "top": 5133.46875,
+          "height": 436.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    },
+    "reference-390": {
+      "height": 6465,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 949.25
+        },
+        {
+          "name": "subscriptions",
+          "top": 949.25,
+          "height": 1216.59375
+        },
+        {
+          "name": "ai",
+          "top": 2165.84375,
+          "height": 653.796875
+        },
+        {
+          "name": "voice",
+          "top": 2819.640625,
+          "height": 640
+        },
+        {
+          "name": "security",
+          "top": 3459.640625,
+          "height": 564
+        },
+        {
+          "name": "steps",
+          "top": 4023.640625,
+          "height": 994.59375
+        },
+        {
+          "name": "cta",
+          "top": 5018.234375,
+          "height": 586.59375
+        },
+        {
+          "name": "footer",
+          "top": 5604.828125,
+          "height": 860.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    },
+    "implementation-390": {
+      "height": 6465,
+      "overflow": false,
+      "sections": [
+        {
+          "name": "hero",
+          "top": 0,
+          "height": 949.25
+        },
+        {
+          "name": "subscriptions",
+          "top": 949.25,
+          "height": 1216.59375
+        },
+        {
+          "name": "ai",
+          "top": 2165.84375,
+          "height": 653.796875
+        },
+        {
+          "name": "voice",
+          "top": 2819.640625,
+          "height": 640
+        },
+        {
+          "name": "security",
+          "top": 3459.640625,
+          "height": 564
+        },
+        {
+          "name": "steps",
+          "top": 4023.640625,
+          "height": 994.59375
+        },
+        {
+          "name": "cta",
+          "top": 5018.234375,
+          "height": 586.59375
+        },
+        {
+          "name": "footer",
+          "top": 5604.828125,
+          "height": 860.5
+        }
+      ],
+      "heading": "Fraunces, Georgia, serif"
+    }
+  },
+  "problems": []
+}
