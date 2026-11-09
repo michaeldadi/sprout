@@ -91,13 +91,27 @@ Apple's readback to fail; a serial recovery apply completed, and a fresh
 now uses `-parallelism=1` to avoid this race. Both temporary four-scope
 organization keys were revoked and their local secrets and plan files removed.
 
-OAuth refuses to mint a key that outlives its grant. The Sprout Finance console
-did not show the documented Partners key section, so future local plans need a
-newly minted short-lived organization key or another supported organization
-credential. Production has no Terraform state yet and its existing project key
-secret is unavailable locally. Bootstrap a scoped production project key or
-recover the existing secret before its state imports. The production function
-secret value must also be supplied outside source control for a full plan.
+On 2026-11-09, 27 existing production resources were imported into the
+`sprout-appwrite-production` HCP state: the project, existing 85-scope key,
+TablesDB database, site and three site variables, five functions, and 15
+function variables. A separate state readback found all 27 managed IDs and 55
+settings data-source observations; the imported Hugging Face variable's secret
+value was absent from state. This was a state-only import: no production plan
+was applied. The temporary 28-scope
+project key was deleted, both temporary four-scope organization keys were
+revoked, and their local secrets were removed. The existing production key
+remains untouched; its secret is unavailable locally. A full production plan
+still requires that key or another scoped project credential and the production
+function secret supplied outside source control. It also needs a fresh review
+before any production apply.
+
+OAuth refuses to mint an organization key that outlives its grant. The Sprout
+Finance console did not show the documented Partners key section, so future
+local plans need a newly minted short-lived organization key or another
+supported organization credential. If the local Python 3.13 Appwrite settings
+bridge reports `Missing Authority Key Identifier` under the machine's managed
+CA bundle, use `/usr/bin/python3` for the bridge after verifying its TLS
+connection. Do not disable certificate verification.
 
 Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraform),
 [provider schema](https://registry.terraform.io/providers/appwrite/appwrite/latest/docs).
