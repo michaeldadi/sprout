@@ -98,3 +98,28 @@ site_variables = {
     secret = false
   }
 }
+
+# Bootstrapped in Appwrite on 2026-11-09 with these scopes. The console
+# generated this ID; imports.tf adopts it. Keep the key value outside source.
+project_keys = {
+  terraform = {
+    id   = "6af1825f001c30ffaf12"
+    name = "Terraform"
+    scopes = [
+      "project.read", "project.write",
+      "keys.read", "keys.write",
+      "databases.read", "databases.write",
+      "tables.read", "tables.write",
+      "columns.read", "columns.write",
+      "indexes.read", "indexes.write",
+      "buckets.read", "buckets.write",
+      "sites.read", "sites.write",
+      "functions.read", "functions.write",
+      "platforms.read", "platforms.write",
+      "policies.read", "policies.write",
+      "project.policies.read", "project.policies.write",
+      "project.oauth2.read", "project.oauth2.write",
+      "vcs.read", "vcs.write",
+    ]
+  }
+}

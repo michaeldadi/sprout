@@ -27,7 +27,8 @@ not make them work.
    secret manager or local environment. Never commit either credential or a
    Terraform state file. The official provider cannot create a project API key:
    bootstrap a scoped key in Appwrite, then add and import its metadata.
-   Staging does not yet have such a key.
+   The staging key was bootstrapped on 2026-11-09 and its generated ID and
+   28 scopes are recorded in `environments/staging.tfvars`.
 3. Run `./tf.sh staging validate` or `./tf.sh production validate` for
    formatting and configuration syntax. This does not check live drift or
    environment values. Run `./tf.sh <environment> plan` to preview import and
@@ -77,10 +78,16 @@ Google sign-in.
 
 The landing sites point to `./apps/web`, which is absent from this checkout.
 No site or function deployment is imported or activated by this configuration.
-No live Appwrite writes or Terraform state imports were performed while
-preparing this draft. A live plan requires the staging project key, the
-organization key, and the production project key; a validated local plan does
-not prove the remote configuration matches this code.
+The only live Appwrite write so far is the staging Terraform project key.
+No Terraform state import or apply has completed. A staging plan with the
+project key reached the project settings, but the provider rejected that
+standard key for project and key imports: it requires a separate organization
+credential with project and key scopes. The Sprout Finance console displayed
+General, Members, and Billing under organization Settings on 2026-11-09, but
+no Partners key section. The same plan also encountered intermittent Appwrite
+read timeouts. Resolve organization credential access and rerun a complete
+plan before importing state. Production still needs access to its existing
+project key credential.
 
 Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraform),
 [provider schema](https://registry.terraform.io/providers/appwrite/appwrite/latest/docs).
