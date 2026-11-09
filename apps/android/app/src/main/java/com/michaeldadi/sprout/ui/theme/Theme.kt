@@ -1,58 +1,97 @@
 package com.michaeldadi.sprout.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = LightSproutColors.action,
+    onPrimary = LightSproutColors.onAction,
+    primaryContainer = LightSproutColors.actionSubtle,
+    onPrimaryContainer = LightSproutColors.textPrimary,
+    secondary = LightSproutColors.textSecondary,
+    onSecondary = LightSproutColors.surface,
+    secondaryContainer = LightSproutColors.surfaceSubtle,
+    onSecondaryContainer = LightSproutColors.textPrimary,
+    tertiary = LightSproutColors.info,
+    onTertiary = LightSproutColors.surface,
+    background = LightSproutColors.canvas,
+    onBackground = LightSproutColors.textPrimary,
+    surface = LightSproutColors.surface,
+    onSurface = LightSproutColors.textPrimary,
+    surfaceVariant = LightSproutColors.surfaceSubtle,
+    onSurfaceVariant = LightSproutColors.textSecondary,
+    surfaceContainerLowest = LightSproutColors.surface,
+    surfaceContainerLow = LightSproutColors.canvas,
+    surfaceContainer = LightSproutColors.surfaceSubtle,
+    surfaceContainerHigh = LightSproutColors.surfaceSubtle,
+    surfaceContainerHighest = LightSproutColors.surfaceSubtle,
+    inverseSurface = LightSproutColors.textPrimary,
+    inverseOnSurface = LightSproutColors.surface,
+    inversePrimary = DarkSproutColors.action,
+    surfaceTint = LightSproutColors.action,
+    outline = LightSproutColors.separator,
+    outlineVariant = LightSproutColors.separator,
+    error = LightSproutColors.error,
+    onError = LightSproutColors.surface
+)
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val DarkColorScheme = darkColorScheme(
+    primary = DarkSproutColors.action,
+    onPrimary = DarkSproutColors.onAction,
+    primaryContainer = DarkSproutColors.actionSubtle,
+    onPrimaryContainer = DarkSproutColors.textPrimary,
+    secondary = DarkSproutColors.textSecondary,
+    onSecondary = DarkSproutColors.canvas,
+    secondaryContainer = DarkSproutColors.surfaceSubtle,
+    onSecondaryContainer = DarkSproutColors.textPrimary,
+    tertiary = DarkSproutColors.info,
+    onTertiary = DarkSproutColors.canvas,
+    background = DarkSproutColors.canvas,
+    onBackground = DarkSproutColors.textPrimary,
+    surface = DarkSproutColors.surface,
+    onSurface = DarkSproutColors.textPrimary,
+    surfaceVariant = DarkSproutColors.surfaceSubtle,
+    onSurfaceVariant = DarkSproutColors.textSecondary,
+    surfaceContainerLowest = DarkSproutColors.canvas,
+    surfaceContainerLow = DarkSproutColors.surface,
+    surfaceContainer = DarkSproutColors.surfaceSubtle,
+    surfaceContainerHigh = DarkSproutColors.surfaceSubtle,
+    surfaceContainerHighest = DarkSproutColors.surfaceSubtle,
+    inverseSurface = DarkSproutColors.textPrimary,
+    inverseOnSurface = DarkSproutColors.canvas,
+    inversePrimary = LightSproutColors.action,
+    surfaceTint = DarkSproutColors.action,
+    outline = DarkSproutColors.separator,
+    outlineVariant = DarkSproutColors.separator,
+    error = DarkSproutColors.error,
+    onError = DarkSproutColors.canvas
+)
+
+private val SproutShapes = Shapes(
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp)
 )
 
 @Composable
 fun SproutTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = if (darkTheme) DarkSproutColors else LightSproutColors
+    CompositionLocalProvider(LocalSproutColors provides colors) {
+        MaterialTheme(
+            colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+            typography = Typography,
+            shapes = SproutShapes,
+            content = content
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }

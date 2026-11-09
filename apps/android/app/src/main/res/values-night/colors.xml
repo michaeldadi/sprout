@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window background before Compose draws; keep in sync with DarkSproutColors.canvas. -->
+    <color name="sprout_canvas">#FF101B16</color>
+</resources>

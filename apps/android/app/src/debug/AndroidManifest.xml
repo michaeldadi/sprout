@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity android:name=".ui.review.FoundationReviewActivity" android:exported="true" />
+        <activity android:name=".ui.review.ActivityReviewActivity" android:exported="true" />
+        <activity android:name=".ui.review.HomeReviewActivity" android:exported="true" />
+    </application>
+</manifest>
