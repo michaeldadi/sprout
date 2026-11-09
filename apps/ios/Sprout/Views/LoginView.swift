@@ -7,6 +7,8 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isShowingPassword = false
     @State private var isAnimating = false
+    @State private var isPingingAppwrite = false
+    @State private var appwritePingStatus: String?
     enum Field: Hashable { case email, password }
     @FocusState private var focusedField: Field?
     @Environment(\.colorScheme) var colorScheme
@@ -71,6 +73,9 @@ struct LoginView: View {
             logoSection
             loginFormSection
             Spacer()
+            #if DEBUG
+            appwritePingControl
+            #endif
             signUpLink
         }
     }
@@ -273,6 +278,36 @@ struct LoginView: View {
         .padding(.top, 20)
         .padding(.bottom, 30)
     }
+
+    #if DEBUG
+    private var appwritePingControl: some View {
+        VStack(spacing: 4) {
+            Button(isPingingAppwrite ? "Checking Appwrite…" : "Test Appwrite connection") {
+                isPingingAppwrite = true
+                appwritePingStatus = nil
+                Task { @MainActor in
+                    do {
+                        try await AppwriteConnection.ping()
+                        appwritePingStatus = "Appwrite ping succeeded"
+                    } catch {
+                        appwritePingStatus = "Appwrite ping failed: \(error.localizedDescription)"
+                    }
+                    isPingingAppwrite = false
+                }
+            }
+            .disabled(isPingingAppwrite)
+            .foregroundColor(.white)
+
+            if let appwritePingStatus {
+                Text(appwritePingStatus)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .font(.footnote)
+        .padding(.horizontal, 24)
+    }
+    #endif
     
     // MARK: - Helper Methods
     private func dismissKeyboard() {

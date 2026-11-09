@@ -66,6 +66,7 @@
 		14B44E7D2E552ABD0071757B /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E7C2E552ABD0071757B /* FirebaseRemoteConfig */; };
 		14B44E9A2E555B020071757B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E992E555B020071757B /* GoogleSignIn */; };
 		14B44E9C2E555B020071757B /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E9B2E555B020071757B /* GoogleSignInSwift */; };
+		3F1DD77552CE4C87BA3C92E0 /* Appwrite in Frameworks */ = {isa = PBXBuildFile; productRef = 09F92476758E4890B666FE22 /* Appwrite */; };
 		4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 1AA7ECB4D81B4D319058FEAA /* Sentry */; };
 /* End PBXBuildFile section */
 
@@ -255,6 +256,7 @@
 				141706112E525F89004229DD /* BackgroundTasks.framework in Frameworks */,
 				141706132E525F91004229DD /* Network.framework in Frameworks */,
 				1466568D2E57044200016C94 /* SDWebImage in Frameworks */,
+				3F1DD77552CE4C87BA3C92E0 /* Appwrite in Frameworks */,
 				4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,6 +407,7 @@
 				1463CDA52E569EE3007476A0 /* FacebookShare */,
 				1466567D2E56E33900016C94 /* BrazeLocation */,
 				1466568C2E57044200016C94 /* SDWebImage */,
+				09F92476758E4890B666FE22 /* Appwrite */,
 			);
 			productName = Sprout;
 			productReference = 141705D02E505701004229DD /* Sprout.app */;
@@ -527,6 +530,7 @@
 				F0195ADB1D89449B8758F552 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				1466568B2E57044200016C94 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 141705D12E505701004229DD /* Products */;
@@ -1234,6 +1238,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appwrite/sdk-for-apple";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 21.1.1;
+			};
+		};
 		141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift.git";
@@ -1333,6 +1345,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		09F92476758E4890B666FE22 /* Appwrite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */;
+			productName = Appwrite;
+		};
 		141B37E02E5566DB00121BAF /* AWSAPIGateway */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;

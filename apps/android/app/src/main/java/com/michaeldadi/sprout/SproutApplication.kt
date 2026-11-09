@@ -9,12 +9,15 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.michaeldadi.sprout.services.AppwriteConnection
 import zendesk.android.Zendesk
 import zendesk.messaging.android.DefaultMessagingFactory
 
 class SproutApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        AppwriteConnection.initialize(this)
 
         // Initialize Zendesk SDK
         if (BuildConfig.ZENDESK_CHANNEL_KEY.isNotEmpty()) {

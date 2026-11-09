@@ -1,5 +1,5 @@
 {
-  "originHash" : "337255d5694c144347e65eb6c02f141f895f83e4e3ee8806fe43b63033075c23",
+  "originHash" : "150256429e621d3d6b67942007a59ec53267721fd1a6bc21e6129acbc9accbee",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "f7f5e508e1125914f0a0177c8c033c3143c4d88a",
         "version" : "6.17.2"
+      }
+    },
+    {
+      "identity" : "async-http-client",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server/async-http-client.git",
+      "state" : {
+        "revision" : "d2dfb39bcb0fafd1834ec6e6334c1755360f856e",
+        "version" : "1.37.0"
       }
     },
     {
@@ -227,6 +236,15 @@
       }
     },
     {
+      "identity" : "mqtt-nio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server-community/mqtt-nio.git",
+      "state" : {
+        "revision" : "91d357875eabd63c55eee40fc6b85bc1f00839ed",
+        "version" : "2.13.0"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -278,6 +296,15 @@
       "state" : {
         "revision" : "b2a5f6c6fb4de109fc6dd6491d7f0657fbc983bf",
         "version" : "5.35.0"
+      }
+    },
+    {
+      "identity" : "sdk-for-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/appwrite/sdk-for-apple",
+      "state" : {
+        "revision" : "903c6fec174706e0647e8030d412cf9bf12ecdd9",
+        "version" : "21.2.0"
       }
     },
     {
@@ -393,8 +420,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "8c0c0a8b49e080e54e5e328cc552821ff07cd341",
-        "version" : "1.2.1"
+        "revision" : "f96b909e1a9e469620bc5037c1e24e00153f376f",
+        "version" : "1.7.5"
+      }
+    },
+    {
+      "identity" : "swift-configuration",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-configuration.git",
+      "state" : {
+        "revision" : "0b0c23215764302f7db752b079c024fbaff12e62",
+        "version" : "1.5.0"
       }
     },
     {
@@ -404,6 +440,15 @@
       "state" : {
         "revision" : "334e682869394ee239a57dbe9262bff3cd9495bd",
         "version" : "3.14.0"
+      }
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-distributed-tracing.git",
+      "state" : {
+        "revision" : "9f982a7ec8dd815bf57024e39de592813ca14399",
+        "version" : "1.7.4"
       }
     },
     {
@@ -429,8 +474,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
-        "version" : "1.6.4"
+        "revision" : "e3da04078777e6a1b72ce19981fbd6539b0847d8",
+        "version" : "1.17.0"
       }
     },
     {
@@ -447,8 +492,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "1c30f0f2053b654e3d1302492124aa6d242cdba7",
-        "version" : "2.86.0"
+        "revision" : "2f58d8ef84438d6517fc78bcea2f8527e3c72936",
+        "version" : "2.105.0"
       }
     },
     {
@@ -503,6 +548,15 @@
       "state" : {
         "revision" : "e3f69fd321d0c9fcdc16fb576a0cdd956675face",
         "version" : "1.31.0"
+      }
+    },
+    {
+      "identity" : "swift-service-context",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-service-context.git",
+      "state" : {
+        "revision" : "853ba3d9ce78851b9cc20108e8bd4f13f7fa546c",
+        "version" : "1.5.1"
       }
     },
     {

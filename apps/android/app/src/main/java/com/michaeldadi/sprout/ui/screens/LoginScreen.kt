@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.michaeldadi.sprout.BuildConfig
 import com.michaeldadi.sprout.R
 import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.managers.rememberToastState
@@ -36,9 +37,11 @@ import com.michaeldadi.sprout.services.GoogleSignInService
 import com.michaeldadi.sprout.services.GoogleSignInResult
 import com.michaeldadi.sprout.services.AppleSignInService
 import com.michaeldadi.sprout.services.AppleSignInResult
+import com.michaeldadi.sprout.services.AppwriteConnection
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import androidx.activity.ComponentActivity
+import kotlinx.coroutines.launch
 
 /**
  * Login screen that mirrors the iOS LoginView design and functionality
@@ -53,6 +56,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val toastState = rememberToastState()
+    val pingScope = rememberCoroutineScope()
 
     // State
     var email by remember { mutableStateOf("") }
@@ -61,6 +65,8 @@ fun LoginScreen(
     var shouldTriggerLogin by remember { mutableStateOf(false) }
     var shouldTriggerGoogleLogin by remember { mutableStateOf(false) }
     var shouldTriggerAppleLogin by remember { mutableStateOf(false) }
+    var isPingingAppwrite by remember { mutableStateOf(false) }
+    var appwritePingStatus by remember { mutableStateOf<String?>(null) }
 
     val textLoginFailure = stringResource(R.string.login_failed)
 
@@ -238,6 +244,34 @@ fun LoginScreen(
 
             // Sign Up Link
             SignUpLink(onNavigateToSignUp = onNavigateToSignUp)
+
+            if (BuildConfig.DEBUG) {
+                TextButton(
+                    onClick = {
+                        isPingingAppwrite = true
+                        appwritePingStatus = null
+                        pingScope.launch {
+                            appwritePingStatus = try {
+                                AppwriteConnection.ping()
+                                "Appwrite ping succeeded"
+                            } catch (error: Exception) {
+                                "Appwrite ping failed: ${error.localizedMessage ?: "Unknown error"}"
+                            }
+                            isPingingAppwrite = false
+                        }
+                    },
+                    enabled = !isPingingAppwrite
+                ) {
+                    Text(if (isPingingAppwrite) "Checking Appwrite…" else "Test Appwrite connection")
+                }
+                appwritePingStatus?.let { status ->
+                    Text(
+                        text = status,
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
         }
