@@ -1,17 +1,15 @@
 name: Deploy AWS Resources to Production
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'infra/**'
-      - '!infra/appwrite/**'
-      - 'services/**'
-      - '!services/appwrite/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   deploy-production:
     name: Deploy CDK Infrastructure to Production
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
 
