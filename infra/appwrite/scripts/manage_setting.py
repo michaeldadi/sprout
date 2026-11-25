@@ -40,7 +40,7 @@ def config():
         raise ValueError("Appwrite endpoint must use HTTPS (or loopback HTTP for tests)")
     if not parsed.netloc or not parsed.path.rstrip("/").endswith("/v1"):
         raise ValueError("Expected an Appwrite /v1 endpoint")
-    if kind not in ("bucket", "platform", "auth_method", "oauth_native", "service", "protocol", "policy", "site_marketing", "waf_rate"):
+    if kind not in ("bucket", "platform", "auth_method", "oauth_native", "service", "protocol", "policy", "site_marketing", "waf_rate", "function_git"):
         raise ValueError("Unsupported Appwrite setting kind")
     if not resource_id or "/" in resource_id:
         raise ValueError("Invalid Appwrite resource ID")
@@ -75,6 +75,11 @@ def request(endpoint, project_id, method, path, body=None):
 
 
 def snapshot(endpoint, project_id, kind, resource_id):
+    if kind == "function_git":
+        row = request(endpoint, project_id, "GET", "/functions/" + resource_id)
+        if row is None:
+            raise ValueError("Appwrite function is missing")
+        return {"id": row["$id"], "name": row["name"], "providerDeployments": row["providerDeployments"]}
     if kind == "site_marketing":
         row = request(endpoint, project_id, "GET", "/sites/" + resource_id)
         if row is None:
@@ -151,10 +156,17 @@ def apply(endpoint, project_id, kind, resource_id, desired):
     if desired["id"] != resource_id:
         raise ValueError("Terraform resource ID differs from desired ID")
     before = snapshot(endpoint, project_id, kind, resource_id)
+    if kind == "function_git":
+        desired = {**desired, "name": before["name"]}
     if before == desired:
         print(f"Appwrite {kind} {resource_id}: already matches Terraform")
         return
-    if kind == "site_marketing":
+    if kind == "function_git":
+        request(endpoint, project_id, "PUT", "/functions/" + resource_id, {
+            "name": desired["name"],  # Appwrite requires a name for partial updates.
+            "providerDeployments": desired["providerDeployments"],
+        })
+    elif kind == "site_marketing":
         if before is None:
             raise ValueError("Marketing site is missing")
         # Preserve build settings while owning only scopes and trigger filters.

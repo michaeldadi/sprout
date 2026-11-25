@@ -120,6 +120,7 @@ variable "functions" {
     provider_repository_id  = string
     provider_branch         = string
     provider_root_directory = string
+    provider_deploy_on_push = optional(bool)
   }))
   default = {}
 }

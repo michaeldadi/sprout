@@ -66,6 +66,11 @@ The provider's write-only `value_wo` field keeps the value out of state.
 Several other template function variables are currently blank in Appwrite;
 their blank configuration is recorded literally.
 
+The legacy Speech recognition function has no active deployment. Its Git build
+expects a setup script and entrypoint that are absent from the repository.
+Deploy on push is disabled for this function. The Git connection remains
+available for a manual build after valid function source is restored.
+
 Mobile builds select their Appwrite project independently of Terraform state.
 Set `SPROUT_APPWRITE_ENDPOINT` and `SPROUT_APPWRITE_PROJECT_ID` for the selected
 environment. Android reads these public identifiers and

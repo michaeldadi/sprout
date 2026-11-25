@@ -128,6 +128,7 @@ functions = {
     provider_repository_id  = "1041147244"
     provider_branch         = "main"
     provider_root_directory = "./"
+    provider_deploy_on_push = false
   }
   url_shortener = {
     id                      = "6af0f05f0039657ea7ed"
