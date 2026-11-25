@@ -1,0 +1,107 @@
+[
+  {
+    "name": "tax is not the total",
+    "text": "SPROUT CAFE\n11/09/2026\nLatte $5.00\nSubtotal $5.00\nTax $0.40\nTOTAL $5.40",
+    "amountMinor": 540,
+    "merchant": "SPROUT CAFE",
+    "date": "2026-11-09"
+  },
+  {
+    "name": "comma total",
+    "text": "SPROUT FURNITURE\nDate 2026-11-09\nSUBTOTAL 1200.00\nTAX 34.56\nGRAND TOTAL 1,234.56 USD",
+    "amountMinor": 123456,
+    "merchant": "SPROUT FURNITURE",
+    "date": "2026-11-09"
+  },
+  {
+    "name": "repeated total agrees",
+    "text": "7-Eleven\nTOTAL $12.50\nTOTAL PAID $12.50",
+    "amountMinor": 1250,
+    "merchant": "7-Eleven",
+    "date": null
+  },
+  {
+    "name": "tip changed total needs review",
+    "text": "SPROUT DINER\nTOTAL 22.00\nTIP 3.00\nGRAND TOTAL 25.00",
+    "amountMinor": null,
+    "merchant": "SPROUT DINER",
+    "date": null
+  },
+  {
+    "name": "subtotal alone is not a final total",
+    "text": "SPROUT MARKET\nSubtotal $15.00\nTax $1.20",
+    "amountMinor": null,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "foreign currency",
+    "text": "SPROUT TRAVEL\nTOTAL 15.00 EUR",
+    "amountMinor": null,
+    "merchant": "SPROUT TRAVEL",
+    "date": null
+  },
+  {
+    "name": "negative total",
+    "text": "SPROUT SHOP\nTOTAL -12.00",
+    "amountMinor": null,
+    "merchant": "SPROUT SHOP",
+    "date": null
+  },
+  {
+    "name": "refund is not an expense",
+    "text": "SPROUT SHOP\nREFUND\nTOTAL $12.00",
+    "amountMinor": null,
+    "merchant": "SPROUT SHOP",
+    "date": null
+  },
+  {
+    "name": "do not guess short year",
+    "text": "SPROUT MARKET\n11/9/26\nTOTAL $2.10",
+    "amountMinor": 210,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "invalid date",
+    "text": "SPROUT MARKET\n02/30/2026\nTOTAL $2.10",
+    "amountMinor": 210,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "multiple dates need review",
+    "text": "SPROUT MARKET\n11/09/2026\n11/10/2026\nTOTAL $2.10",
+    "amountMinor": 210,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "metadata before merchant",
+    "text": "Receipt\n123 Main Street\nSPROUT BOOKS\nAMOUNT DUE: $18.75",
+    "amountMinor": 1875,
+    "merchant": "SPROUT BOOKS",
+    "date": null
+  },
+  {
+    "name": "malformed cents",
+    "text": "SPROUT MARKET\nTOTAL $12.345",
+    "amountMinor": null,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "no arbitrary standalone item number",
+    "text": "SPROUT MARKET\n42\n1234\n$1.99",
+    "amountMinor": null,
+    "merchant": "SPROUT MARKET",
+    "date": null
+  },
+  {
+    "name": "unrecognized OCR currency glyph needs review",
+    "text": "SPROUT CAFE\n11/09/2026\nSUBTOTAL $5.00\nTAX $0.40\nTOTAL \u02185.40",
+    "amountMinor": null,
+    "merchant": "SPROUT CAFE",
+    "date": "2026-11-09"
+  }
+]

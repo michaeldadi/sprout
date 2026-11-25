@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run && tsx --test api/chat/getStreamToken.test.ts",
+    "build": "tsc -p tsconfig.ai.json",
+    "check:tools": "tsc -p ../scripts/tsconfig.json",
+    "test:ai": "vitest run",
+    "bundle": "tsx ../scripts/bundle-functions.ts",
+    "generate": "tsx ../scripts/generate-contracts.ts"
   },
   "private": true,
   "directories": {
@@ -11,10 +16,22 @@
   },
   "type": "commonjs",
   "dependencies": {
-    "esbuild": "^0.25.9"
+    "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
+    "esbuild": "^0.25.9",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "node-appwrite": "20.3.0",
+    "openai": "6.49.0",
+    "stream-chat": "^8.0.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.152",
-    "aws-lambda": "^1.0.7"
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/node": "^24.3.0",
+    "aws-lambda": "^1.0.7",
+    "tsx": "^4.20.4",
+    "typescript": "^5.0.0",
+    "vitest": "^3.2.4"
   }
 }

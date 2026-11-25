@@ -1,5 +1,5 @@
 {
-  "originHash" : "337255d5694c144347e65eb6c02f141f895f83e4e3ee8806fe43b63033075c23",
+  "originHash" : "c28653580b9f8751895d7479c69db8ff70689eaad6273c189939a2bb07cdd3cb",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -38,6 +38,15 @@
       }
     },
     {
+      "identity" : "async-http-client",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server/async-http-client.git",
+      "state" : {
+        "revision" : "d2dfb39bcb0fafd1834ec6e6334c1755360f856e",
+        "version" : "1.37.0"
+      }
+    },
+    {
       "identity" : "aws-crt-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift",
@@ -62,24 +71,6 @@
       "state" : {
         "revision" : "99e270648a03bc11595d4faf85ae1068fc9740b9",
         "version" : "13.0.0"
-      }
-    },
-    {
-      "identity" : "commonui_sdk_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/commonui_sdk_ios",
-      "state" : {
-        "revision" : "a256317e50600166fad4055c62a46ad768bcdd3d",
-        "version" : "9.1.0"
-      }
-    },
-    {
-      "identity" : "core_sdk_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/core_sdk_ios",
-      "state" : {
-        "revision" : "36091ee0cd0fb888fc98f815f460b66e30132192",
-        "version" : "5.0.5"
       }
     },
     {
@@ -200,24 +191,6 @@
       }
     },
     {
-      "identity" : "messaging_sdk_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/messaging_sdk_ios",
-      "state" : {
-        "revision" : "c9d6e4aa784774a5bc62bbdff7518f783f7b03df",
-        "version" : "6.1.0"
-      }
-    },
-    {
-      "identity" : "messagingapi_sdk_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/messagingapi_sdk_ios",
-      "state" : {
-        "revision" : "ae7f3169d07016893c52ec887b26fac4e247db25",
-        "version" : "6.0.2"
-      }
-    },
-    {
       "identity" : "mixpanel-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mixpanel/mixpanel-swift",
@@ -227,12 +200,30 @@
       }
     },
     {
+      "identity" : "mqtt-nio",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server-community/mqtt-nio.git",
+      "state" : {
+        "revision" : "91d357875eabd63c55eee40fc6b85bc1f00839ed",
+        "version" : "2.13.0"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
       "state" : {
         "revision" : "b7e1104502eca3a213b46303391ca4d3bc8ddec1",
         "version" : "2.30910.0"
+      }
+    },
+    {
+      "identity" : "onesignal-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OneSignal/OneSignal-iOS-SDK",
+      "state" : {
+        "revision" : "2c3b878c32b0adc8349dc1bf2509ca7decd3b27c",
+        "version" : "5.2.14"
       }
     },
     {
@@ -272,21 +263,12 @@
       }
     },
     {
-      "identity" : "purchases-ios-spm",
+      "identity" : "sdk-for-apple",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
+      "location" : "https://github.com/appwrite/sdk-for-apple",
       "state" : {
-        "revision" : "b2a5f6c6fb4de109fc6dd6491d7f0657fbc983bf",
-        "version" : "5.35.0"
-      }
-    },
-    {
-      "identity" : "sdkconfigurations_sdk_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/sdkconfigurations_sdk_ios",
-      "state" : {
-        "revision" : "18de371f71f6a92b34f63013fe2fbe46caf0811e",
-        "version" : "4.0.1"
+        "revision" : "903c6fec174706e0647e8030d412cf9bf12ecdd9",
+        "version" : "21.2.0"
       }
     },
     {
@@ -317,21 +299,21 @@
       }
     },
     {
-      "identity" : "support_providers_sdk_ios",
+      "identity" : "stream-chat-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/support_providers_sdk_ios",
+      "location" : "https://github.com/GetStream/stream-chat-swift.git",
       "state" : {
-        "revision" : "23008686dba97417a38973c1c33387acbb203dd8",
-        "version" : "9.0.0"
+        "revision" : "914fc97312d8b3f4c920a352a3a22a2e9a23b9af",
+        "version" : "4.86.0"
       }
     },
     {
-      "identity" : "support_sdk_ios",
+      "identity" : "stream-chat-swiftui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zendesk/support_sdk_ios",
+      "location" : "https://github.com/getstream/stream-chat-swiftui",
       "state" : {
-        "revision" : "c1d01263b4ef80404016da2c8a1db3332d8bebb7",
-        "version" : "9.1.0"
+        "revision" : "c7a21ba830557b1b4b378f1826a04f6433b7254a",
+        "version" : "4.86.0"
       }
     },
     {
@@ -393,8 +375,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "8c0c0a8b49e080e54e5e328cc552821ff07cd341",
-        "version" : "1.2.1"
+        "revision" : "f96b909e1a9e469620bc5037c1e24e00153f376f",
+        "version" : "1.7.5"
+      }
+    },
+    {
+      "identity" : "swift-configuration",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-configuration.git",
+      "state" : {
+        "revision" : "0b0c23215764302f7db752b079c024fbaff12e62",
+        "version" : "1.5.0"
       }
     },
     {
@@ -404,6 +395,15 @@
       "state" : {
         "revision" : "334e682869394ee239a57dbe9262bff3cd9495bd",
         "version" : "3.14.0"
+      }
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-distributed-tracing.git",
+      "state" : {
+        "revision" : "9f982a7ec8dd815bf57024e39de592813ca14399",
+        "version" : "1.7.4"
       }
     },
     {
@@ -429,8 +429,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
-        "version" : "1.6.4"
+        "revision" : "e3da04078777e6a1b72ce19981fbd6539b0847d8",
+        "version" : "1.17.0"
       }
     },
     {
@@ -447,8 +447,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "1c30f0f2053b654e3d1302492124aa6d242cdba7",
-        "version" : "2.86.0"
+        "revision" : "2f58d8ef84438d6517fc78bcea2f8527e3c72936",
+        "version" : "2.105.0"
       }
     },
     {
@@ -503,6 +503,15 @@
       "state" : {
         "revision" : "e3f69fd321d0c9fcdc16fb576a0cdd956675face",
         "version" : "1.31.0"
+      }
+    },
+    {
+      "identity" : "swift-service-context",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-service-context.git",
+      "state" : {
+        "revision" : "853ba3d9ce78851b9cc20108e8bd4f13f7fa546c",
+        "version" : "1.5.1"
       }
     },
     {

@@ -77,14 +77,12 @@ class GoogleAssistantService private constructor(private val context: Context) {
         val host = data.host
 
         if (scheme == "sprout") {
-            Log.d("GoogleAssistantService", "Handling deep link: $data")
 
             return when (host) {
                 "add-expense" -> {
                     val amount = data.getQueryParameter("amount")
                     val merchant = data.getQueryParameter("merchant")
                     val category = data.getQueryParameter("category")
-                    Log.d("GoogleAssistantService", "Add expense: amount=$amount, merchant=$merchant, category=$category")
                     availableActions.find { it.id == "add_expense" }
                 }
                 "check-balance" -> {
@@ -99,12 +97,10 @@ class GoogleAssistantService private constructor(private val context: Context) {
                 "monthly-spending" -> {
                     val month = data.getQueryParameter("month")
                     val year = data.getQueryParameter("year")
-                    Log.d("GoogleAssistantService", "Monthly spending: month=$month, year=$year")
                     availableActions.find { it.id == "monthly_spending" }
                 }
                 "search-transactions" -> {
                     val query = data.getQueryParameter("query")
-                    Log.d("GoogleAssistantService", "Search transactions: query=$query")
                     availableActions.find { it.id == "search_transactions" }
                 }
                 "financial-goals" -> {

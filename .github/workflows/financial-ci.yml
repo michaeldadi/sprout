@@ -1,0 +1,60 @@
+name: Financial backend and design contracts
+on:
+  pull_request:
+    paths:
+      [
+        "services/**",
+        "design/**",
+        "scripts/**",
+        "infra/appwrite/**",
+        "yarn.lock",
+        ".github/workflows/financial-ci.yml",
+      ]
+  push:
+    branches: [main, develop]
+    paths:
+      [
+        "services/**",
+        "design/**",
+        "scripts/**",
+        "infra/appwrite/**",
+        "yarn.lock",
+      ]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: node scripts/generate-design-tokens.mjs --check
+      - run: node scripts/verify-design-manifest.mjs
+      - run: yarn workspace @sprout/services generate --check
+      - run: yarn workspace @sprout/services build
+      - run: yarn workspace @sprout/services check:tools
+      - run: yarn workspace @sprout/services test
+      - run: yarn workspace @sprout/services bundle
+      - name: Record bundle source
+        run: |
+          printf '{"commit":"%s","contractVersion":1}\n' "$GITHUB_SHA" > services/bundles/release.json
+          find services/bundles -type f -exec sha256sum {} \; > "$RUNNER_TEMP/bundle-sha256.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: immutable-financial-functions
+          path: |
+            services/bundles
+            ${{ runner.temp }}/bundle-sha256.txt
+          retention-days: 14
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: hashicorp/setup-terraform@v3
+      - run: bash infra/appwrite/tf.sh staging validate

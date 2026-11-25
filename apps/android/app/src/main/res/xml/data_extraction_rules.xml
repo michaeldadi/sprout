@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
   <cloud-backup>
+    <exclude domain="file" path="sprout-receipts/"/>
     <exclude domain="sharedpref" path="appsflyer-data"/>
   </cloud-backup>
   <device-transfer>

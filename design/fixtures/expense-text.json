@@ -1,0 +1,126 @@
+[
+  {
+    "text": "Coffee was $12.50",
+    "amountMinor": 1250
+  },
+  {
+    "text": "On November 9 I spent $12.50 at lunch",
+    "amountMinor": 1250
+  },
+  {
+    "text": "Subtotal $12 and tax $1.20",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid 12 dollars then corrected it to 14 dollars",
+    "amountMinor": null
+  },
+  {
+    "text": "Dinner on the 18th",
+    "amountMinor": null
+  },
+  {
+    "text": "Total $12.345",
+    "amountMinor": null
+  },
+  {
+    "text": "Paid $1,234.56 for furniture",
+    "amountMinor": 123456
+  },
+  {
+    "text": "Paid 1,234 dollars and 56 cents",
+    "amountMinor": 123456
+  },
+  {
+    "text": "Coffee was 12 dollars and 5 cents",
+    "amountMinor": 1205
+  },
+  {
+    "text": "Parking cost 75 cents",
+    "amountMinor": 75
+  },
+  {
+    "text": "I paid USD 12.50 for lunch",
+    "amountMinor": 1250
+  },
+  {
+    "text": "The ticket was 12.50 USD",
+    "amountMinor": 1250
+  },
+  {
+    "text": "I paid $12.50, actually 14",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $12.50, make that 14",
+    "amountMinor": null
+  },
+  {
+    "text": "A refund of $12.50 arrived",
+    "amountMinor": null
+  },
+  {
+    "text": "The credit was -$12.50",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $12.50 CAD",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid €12.50",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $1,23.45",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $12.50.",
+    "amountMinor": 1250
+  },
+  {
+    "text": "Lunch on 2026-11-09 cost $12.50",
+    "amountMinor": 1250
+  },
+  {
+    "text": "Coffee was 12 dollars and fifty cents",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid 12.50 dollars and 5 cents",
+    "amountMinor": null
+  },
+  {
+    "text": "Nothing cost $0.00",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $900719925474099999999",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid $12.50 plus $2 tip",
+    "amountMinor": null
+  },
+  {
+    "text": "Two coffees were $5 each",
+    "amountMinor": null
+  },
+  {
+    "text": "I paid 12:50 dollars",
+    "amountMinor": null
+  },
+  {
+    "text": "The amount was $12/50",
+    "amountMinor": null
+  },
+  {
+    "text": "It was around $10 to 12",
+    "amountMinor": null
+  },
+  {
+    "text": "It was 10 to 12 dollars",
+    "amountMinor": null
+  }
+]

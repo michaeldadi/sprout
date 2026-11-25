@@ -1,0 +1,159 @@
+[
+  {
+    "name": "reviewed expense",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": true,
+    "minor": 1234
+  },
+  {
+    "name": "empty launch opens review",
+    "fields": {},
+    "valid": true,
+    "minor": null
+  },
+  {
+    "name": "missing merchant stays a draft",
+    "fields": {
+      "amount": "0.29"
+    },
+    "valid": true,
+    "minor": null
+  },
+  {
+    "name": "exact cents",
+    "fields": {
+      "amount": "$0.29",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": true,
+    "minor": 29
+  },
+  {
+    "name": "leap day",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2024-02-29",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": true,
+    "minor": 1234
+  },
+  {
+    "name": "negative amount",
+    "fields": {
+      "amount": "-2",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "ambiguous precision",
+    "fields": {
+      "amount": "1.005",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "currency mismatch",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "EUR",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "invalid date",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-02-30",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "unknown category",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "unsupported",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "currency symbol only",
+    "fields": {
+      "amount": "$",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "merchant UTF16 bound",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️☕️",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "Reviewed draft"
+    },
+    "valid": false,
+    "minor": null
+  },
+  {
+    "name": "notes bound",
+    "fields": {
+      "amount": "12.34",
+      "merchant": "Shortcut Coffee",
+      "category": "Food",
+      "date": "2026-11-09",
+      "currency": "USD",
+      "notes": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    "valid": false,
+    "minor": null
+  }
+]

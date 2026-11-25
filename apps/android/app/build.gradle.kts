@@ -12,6 +12,8 @@ plugins {
     id("io.sentry.android.gradle") version "5.9.0"
 }
 
+ksp { arg("room.schemaLocation", "$projectDir/schemas") }
+
 // Load environment variables from .env file
 val envFile = file("../../.env.local")
 val envProperties = Properties()
@@ -39,11 +41,21 @@ android {
         buildConfigField("String", "MIXPANEL_TOKEN", "\"${envProperties.getProperty("MIXPANEL_TOKEN", "")}\"")
         buildConfigField("String", "APPSFLYER_DEV_KEY", "\"${envProperties.getProperty("APPSFLYER_DEV_KEY", "")}\"")
         buildConfigField("String", "REVENUECAT_API_KEY", "\"${envProperties.getProperty("REVENUECAT_API_KEY", "")}\"")
+        buildConfigField("String", "SPROUT_API_BASE_URL", "\"${envProperties.getProperty("SPROUT_API_BASE_URL", "")}\"")
+        buildConfigField("String", "SPROUT_APPWRITE_ENDPOINT", "\"${envProperties.getProperty("SPROUT_APPWRITE_ENDPOINT", "")}\"")
+        buildConfigField("String", "SPROUT_APPWRITE_PROJECT_ID", "\"${envProperties.getProperty("SPROUT_APPWRITE_PROJECT_ID", "")}\"")
+        buildConfigField("String", "SPROUT_GOOGLE_WEB_CLIENT_ID", "\"${envProperties.getProperty("SPROUT_GOOGLE_WEB_CLIENT_ID", "")}\"")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
+            // Sentry is the selected error destination. Local release builds must
+            // not publish mappings or native symbols to the legacy destination.
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+                nativeSymbolUploadEnabled = false
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -67,6 +79,8 @@ android {
 
 dependencies {
 
+    implementation(libs.appwrite.android)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -75,6 +89,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("com.google.mlkit:text-recognition:16.0.1")
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
@@ -94,9 +110,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.foundation)
-
-    // Custom Tabs for Apple Sign In
-    implementation(libs.androidx.browser)
 
     // Room database
     implementation(libs.androidx.room.runtime)
@@ -162,6 +175,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.4.1")
     androidTestImplementation(libs.mockito.core)
     androidTestImplementation(libs.mockito.kotlin)
 
@@ -171,11 +185,17 @@ dependencies {
 }
 
 
+// Local validation never publishes symbols or source code. Distribution CI opts in.
+val uploadSproutAndroidSymbols = providers.environmentVariable("SPROUT_UPLOAD_ANDROID_SYMBOLS").orNull == "1"
+if (uploadSproutAndroidSymbols && providers.environmentVariable("SENTRY_AUTH_TOKEN").orNull.isNullOrBlank()) {
+    error("Android symbol upload was requested but Sentry authentication is not configured.")
+}
 sentry {
     org.set("michael-dadi-1b")
     projectName.set("sprout-android")
-
-    // this will upload your source code to Sentry to show it as part of the stack traces
-    // disable if you don't want to expose your sources
-    includeSourceContext.set(true)
+    includeSourceContext.set(false)
+    autoUploadSourceContext.set(false)
+    autoUploadProguardMapping.set(uploadSproutAndroidSymbols)
+    uploadNativeSymbols.set(uploadSproutAndroidSymbols)
+    autoUploadNativeSymbols.set(uploadSproutAndroidSymbols)
 }

@@ -1,7 +1,7 @@
 # The official Appwrite provider does not yet expose native platforms, auth
-# method switches, or bucket stripMetadata. This bridge keeps their desired
-# settings in Terraform and reads live values on every plan. It never deletes
-# remote Appwrite resources. Every write is followed by a semantic readback.
+# method switches, bucket stripMetadata, or function Git automation. This
+# bridge keeps their desired settings in Terraform and reads live values on
+# every plan. Every write is followed by a semantic readback.
 locals {
   # Read from both live projects on 2026-11-09. Environment files override
   # the few settings that differ; future environments can do the same.
@@ -129,6 +129,16 @@ locals {
         id      = name
         desired = merge({ id = name }, policy)
       }
+    },
+    {
+      for name, function in var.functions : "function_git_${name}" => {
+        kind = "function_git"
+        id   = function.id
+        desired = {
+          id                  = function.id
+          providerDeployments = function.provider_deploy_on_push
+        }
+      } if function.provider_deploy_on_push != null
     }
   )
 }

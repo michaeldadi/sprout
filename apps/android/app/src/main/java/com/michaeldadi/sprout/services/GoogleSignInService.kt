@@ -3,6 +3,7 @@ package com.michaeldadi.sprout.services
 import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -16,14 +17,18 @@ import com.michaeldadi.sprout.config.AppConfig
 class GoogleSignInService(
     private val context: Context,
     private val activity: ComponentActivity,
-    private val credentialManager: CredentialManager = CredentialManager.create(context)
+    private val credentialManager: CredentialManager = CredentialManager.create(context),
+    private val serverClientId: String = AppConfig.googleSignInClientId
 ) {
     
     suspend fun signIn(): GoogleSignInResult {
         return try {
+            if (serverClientId.isBlank()) {
+                return GoogleSignInResult.Error("Google sign-in is not configured for this build")
+            }
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(AppConfig.googleSignInClientId)
+                .setServerClientId(serverClientId)
                 .build()
 
             val request = GetCredentialRequest.Builder()
@@ -42,6 +47,18 @@ class GoogleSignInService(
                         email = credential.id,
                         displayName = credential.displayName,
                         photoUrl = credential.profilePictureUri?.toString()
+                    )
+                }
+                is CustomCredential -> {
+                    if (credential.type != GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                        return GoogleSignInResult.Error("Unknown credential type")
+                    }
+                    val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                    GoogleSignInResult.Success(
+                        idToken = googleCredential.idToken,
+                        email = googleCredential.id,
+                        displayName = googleCredential.displayName,
+                        photoUrl = googleCredential.profilePictureUri?.toString()
                     )
                 }
                 else -> {

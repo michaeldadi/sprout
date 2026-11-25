@@ -4,7 +4,7 @@ import {
   createErrorResponse,
   getUserIdFromEvent
 } from '../common/utils';
-import { db } from '../common/database';
+import { db, StorageUnavailableError } from '../common/database';
 import { SyncData } from '../common/types';
 
 /**
@@ -20,17 +20,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log('GetSync handler called', {
-      queryParams: event.queryStringParameters,
-      headers: event.headers
-    });
-
     // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
       return createSuccessResponse({});
     }
 
-    // Get user ID from JWT token or headers
+    // Get user ID from the authorizer's verified JWT claims.
     const userId = getUserIdFromEvent(event);
     if (!userId) {
       return createErrorResponse(
@@ -55,12 +50,6 @@ export const handler = async (
       );
     }
 
-    console.log('Fetching transactions for user:', userId, {
-      cursor,
-      limit,
-      since
-    });
-
     // Fetch transactions from database
     const result = await db.getTransactionsByUserId(userId, cursor, limit);
 
@@ -81,11 +70,12 @@ export const handler = async (
       nextCursor: result.lastEvaluatedKey
     };
 
-    console.log(`Successfully synced ${transactions.length} transactions for user ${userId}`);
-
     return createSuccessResponse(syncData);
 
   } catch (error) {
+    if (error instanceof StorageUnavailableError) {
+      return createErrorResponse('STORAGE_UNAVAILABLE', 'Transaction sync is unavailable', 503);
+    }
     console.error('Error in GetSync handler:', error);
 
     return createErrorResponse(

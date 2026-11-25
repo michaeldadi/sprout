@@ -1,0 +1,193 @@
+[
+  {
+    "name": "reviewed expense",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.40,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 1,
+    "amounts": [
+      -540
+    ],
+    "batchId": "f4131b9450c071cf7461dc01d69c7f508f460ca7ff8c20044c10f9bf257a7e98"
+  },
+  {
+    "name": "quoted comma and newline",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,\"Cafe, Inc\",-5.40,expense,USD,Food,\"line one\nline \"\"two\"\"\"\n",
+    "rowCount": 1,
+    "selectedCount": 1,
+    "amounts": [
+      -540
+    ],
+    "batchId": "43fb9075ede7c0ce4d56f8c8b00787a4d9481e9a646d1bc0578ca62821f6b60e"
+  },
+  {
+    "name": "income refund transfer",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Payroll,3000.00,income,USD,Income,\n2026-11-09,Shop,2.75,refund,USD,Other,\n2026-11-08,Move,-20,transfer,USD,Transfer,\n",
+    "rowCount": 3,
+    "selectedCount": 3,
+    "amounts": [
+      300000,
+      275,
+      -2000
+    ],
+    "batchId": "f008dac5367ab17a9a68c311b06b5ddad538e116faf6b806a4a84a4e8d9ffe60"
+  },
+  {
+    "name": "wrong expense sign",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,5.40,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "85f27df773949d22762417ac197d03570c81e2733014f70c22b4de4afbab653e"
+  },
+  {
+    "name": "unverified currency",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.40,expense,EUR,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "c9c717d483b027c30b2a9e1d90627962b5d67f40b4cf9a886a5ad752a4c7e1cf"
+  },
+  {
+    "name": "invalid date",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-02-30,Cafe,-5.40,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "687fe0ae8a8a9c7668d6ac3b193c131b883080e51f1d649aafb60bf553195fb2"
+  },
+  {
+    "name": "ambiguous date",
+    "csv": "date,merchant,amount,type,currency,category,notes\n11/10/2026,Cafe,-5.40,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "4982b6ee01038c1ce8ae3e9d142606ba88c5afbe7048376c540317479f5a8d79"
+  },
+  {
+    "name": "excess precision",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.401,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "1649343cd54cd6121eb15a190b4ec7aa69a693ce76a0517dd81c8bad4b1c01a2"
+  },
+  {
+    "name": "possible duplicate",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.40,expense,USD,Food,\n2026-11-10,CAFE,-5.40,expense,USD,Food,\n",
+    "rowCount": 2,
+    "selectedCount": 1,
+    "amounts": [
+      -540,
+      -540
+    ],
+    "batchId": "e6a4f1874ef51557683144ec5b6a304487b2e0e9d9dc89f709456431b4bd58e1"
+  },
+  {
+    "name": "unicode and BOM",
+    "csv": "﻿date,merchant,amount,type,currency,category,notes\r\n2026-11-10,茶屋,-5.40,expense,USD,Food,領収書\r\n",
+    "rowCount": 1,
+    "selectedCount": 1,
+    "amounts": [
+      -540
+    ],
+    "batchId": "31406424fc92b0b545e18960b6fdeaaafb17cdc2bec031799ce93c09f4aef9b3"
+  },
+  {
+    "name": "optional columns",
+    "csv": "date,merchant,amount,type,currency\n2026-11-10,Cafe,-5.40,expense,USD\n",
+    "rowCount": 1,
+    "selectedCount": 1,
+    "amounts": [
+      -540
+    ],
+    "batchId": "2715505de8409c2b6591fc764ddb44cfe92a068572949dbbeff8bf37bd2c9960"
+  },
+  {
+    "name": "blank rows",
+    "csv": "date,merchant,amount,type,currency,category,notes\n\n2026-11-10,Cafe,-5.40,expense,USD,Food,\n\n",
+    "rowCount": 1,
+    "selectedCount": 1,
+    "amounts": [
+      -540
+    ],
+    "batchId": "e5d6561d9273322546f4d215f2b92b6b6b2001a729d60e069c6cc2eeaebb063e"
+  },
+  {
+    "name": "duplicate header",
+    "csv": "date,merchant,amount,type,currency,date\n2026-11-10,Cafe,-5.40,expense,USD,2026-11-10\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "39f561b684c26cb5c185750138c56ecd3b0f4db2171b363ef89afcf4dbec9f22"
+  },
+  {
+    "name": "unclosed quote",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,\"Cafe,-5.40,expense,USD,Food,\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "6916c365ef4dd6ad668d9c790fb87b295fc451f6db1257afda6b111fc46b4d16"
+  },
+  {
+    "name": "unexpected quote",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Ca\"fe,-5.40,expense,USD,Food,\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "f301e290369d99c690b4f35fc8107ff9c4aebe14a8ebf7d10c96a8865dee67bd"
+  },
+  {
+    "name": "quote trailing characters",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,\"Cafe\"x,-5.40,expense,USD,Food,\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "fe3e9c4e0ef374caa20da55086086b6b86205962865ad67adbe3fc7937c6fad6"
+  },
+  {
+    "name": "column mismatch",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.40,expense,USD\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "01b3e7ee2d43eb5287f3be29e656a7762427ddfd6100175ce3b96c9ed9ee1aa6"
+  },
+  {
+    "name": "missing currency",
+    "csv": "date,merchant,amount,type\n2026-11-10,Cafe,-5.40,expense\n",
+    "rowCount": null,
+    "selectedCount": null,
+    "amounts": null,
+    "batchId": "458295d44c985f88327cb43dfd9aaf50bd1d79c355dc9b9c45e331de98989303"
+  },
+  {
+    "name": "zero amount",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,0,expense,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "f5e9ec67df19fc4577c1f9648fa62848100ca3b2ebf80f589a3069a9dc995b3b"
+  },
+  {
+    "name": "invalid refund sign",
+    "csv": "date,merchant,amount,type,currency,category,notes\n2026-11-10,Cafe,-5.40,refund,USD,Food,\n",
+    "rowCount": 1,
+    "selectedCount": 0,
+    "amounts": [
+      null
+    ],
+    "batchId": "d220b45b5b87c11d4ad9e2e517474b1520613f1116c7686bae9fc89ea951c8b1"
+  }
+]

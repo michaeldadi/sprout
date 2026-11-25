@@ -12,6 +12,7 @@ import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations
 import { HttpUserPoolAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { UserPool, UserPoolClient } from 'aws-cdk-lib/aws-cognito';
 import { NodejsFunction, OutputFormat } from "aws-cdk-lib/aws-lambda-nodejs";
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export interface ApiConstructProps {
     transactions: Table;
@@ -20,6 +21,9 @@ export interface ApiConstructProps {
     userPool: UserPool;
     userPoolClient: UserPoolClient;
     environment: string;
+    streamApiKey?: string;
+    streamApiSecret?: string;
+    appleClientId?: string;
 }
 
 export class ApiConstruct extends Construct {
@@ -32,7 +36,12 @@ export class ApiConstruct extends Construct {
             TXN_TABLE: props.transactions.tableName,
             LEDGER_TABLE: props.ledgers.tableName,
             RECEIPTS_BUCKET: props.receipts.bucketName,
-            ENVIRONMENT: props.environment
+            ENVIRONMENT: props.environment,
+            USER_POOL_ID: props.userPool.userPoolId,
+            CLIENT_ID: props.userPoolClient.userPoolClientId,
+            STREAM_API_KEY: props.streamApiKey || '',
+            STREAM_API_SECRET: props.streamApiSecret || '',
+            APPLE_CLIENT_ID: props.appleClientId || 'com.michaeldadi.sprout'
         };
 
         // Helper to bundle a handler out of "../services/**.ts"
@@ -62,6 +71,10 @@ export class ApiConstruct extends Construct {
         const deleteTxn = mkFn('DeleteTransaction', '../services/api/transactions/deleteTransaction.ts');
         const createUploadUrl = mkFn('CreateReceiptUrl', '../services/api/uploads/createReceiptUrl.ts');
 
+        // Auth Lambdas
+        const appleSignIn = mkFn('AppleSignIn', '../services/api/auth/appleSignIn.ts');
+        const getStreamToken = mkFn('GetStreamToken', '../services/api/chat/getStreamToken.ts');
+
         // Permissions
         props.transactions.grantReadWriteData(getSync);
         props.transactions.grantReadWriteData(postTxn);
@@ -70,6 +83,18 @@ export class ApiConstruct extends Construct {
 
         props.ledgers.grantReadWriteData(getSync); // expand with ledger mutations as needed
         props.receipts.grantPut(createUploadUrl);  // presigned PUT signer
+
+        // Grant permissions for auth lambdas to manage Cognito users
+        appleSignIn.addToRolePolicy(new PolicyStatement({
+            actions: [
+                'cognito-idp:AdminCreateUser',
+                'cognito-idp:AdminSetUserPassword',
+                'cognito-idp:AdminInitiateAuth',
+                'cognito-idp:AdminGetUser',
+                'cognito-idp:AdminUpdateUserAttributes'
+            ],
+            resources: [props.userPool.userPoolArn]
+        }));
 
         // HTTP API
         this.httpApi = new HttpApi(this, 'HttpApi', {
@@ -92,6 +117,10 @@ export class ApiConstruct extends Construct {
         const iPatch  = new HttpLambdaIntegration('iPatch', patchTxn);
         const iDelete = new HttpLambdaIntegration('iDelete', deleteTxn);
         const iUpload = new HttpLambdaIntegration('iUpload', createUploadUrl);
+
+        // Auth Integrations
+        const iAppleSignIn = new HttpLambdaIntegration('iAppleSignIn', appleSignIn);
+        const iStreamToken = new HttpLambdaIntegration('iStreamToken', getStreamToken);
 
         // Routes (all protected)
         this.httpApi.addRoutes({
@@ -126,6 +155,23 @@ export class ApiConstruct extends Construct {
             path: '/uploads/receipts',
             methods: [HttpMethod.POST],
             integration: iUpload,
+            authorizer
+        });
+
+        // Auth Routes
+        // Apple Sign In (public endpoint - no authorizer)
+        this.httpApi.addRoutes({
+            path: '/auth/apple',
+            methods: [HttpMethod.POST],
+            integration: iAppleSignIn
+            // No authorizer - this is the endpoint that creates auth tokens
+        });
+
+        // Stream Chat Token (protected endpoint)
+        this.httpApi.addRoutes({
+            path: '/chat/token',
+            methods: [HttpMethod.GET],
+            integration: iStreamToken,
             authorizer
         });
     }

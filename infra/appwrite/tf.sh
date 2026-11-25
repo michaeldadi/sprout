@@ -33,6 +33,13 @@ case "$operation" in
     terraform -chdir="$root" validate
     ;;
   plan|apply)
+    # Values stay outside source and Terraform state (value_wo). CI may supply
+    # TF_VAR_financial_secret_values directly; local macOS uses the same Keychain
+    # as the existing project credential. Never echo this environment variable.
+    if [[ -z "${TF_VAR_financial_secret_values:-}" ]] && grep -q '^financial_secret_versions' "$config"; then
+      export TF_VAR_financial_secret_values
+      TF_VAR_financial_secret_values="$(security find-generic-password -a sprout-terraform -s "sprout-appwrite-$environment-financial-secrets" -w)"
+    fi
     if [[ "$operation" == "plan" ]] && grep -Eq '^[[:space:]]*manual_transactions_enabled[[:space:]]*=[[:space:]]*true([[:space:]]|$)' "$config"; then
       /usr/bin/python3 "$root/scripts/package_manual_transactions.py"
     fi

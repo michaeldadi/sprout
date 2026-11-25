@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "deploy-functions.ts",
+    "validate-live-appwrite.ts",
+    "validate-live-imports.ts",
+    "validate-live-receipts.ts",
+    "validate-live-workflows.ts",
+    "validate-live-privacy.ts",
+    "validate-live-restore.ts"
+  ]
+}

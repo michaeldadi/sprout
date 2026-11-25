@@ -1,0 +1,55 @@
+name: FoundationReviewHost
+options:
+  bundleIdPrefix: com.michaeldadi.sprout.review
+targets:
+  FoundationReviewHost:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.5"
+    sources:
+      - path: FoundationReviewHostApp.swift
+      - path: ActivityReviewView.swift
+      - path: HomeReviewView.swift
+      - path: ActivityAdapterStubs.swift
+      - path: ../Sprout/Core/Data/Models/Shared/Transaction.swift
+      - path: ../Sprout/Core/Data/DataContainer.swift
+      - path: ../Sprout/Features/Transactions/TransactionsView.swift
+      - path: ../Sprout/Features/Transactions/ActivityRecordSource.swift
+      - path: ../Sprout/Features/Transactions/ActivityPresentation.swift
+      - path: ../Sprout/Features/Transactions/ActivityJourneyView.swift
+      - path: ../Sprout/Features/Dashboard/DashboardView.swift
+      - path: ../Sprout/Features/Dashboard/HomeOrientationView.swift
+      - path: ../Sprout/Shared/Design/SproutTheme.swift
+      - path: ../Sprout/Shared/Design/SproutFoundationComponents.swift
+      - path: ../Sprout/Shared/Design/FoundationReviewView.swift
+      - path: ../Sprout/Shared/Components/SocialLoginButton.swift
+      - path: ../Sprout/Shared/Components/FloatingCirclesView.swift
+      - path: ../Sprout/Shared/Components/LoadingModal.swift
+      - path: ../Sprout/Shared/Components/ToastView.swift
+      - path: ../Sprout/Core/Managers/ToastManager.swift
+      - path: ../Sprout/Resources/Assets.xcassets
+        buildPhase: resources
+    info:
+      path: Info.plist
+      properties:
+        UILaunchScreen: {}
+        UIRequiresFullScreen: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.michaeldadi.sprout.review.foundation
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: 5.0
+        CODE_SIGNING_ALLOWED: NO
+  FoundationReviewHostTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "18.5"
+    sources:
+      - path: ActivityPresentationTests.swift
+    dependencies:
+      - target: FoundationReviewHost
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.michaeldadi.sprout.review.foundation.tests
+        SWIFT_VERSION: 5.0
+        CODE_SIGNING_ALLOWED: NO

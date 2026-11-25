@@ -42,8 +42,7 @@ import com.michaeldadi.sprout.managers.ToastManager
 import com.michaeldadi.sprout.services.AuthService
 import com.michaeldadi.sprout.services.GoogleSignInService
 import com.michaeldadi.sprout.services.GoogleSignInResult
-import com.michaeldadi.sprout.services.AppleSignInService
-import com.michaeldadi.sprout.services.AppleSignInResult
+import com.michaeldadi.sprout.services.AppwriteNativeSession
 import com.michaeldadi.sprout.ui.components.FloatingCirclesBackground
 import com.michaeldadi.sprout.ui.components.SocialLoginButton
 import kotlinx.coroutines.launch
@@ -74,11 +73,9 @@ fun SignUpScreen(
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
     var shouldTriggerSignUp by remember { mutableStateOf(false) }
     var shouldTriggerGoogleSignUp by remember { mutableStateOf(false) }
-    var shouldTriggerAppleSignUp by remember { mutableStateOf(false) }
 
     // Track sign up success for navigation
     var signUpSuccessEmail by remember { mutableStateOf<String?>(null) }
-    var socialSignUpSuccessEmail by remember { mutableStateOf<String?>(null) }
 
     val textSignUpFailure = stringResource(R.string.sign_up_failed)
 
@@ -109,13 +106,10 @@ fun SignUpScreen(
                     val googleSignInService = GoogleSignInService(context, activity)
                     when (val result = googleSignInService.signIn()) {
                         is GoogleSignInResult.Success -> {
-                            authService.signInWithGoogle(
+                            AppwriteNativeSession.signInWithGoogle(
                                 idToken = result.idToken,
-                                email = result.email,
-                                fullName = result.displayName
+                                name = result.displayName
                             )
-                            // Trigger state-based navigation
-                            socialSignUpSuccessEmail = result.email
                         }
                         is GoogleSignInResult.Cancelled -> {
                             ToastManager.showInfo(context, "Sign up cancelled")
@@ -135,43 +129,6 @@ fun SignUpScreen(
         }
     }
 
-    val textAppleSignUpFailure = stringResource(R.string.sign_up_failed_apple)
-
-    // Handle Apple sign up attempts
-    LaunchedEffect(shouldTriggerAppleSignUp) {
-        if (shouldTriggerAppleSignUp) {
-            try {
-                val activity = context as? ComponentActivity
-                if (activity != null) {
-                    val appleSignInService = AppleSignInService(context, activity)
-                    when (val result = appleSignInService.signIn()) {
-                        is AppleSignInResult.Success -> {
-                            authService.signInWithApple(
-                                idToken = result.idToken,
-                                email = result.email,
-                                fullName = result.fullName
-                            )
-                            // Trigger state-based navigation
-                            result.email?.let { socialSignUpSuccessEmail = it }
-                        }
-                        is AppleSignInResult.Cancelled -> {
-                            ToastManager.showInfo(context, "Sign up cancelled")
-                        }
-                        is AppleSignInResult.Error -> {
-                            ToastManager.showError(context, result.message)
-                        }
-                    }
-                } else {
-                    ToastManager.showError(context, "Unable to get activity context")
-                }
-            } catch (e: Exception) {
-                ToastManager.showError(context, e.message ?: textAppleSignUpFailure)
-            } finally {
-                shouldTriggerAppleSignUp = false
-            }
-        }
-    }
-
     val textAccountCreatedNextStep = stringResource(R.string.account_created_what_next)
 
     // Auth state
@@ -183,17 +140,6 @@ fun SignUpScreen(
             ToastManager.showSuccess(context, textAccountCreatedNextStep)
             onNavigateToVerification(email)
             signUpSuccessEmail = null // Reset to prevent re-navigation
-        }
-    }
-
-    val textAccountCreatedSocialProviderNextStep = stringResource(R.string.account_created_social_provider_what_next)
-
-    // Handle navigation when social sign up is successful
-    LaunchedEffect(socialSignUpSuccessEmail) {
-        socialSignUpSuccessEmail?.let { email ->
-            ToastManager.showSuccess(context, textAccountCreatedSocialProviderNextStep)
-            onNavigateToVerification(email)
-            socialSignUpSuccessEmail = null // Reset to prevent re-navigation
         }
     }
 
@@ -258,8 +204,7 @@ fun SignUpScreen(
                 isLoading = isLoading,
                 focusManager = focusManager,
                 context = context,
-                onTriggerGoogleSignUp = { shouldTriggerGoogleSignUp = true },
-                onTriggerAppleSignUp = { shouldTriggerAppleSignUp = true }
+                onTriggerGoogleSignUp = { shouldTriggerGoogleSignUp = true }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -348,8 +293,7 @@ private fun SignUpForm(
     isLoading: Boolean,
     focusManager: androidx.compose.ui.focus.FocusManager,
     context: Context,
-    onTriggerGoogleSignUp: () -> Unit,
-    onTriggerAppleSignUp: () -> Unit
+    onTriggerGoogleSignUp: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -621,13 +565,7 @@ private fun SignUpForm(
               onClick = onTriggerGoogleSignUp
             )
 
-            SocialLoginButton(
-                text = stringResource(R.string.continue_with_apple),
-                backgroundColor = Color.Black,
-                textColor = Color.White,
-                icon = "apple",
-                onClick = onTriggerAppleSignUp
-            )
+
         }
     }
 }

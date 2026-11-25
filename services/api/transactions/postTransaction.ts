@@ -6,7 +6,7 @@ import {
   validateRequiredFields,
   generateId
 } from '../common/utils';
-import { db } from '../common/database';
+import { db, StorageUnavailableError } from '../common/database';
 import { CreateTransactionRequest, Transaction } from '../common/types';
 
 /**
@@ -25,17 +25,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log('PostTransaction handler called', {
-      body: event.body,
-      headers: event.headers
-    });
-
     // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
       return createSuccessResponse({});
     }
 
-    // Get user ID from JWT token or headers
+    // Get user ID from the authorizer's verified JWT claims.
     const userId = getUserIdFromEvent(event);
     if (!userId) {
       return createErrorResponse(
@@ -120,16 +115,15 @@ export const handler = async (
       date: requestBody.date
     };
 
-    console.log('Creating new transaction:', newTransaction);
-
     // Save to database
     const createdTransaction = await db.createTransaction(newTransaction);
-
-    console.log(`Successfully created transaction ${transactionId} for user ${userId}`);
 
     return createSuccessResponse(createdTransaction, 201);
 
   } catch (error) {
+    if (error instanceof StorageUnavailableError) {
+      return createErrorResponse('STORAGE_UNAVAILABLE', 'Transaction storage is unavailable', 503);
+    }
     console.error('Error in PostTransaction handler:', error);
 
     return createErrorResponse(

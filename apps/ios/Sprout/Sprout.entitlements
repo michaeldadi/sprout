@@ -17,6 +17,7 @@
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.com.michaeldadi.Sprout</string>
+		<string>group.com.michaeldadi.Sprout.onesignal</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>

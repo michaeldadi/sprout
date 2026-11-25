@@ -73,7 +73,10 @@ struct TestHelpers {
     
     static func generateMockUser(email: String? = nil) -> CognitoUser {
         return CognitoUser(
+            id: "mock-user",
             email: email ?? generateRandomEmail(),
+            username: "mock-user",
+            fullName: nil,
             accessToken: "mock_access_token_\(UUID().uuidString)",
             idToken: "mock_id_token_\(UUID().uuidString)",
             refreshToken: "mock_refresh_token_\(UUID().uuidString)"

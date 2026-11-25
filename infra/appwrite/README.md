@@ -1,5 +1,25 @@
 # Sprout Appwrite infrastructure
 
+## AI money autopilot staging integration — 2026-11-10
+
+The [implementation record](../../docs/ai-autopilot/implementation.md) defines the selected mobile/AI direction. Staging project `6af0f72200383d2f1084` now has 24 financial tables, a separate private privacy ledger, seven deployed Functions and private storage defined in `financial.tf`. Row security is enabled without broad table grants. Production remains unchanged and opt-out. The existing manual-transactions slice and website resources were reconciled from main `80be92c` and preserved; the new canonical tables do not silently migrate their records. The [validation record](../../docs/ai-autopilot/validation.md) summarizes deployments, native journeys, and ownership and concurrency proofs.
+
+A reviewed November 10 update added eight resources for the private `import_inputs` table, its columns and owner index, with zero existing-resource changes or deletions. Reviewed CSV batches run as durable checkpointed jobs; raw input parts have no mobile row grants, sync journals contain metadata only, and completed inputs are tombstoned without their source text.
+
+A second reviewed November 10 update added the private `receipts` table, columns and owner index (eight resources). An attempted expansion of API/worker file scopes was rejected before those grants changed. The final implementation reuses the existing server-only private-data function for receipt file IO; public callers cannot invoke it directly. The scoped post-change plan reports no drift, with no new API/worker file permissions. Receipt rows are server-only, files grant only the exact owner read access, and sync journals omit file leases and image bytes. Full-root drift after these additions remains unverified because the current organization credential cannot delegate the required read grant.
+
+The initial schema apply added 221 resources after importing the six functions, with no changes or deletions to existing resources. A complete staging Terraform refresh subsequently reported no drift across the entire root, including website settings. A later reviewed API-only change added `executions.write` to wake the dispatcher after committing jobs. The dispatcher also subscribes to the jobs row event family and runs every five minutes for recovery. Uploads use local bundles through `scripts/deploy-functions.ts`, which rejects changed backend inputs or changed bundles against an artifact manifest, records source and bundle hashes, and verifies active deployments.
+
+Function secrets must be supplied outside source control. The new backend needs the database ID, server-side independent capability flags, a versioned 32-byte base64 token-encryption key, selected Plaid environment/client/secret/webhook URL, OpenAI key/model, verified RevenueCat webhook authorization/entitlement ID, and OneSignal app/key as applicable. Secrets remain scoped to the functions that need them. The private export function also needs `SPROUT_PRIVATE_BUCKET_ID`. No mobile build receives these secrets.
+
+`financial_flags` defaults off. Staging enables `FINANCIAL_WRITES` and `FIRST_PARTY_ERASURE` after staged ownership, retry, concurrency, and erasure checks. Linking, AI, forecasts, notifications, cancellation and scan assistance remain off. Michael deferred OpenAI, Plaid, RevenueCat and OneSignal credential setup until the end. Privacy requests remain independent of the financial write gate, and submitted-action recovery must continue when new actions are disabled. Appwrite captures runtime variables in deployments: after changing variables, deploy/rebuild and verify actual executions rather than assuming warm containers picked up new values.
+
+Supply `financial_secret_values` securely, keyed by `function/ENV_NAME`, with a matching `financial_secret_versions` entry. Missing declared values fail planning instead of deleting live secrets. The internal 32-byte `api/SPROUT_SYNC_CURSOR_KEY` was generated and provisioned through Terraform's write-only value; local `tf.sh` loads the secret map from the `sprout-terraform` Keychain account, service `sprout-appwrite-staging-financial-secrets`, unless CI supplies `TF_VAR_financial_secret_values`. No external-provider credentials were configured. Keep saved plans private: sensitive input variables can be present even when values are write-only in state.
+
+Native requests execute `/v1` paths through the Functions SDK. The API verifies the Appwrite-supplied user JWT and then compares `x-sprout-account` on every request and `_account` on every POST with that identity. These markers prevent a pending request from following a shared SDK session into another account; they never authorize the caller. Bootstrap echoes `accountId`, which clients verify before saving their account/environment-partitioned cache.
+
+Bank retrieval timestamps are recorded separately from institution source timestamps. `/accounts/get` does not establish when the bank refreshed its balance. The UI labels server composition time as a **snapshot**, discloses unavailable bank timestamps, and does not enable forecasts from that retrieval time.
+
 One Terraform root manages any Sprout Appwrite environment. The selected
 `environments/<name>.tfvars` file supplies project and resource IDs; the
 Terraform workspace with the same name holds that environment's state. The
@@ -8,7 +28,7 @@ adding one data file, without copying resource code.
 
 The current files record the **existing** production and staging Appwrite Cloud
 projects as read on 2026-11-09. The `import` blocks adopt those resource IDs
-into state. They do not authorize replacement or creation. Both projects have
+into state. They do not authorize replacement or creation. At the initial inventory both projects had
 an empty TablesDB database, a document bucket, and a landing site. Production
 also has five existing template functions and one Terraform project API key.
 Function and site deployments generated by Appwrite from Git are runtime
@@ -46,6 +66,11 @@ The provider's write-only `value_wo` field keeps the value out of state.
 Several other template function variables are currently blank in Appwrite;
 their blank configuration is recorded literally.
 
+The legacy Speech recognition function has no active deployment. Its Git build
+expects a setup script and entrypoint that are absent from the repository.
+Deploy on push is disabled for this function. The Git connection remains
+available for a manual build after valid function source is restored.
+
 Mobile builds select their Appwrite project independently of Terraform state.
 Set `SPROUT_APPWRITE_ENDPOINT` and `SPROUT_APPWRITE_PROJECT_ID` for the selected
 environment. Android reads these public identifiers and
@@ -76,7 +101,7 @@ client ID as its Appwrite audience. Verify that web client in Google Cloud
 and configure the same server client ID in the iOS build before activating
 Google sign-in.
 
-The Clear sky implementation now lives in `apps/web`; the website settings below supersede the original landing-site build configuration.
+The Clear sky website lives in `apps/web`. See the website configuration below.
 No site or function deployment is imported or activated by this configuration.
 
 On 2026-11-09, the staging Terraform project key was bootstrapped in Appwrite.
@@ -113,13 +138,13 @@ bridge reports `Missing Authority Key Identifier` under the machine's managed
 CA bundle, use `/usr/bin/python3` for the bridge after verifying its TLS
 connection. Do not disable certificate verification.
 
-## Proposed first financial schema (approval gate)
+## Historical first financial schema proposal (superseded)
 
-The current TablesDB databases are empty. The iOS SwiftData and Android Room
+At the initial inventory the TablesDB databases were empty. The iOS SwiftData and Android Room
 transaction models store amounts as `Double`, while the legacy API's storage
 implementation fails closed. Creating an Appwrite table before choosing a
 canonical money representation and ownership rule would make the two clients'
-sync behavior ambiguous. No financial table or row has been created.
+sync behavior ambiguous. The proposal below preceded the subsequently deployed manual slice and financial backend.
 
 The first proposed slice is **manual transactions only**, starting in staging.
 Define one `transactions` table through Terraform in the selected environment:
@@ -146,6 +171,24 @@ and [Appwrite permissions](https://appwrite.io/docs/advanced/security/permission
 
 Reference: [Appwrite Terraform provider](https://appwrite.io/docs/tooling/terraform),
 [provider schema](https://registry.terraform.io/providers/appwrite/appwrite/latest/docs).
+
+### Privacy and backup validation (2026-11-09)
+
+`privacy.tf` keeps a private restoration ledger in a separate database. Erasure reserves a disabled, anonymized Auth ID to prevent old restored row ACLs from being inherited by a new account with the same ID. The new `sprout-privacy-status` function has only `rows.read`; its public receipt lookup returns no identity or financial facts. Staging first-party erasure was enabled after a synthetic destructive proof and isolated financial restore/filter proof. External-provider cleanup remains a separate gate.
+
+The existing staging policy `6af0f7c8001088fffb12` already runs at `0 2 * * *` UTC with seven-day retention for the primary database. It was imported into Terraform without changes; no plan upgrade or second policy was created. The manual recovery archive and quarantined restoration are test artifacts, separate from scheduled retention.
+
+
+Native account-security updates use a short-lived user JWT with an isolated cookie-free HTTP connection, verified against the expected account before the update. They call Appwrite Auth directly and never pass passwords through financial functions or jobs. Android revision hints use a bounded websocket adapter for the pinned Realtime protocol because SDK 25.2.0 throws error frames from an independent coroutine; auth errors now close the hint stream and leave cursor sync authoritative. Both native credential/isolation journeys and the Android live hint regression passed staging validation. See [JWT authorization](https://appwrite.io/docs/products/auth/jwt) and the [pinned SDK protocol](https://github.com/appwrite/sdk-for-android/blob/25.2.0/library/src/main/java/io/appwrite/services/Realtime.kt).
+
+
+### Compatible API rollback drill
+
+`scripts/validate-live-rollback.ts` is restricted to staging, the protected report directory and synthetic identities. Supply the metadata credential through `APPWRITE_API_KEY`, the recorded target deployment ID through `SPROUT_ROLLBACK_TARGET`, and its reviewed JavaScript checksum through `SPROUT_ROLLBACK_TARGET_SHA256`. It verifies the source archive before activation, writes a preview with expected current/target IDs and hashes, checks active deployment again at action time, validates isolated financial reads during rollback, restores the original deployment in `finally`, and verifies both accounts afterward. Keep other deployers quiescent; the activation API does not provide compare-and-swap. Do not use this as a schema or worker rollback procedure. The November 10 staging drill passed with no financial writes.
+
+### Storage recovery boundary
+
+A JPEG-only synthetic backup/restoration passed exact-byte readback in a disabled isolated bucket with no public read grants. Storage restoration ignored the requested destination ID and generated another bucket: discover and verify its actual ID before promotion or cleanup. Both test buckets and manual archives were removed with 404 readback; existing policies were preserved. A separate mixed JSON/JPEG archive failed in Appwrite migration (`File::setData` received an array for JSON content). Full mixed-storage recovery is unresolved; do not represent the financial database restore or JPEG proof as full attachment/export recovery.
 
 ## Clear sky website
 
