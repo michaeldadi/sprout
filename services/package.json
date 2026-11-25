@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run && tsx --test api/chat/getStreamToken.test.ts",
     "build": "tsc -p tsconfig.ai.json",
     "check:tools": "tsc -p ../scripts/tsconfig.json",
     "test:ai": "vitest run",

@@ -8,7 +8,7 @@
       buildArchitectures = "Automatic">
       <PostActions>
          <ExecutionAction ActionType="Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent title="Embed Swift compatibility runtime" scriptText="bash &quot;$SRCROOT/scripts/embed-swift-compatibility.sh&quot;&#10;">
+            <ActionContent title="Embed Swift compatibility runtime" scriptText="bash &quot;$SRCROOT/Scripts/embed-swift-compatibility.sh&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="141705CF2E505701004229DD" BuildableName="Sprout.app" BlueprintName="Sprout" ReferencedContainer="container:Sprout.xcodeproj" />
                </EnvironmentBuildable>
