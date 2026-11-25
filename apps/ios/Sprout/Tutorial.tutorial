@@ -1,0 +1,95 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Welcome to Sprout") {
+        Sprout is your personal finance companion that helps you track expenses, manage budgets, and achieve your financial goals. Get started with these essential features to take control of your money.
+
+        @Image(source: app-icon, alt: "Sprout app icon showing a growing plant")
+    }
+
+    @Section(title: "Track Your Expenses") {
+        @ContentAndMedia {
+            The foundation of good budgeting is knowing where your money goes. Sprout makes it easy to log expenses quickly and categorize them automatically.
+
+            @Image(source: expense-tracking, alt: "Expense entry screen with amount and category selection")
+        }
+
+        @Steps {
+            @Step {
+                Tap the "+" button on the home screen to add a new expense. Enter the amount you spent and select a category like Food, Transportation, or Shopping.
+
+                @Image(source: add-expense, alt: "Add expense button highlighted on home screen")
+            }
+
+            @Step {
+                Use Siri to add expenses hands-free by saying "Hey Siri, add expense" and follow the prompts. Perfect for when you're on the go.
+
+                @Image(source: siri-integration, alt: "Siri interface showing expense addition")
+            }
+        }
+    }
+
+    @Section(title: "Monitor Your Budgets") {
+        @ContentAndMedia {
+            Set spending limits for different categories and track your progress in real-time. Sprout will alert you when you're approaching your limits.
+
+            @Image(source: budget-overview, alt: "Budget dashboard showing spending categories and progress bars")
+        }
+
+        @Steps {
+            @Step {
+                Go to the Budgets tab and tap "Create Budget" to set monthly spending limits for categories that matter to you.
+
+                @Image(source: create-budget, alt: "Budget creation screen with category and amount fields")
+            }
+
+            @Step {
+                Watch your progress with visual indicators. Green means you're on track, yellow means you're approaching your limit, and red means you've exceeded it.
+
+                @Image(source: budget-progress, alt: "Budget progress indicators showing different colored status bars")
+            }
+        }
+    }
+
+    @Section(title: "Set Financial Goals") {
+        @ContentAndMedia {
+            Whether you're saving for a vacation, building an emergency fund, or paying off debt, Sprout helps you stay motivated and on track.
+
+            @Image(source: financial-goals, alt: "Goals screen showing savings targets and progress")
+        }
+
+        @Steps {
+            @Step {
+                Create a new goal by tapping "Add Goal" and specify your target amount and deadline. Sprout will calculate how much you need to save each month.
+
+                @Image(source: add-goal, alt: "Goal creation form with target amount and date picker")
+            }
+
+            @Step {
+                Check your progress regularly and celebrate milestones. The app will send encouraging notifications to keep you motivated.
+
+                @Image(source: goal-progress, alt: "Goal progress screen showing completion percentage and timeline")
+            }
+        }
+    }
+
+    @Section(title: "Analyze Your Spending") {
+        @ContentAndMedia {
+            Understand your spending patterns with detailed reports and insights. See where you can cut back and optimize your budget.
+
+            @Image(source: spending-analysis, alt: "Charts and graphs showing spending trends over time")
+        }
+
+        @Steps {
+            @Step {
+                Visit the Insights tab to see monthly spending trends, category breakdowns, and comparison to previous months.
+
+                @Image(source: insights-tab, alt: "Insights screen with pie charts and trend lines")
+            }
+
+            @Step {
+                Use the search feature to find specific transactions by merchant, amount, or date. Perfect for tracking down that expense you can't remember.
+
+                @Image(source: search-transactions, alt: "Search interface with filters and transaction results")
+            }
+        }
+    }
+}

@@ -1,6 +1,10 @@
 # Snapshot of existing Appwrite Cloud configuration, read 2026-11-09.
 # No credentials belong in this file.
 environment                 = "staging"
+enable_financial_backend    = true
+enable_financial_backups    = true
+financial_secret_versions   = { "api/SPROUT_SYNC_CURSOR_KEY" = 1 }
+financial_flags             = { FINANCIAL_WRITES = true, FIRST_PARTY_ERASURE = true }
 manual_transactions_enabled = true
 endpoint                    = "https://nyc.cloud.appwrite.io/v1"
 organization_id             = "6af0e4a5003dead0e791"
@@ -128,3 +132,12 @@ project_keys = {
 # Confirmed by Michael, 2026-11-09.
 marketing_site_origin    = "https://staging-getsprout.appwrite.network"
 marketing_site_indexable = false
+
+# Existing daily backup reused; the project permits one policy for this DB.
+financial_backup_policy = {
+  id        = "6af0f7c8001088fffb12"
+  name      = "Daily backup"
+  services  = ["databases"]
+  retention = 7
+  schedule  = "0 2 * * *"
+}

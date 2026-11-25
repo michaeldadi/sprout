@@ -2,19 +2,20 @@ package com.michaeldadi.sprout
 
 import android.app.Application
 import android.util.Log
-import com.appsflyer.AppsFlyerLib
-import com.facebook.FacebookSdk
-import com.facebook.appevents.AppEventsLogger
-import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.michaeldadi.sprout.services.AppwriteConnection
 import zendesk.android.Zendesk
 import zendesk.messaging.android.DefaultMessagingFactory
 
 class SproutApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        AppwriteConnection.initialize(this)
+        runCatching { com.michaeldadi.sprout.money.MoneyReceiptOcr.pruneAbandoned(this) }
+        com.michaeldadi.sprout.money.MoneyDeletionState.initialize(this)
 
         // Initialize Zendesk SDK
         if (BuildConfig.ZENDESK_CHANNEL_KEY.isNotEmpty()) {
@@ -34,35 +35,8 @@ class SproutApplication : Application() {
         }
 
         // Initialize other SDKs that are already in use
-        initializeMixpanel()
-        initializeAppsFlyer()
-        initializeFacebook()
+        com.michaeldadi.sprout.money.MoneyAnalytics.configure(this)
         initializeRevenueCat()
-    }
-
-    private fun initializeMixpanel() {
-        if (BuildConfig.MIXPANEL_TOKEN.isNotEmpty()) {
-            MixpanelAPI.getInstance(this, BuildConfig.MIXPANEL_TOKEN, true)
-            Log.i("SproutApplication", "MixPanel initialized")
-        } else {
-            Log.w("SproutApplication", "MixPanel token not configured")
-        }
-    }
-
-    private fun initializeAppsFlyer() {
-        if (BuildConfig.APPSFLYER_DEV_KEY.isNotEmpty()) {
-            AppsFlyerLib.getInstance().init(BuildConfig.APPSFLYER_DEV_KEY, null, this)
-            AppsFlyerLib.getInstance().start(this)
-            Log.i("SproutApplication", "AppsFlyer initialized")
-        } else {
-            Log.w("SproutApplication", "AppsFlyer dev key not configured")
-        }
-    }
-
-    private fun initializeFacebook() {
-        // Facebook SDK is auto-initialized via manifest metadata
-        FacebookSdk.setAutoInitEnabled(true)
-        AppEventsLogger.activateApp(this)
     }
 
     private fun initializeRevenueCat() {

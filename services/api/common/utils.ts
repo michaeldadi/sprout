@@ -40,15 +40,11 @@ export function createErrorResponse(
 }
 
 export function getUserIdFromEvent(event: any): string | null {
-  // Extract user ID from JWT claims or API Gateway authorizer context
-  const claims = event.requestContext?.authorizer?.claims;
-  if (claims?.sub) {
-    return claims.sub;
-  }
-
-  // Fallback for local development or different auth setup
-  const userId = event.headers?.['x-user-id'] || event.headers?.['X-User-Id'];
-  return userId || null;
+  // HTTP API JWT authorizers use `jwt.claims`; REST API authorizers use `claims`.
+  // Never accept an identity supplied in request headers.
+  const authorizer = event.requestContext?.authorizer;
+  const sub = authorizer?.jwt?.claims?.sub ?? authorizer?.claims?.sub;
+  return typeof sub === 'string' && sub.length > 0 ? sub : null;
 }
 
 export function validateRequiredFields(body: any, fields: string[]): string | null {

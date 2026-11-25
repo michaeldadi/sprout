@@ -5,7 +5,7 @@ import {
   getUserIdFromEvent,
   isValidUUID
 } from '../common/utils';
-import { db } from '../common/database';
+import { db, StorageUnavailableError } from '../common/database';
 
 /**
  * DELETE /transactions/{id}
@@ -18,17 +18,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log('DeleteTransaction handler called', {
-      pathParameters: event.pathParameters,
-      headers: event.headers
-    });
-
     // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
       return createSuccessResponse({});
     }
 
-    // Get user ID from JWT token or headers
+    // Get user ID from the authorizer's verified JWT claims.
     const userId = getUserIdFromEvent(event);
     if (!userId) {
       return createErrorResponse(
@@ -57,8 +52,6 @@ export const handler = async (
       );
     }
 
-    console.log(`Deleting transaction ${transactionId} for user ${userId}`);
-
     // Check if transaction exists and belongs to user
     const existingTransaction = await db.getTransactionById(transactionId, userId);
     if (!existingTransaction) {
@@ -80,8 +73,6 @@ export const handler = async (
       );
     }
 
-    console.log(`Successfully deleted transaction ${transactionId} for user ${userId}`);
-
     // Return 204 No Content for successful deletion
     return {
       statusCode: 204,
@@ -95,6 +86,9 @@ export const handler = async (
     };
 
   } catch (error) {
+    if (error instanceof StorageUnavailableError) {
+      return createErrorResponse('STORAGE_UNAVAILABLE', 'Transaction storage is unavailable', 503);
+    }
     console.error('Error in DeleteTransaction handler:', error);
 
     return createErrorResponse(

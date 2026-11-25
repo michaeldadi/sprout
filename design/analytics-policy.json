@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "destination": "mixpanel",
+  "events": {
+    "sign_up_started": {},
+    "sign_up_completed": {
+      "method": ["email", "apple", "google"]
+    },
+    "login_completed": {
+      "method": ["email", "apple", "google"]
+    },
+    "onboarding_completed": {},
+    "onboarding_skipped": {},
+    "budget_created": {},
+    "budget_updated": {},
+    "transaction_added": {
+      "source": ["manual", "voice", "scan", "shortcut", "import"],
+      "type": ["expense", "income", "transfer"]
+    },
+    "transaction_deleted": {},
+    "account_linked": {},
+    "screen_view": {
+      "screen_name": [
+        "welcome",
+        "connect-bank",
+        "subscriptions-found",
+        "your-plan",
+        "home",
+        "budget",
+        "activity",
+        "subscriptions",
+        "subscription-detail",
+        "insights",
+        "profile",
+        "add-expense",
+        "security",
+        "export",
+        "delete"
+      ]
+    },
+    "notification_permission_granted": {},
+    "notification_permission_denied": {},
+    "expense_reviewed": {
+      "source": ["manual", "voice", "scan", "shortcut", "import"]
+    },
+    "sync_outcome": {
+      "result": ["acknowledged", "conflict", "offline", "failed"]
+    },
+    "subscription_started": {
+      "plan": ["monthly", "annual"]
+    },
+    "subscription_cancelled": {},
+    "session_start": {},
+    "session_end": {}
+  }
+}

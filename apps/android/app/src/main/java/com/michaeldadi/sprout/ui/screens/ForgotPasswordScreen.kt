@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -52,6 +53,9 @@ fun ForgotPasswordScreen(
     var shouldShowResendMessage by remember { mutableStateOf(false) }
     var shouldTriggerForgotPassword by remember { mutableStateOf(false) }
     var shouldTriggerResend by remember { mutableStateOf(false) }
+    var resetCode by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var shouldTriggerConfirm by remember { mutableStateOf(false) }
 
     val failedSendResetEmailMessage = stringResource(R.string.failed_send_reset_email)
     val successSendResetEmailMessage = stringResource(R.string.success_send_reset_email)
@@ -83,6 +87,21 @@ fun ForgotPasswordScreen(
                 ToastManager.showError(context, e.message ?: failedSendResetEmailMessage)
             } finally {
                 shouldTriggerResend = false
+            }
+        }
+    }
+
+    LaunchedEffect(shouldTriggerConfirm) {
+        if (shouldTriggerConfirm) {
+            try {
+                authService.confirmForgotPassword(email.trim(), resetCode.trim(), newPassword)
+                newPassword = ""
+                ToastManager.showSuccess(context, context.getString(R.string.password_reset_complete))
+                onBackPressed()
+            } catch (e: Exception) {
+                ToastManager.showError(context, e.message ?: failedSendResetEmailMessage)
+            } finally {
+                shouldTriggerConfirm = false
             }
         }
     }
@@ -187,16 +206,29 @@ fun ForgotPasswordScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            if (!isSubmitted) Spacer(modifier = Modifier.weight(1f))
 
             if (isSubmitted) {
-                // Success State
                 SuccessState(
                     email = email,
+                    resetCode = resetCode,
+                    onResetCodeChange = { resetCode = it },
+                    newPassword = newPassword,
+                    onNewPasswordChange = { newPassword = it },
+                    onConfirmReset = {
+                        if (newPassword.length < 8) {
+                            ToastManager.showError(context, context.getString(R.string.password_minimum_length))
+                        } else {
+                            focusManager.clearFocus()
+                            shouldTriggerConfirm = true
+                        }
+                    },
                     onResendEmail = {
                         shouldTriggerResend = true
                     },
-                    animatedScale = animatedScale
+                    isLoading = isLoading,
+                    animatedScale = animatedScale,
+                    modifier = Modifier.weight(1f)
                 )
             } else {
                 val enterEmailText = stringResource(R.string.enter_email_address)
@@ -225,7 +257,7 @@ fun ForgotPasswordScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            if (!isSubmitted) Spacer(modifier = Modifier.weight(1f))
 
             // Back to Login Link
             Row(
@@ -415,10 +447,18 @@ private fun InputState(
 @Composable
 private fun SuccessState(
     email: String,
+    resetCode: String,
+    onResetCodeChange: (String) -> Unit,
+    newPassword: String,
+    onNewPasswordChange: (String) -> Unit,
+    onConfirmReset: () -> Unit,
     onResendEmail: () -> Unit,
-    animatedScale: Float
+    isLoading: Boolean,
+    animatedScale: Float,
+    modifier: Modifier = Modifier
 ) {
     Column(
+        modifier = modifier.verticalScroll(rememberScrollState()).padding(vertical = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ) {
@@ -454,7 +494,7 @@ private fun SuccessState(
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Text(
-                text = stringResource(R.string.check_your_email),
+                text = stringResource(R.string.reset_your_password),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -462,7 +502,7 @@ private fun SuccessState(
             )
 
             Text(
-                text = stringResource(R.string.password_reset_instructions_sent_to),
+                text = stringResource(R.string.enter_reset_code_sent_to),
                 fontSize = 16.sp,
                 color = Color.White.copy(alpha = 0.8f),
                 textAlign = TextAlign.Center
@@ -479,6 +519,37 @@ private fun SuccessState(
         }
 
         Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            OutlinedTextField(
+                value = resetCode,
+                onValueChange = onResetCodeChange,
+                label = { Text(stringResource(R.string.verification_code)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = newPassword,
+                onValueChange = onNewPasswordChange,
+                label = { Text(stringResource(R.string.new_password)) },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Button(
+                onClick = onConfirmReset,
+                enabled = !isLoading && resetCode.isNotBlank() && newPassword.isNotBlank(),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isLoading) CircularProgressIndicator(modifier = Modifier.size(18.dp))
+                else Text(stringResource(R.string.reset_password))
+            }
+        }
+
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.padding(top = 10.dp)
@@ -491,7 +562,7 @@ private fun SuccessState(
                 modifier = Modifier.padding(horizontal = 30.dp)
             )
 
-            TextButton(onClick = onResendEmail) {
+            TextButton(onClick = onResendEmail, enabled = !isLoading) {
                 Text(
                     text = stringResource(R.string.resend_email),
                     fontSize = 16.sp,

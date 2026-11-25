@@ -116,7 +116,6 @@ class AndroidSpeechService(private val context: Context) {
                 if (!matches.isNullOrEmpty()) {
                     transcript = matches[0]
                     onTranscriptChanged?.invoke(transcript)
-                    Log.d(TAG, "Transcript: $transcript")
                 }
                 isListening = false
                 onListeningStateChanged?.invoke(false)
@@ -160,12 +159,7 @@ class AndroidSpeechService(private val context: Context) {
     fun parseExpenseFromText(text: String): ExpenseData {
         val lowercased = text.lowercase()
 
-        // Extract amount using regex
-        val amountPattern = Pattern.compile("\\$?([0-9]+\\.?[0-9]*)")
-        val amountMatcher = amountPattern.matcher(text)
-        val amount = if (amountMatcher.find()) {
-            amountMatcher.group(1) ?: ""
-        } else ""
+        val amount = com.michaeldadi.sprout.money.ExpenseDraft.explicitAmounts(text).singleOrNull() ?: ""
 
         // Extract merchant (common patterns)
         var merchant = ""

@@ -5,7 +5,7 @@ import {
   getUserIdFromEvent,
   isValidUUID
 } from '../common/utils';
-import { db } from '../common/database';
+import { db, StorageUnavailableError } from '../common/database';
 import { UpdateTransactionRequest } from '../common/types';
 
 /**
@@ -27,18 +27,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log('PatchTransaction handler called', {
-      pathParameters: event.pathParameters,
-      body: event.body,
-      headers: event.headers
-    });
-
     // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
       return createSuccessResponse({});
     }
 
-    // Get user ID from JWT token or headers
+    // Get user ID from the authorizer's verified JWT claims.
     const userId = getUserIdFromEvent(event);
     if (!userId) {
       return createErrorResponse(
@@ -134,8 +128,6 @@ export const handler = async (
       updates.description = updates.description.trim();
     }
 
-    console.log(`Updating transaction ${transactionId} for user ${userId}:`, updates);
-
     // Check if transaction exists and belongs to user
     const existingTransaction = await db.getTransactionById(transactionId, userId);
     if (!existingTransaction) {
@@ -157,11 +149,12 @@ export const handler = async (
       );
     }
 
-    console.log(`Successfully updated transaction ${transactionId} for user ${userId}`);
-
     return createSuccessResponse(updatedTransaction);
 
   } catch (error) {
+    if (error instanceof StorageUnavailableError) {
+      return createErrorResponse('STORAGE_UNAVAILABLE', 'Transaction storage is unavailable', 503);
+    }
     console.error('Error in PatchTransaction handler:', error);
 
     return createErrorResponse(

@@ -34,15 +34,12 @@
 		141B37EF2E5566DB00121BAF /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37EE2E5566DB00121BAF /* AWSS3 */; };
 		141B37F12E5566DB00121BAF /* AWSS3Control in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F02E5566DB00121BAF /* AWSS3Control */; };
 		141B37F32E5566DB00121BAF /* AWSSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F22E5566DB00121BAF /* AWSSDKCommon */; };
-		141B37F62E5567ED00121BAF /* ZendeskSupportSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 141B37F52E5567ED00121BAF /* ZendeskSupportSDK */; };
 		141B37F92E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		141B37FA2E556B9A00121BAF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		1463CDA02E569EE3007476A0 /* FacebookAEM in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CD9F2E569EE3007476A0 /* FacebookAEM */; };
 		1463CDA22E569EE3007476A0 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA12E569EE3007476A0 /* FacebookCore */; };
 		1463CDA42E569EE3007476A0 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA32E569EE3007476A0 /* FacebookLogin */; };
 		1463CDA62E569EE3007476A0 /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 1463CDA52E569EE3007476A0 /* FacebookShare */; };
-		1466566E2E56DC4100016C94 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 146656672E56DC4000016C94 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		146656762E56DC8400016C94 /* BrazeNotificationService in Frameworks */ = {isa = PBXBuildFile; productRef = 146656752E56DC8400016C94 /* BrazeNotificationService */; };
 		1466567E2E56E33900016C94 /* BrazeLocation in Frameworks */ = {isa = PBXBuildFile; productRef = 1466567D2E56E33900016C94 /* BrazeLocation */; };
 		146656802E56FAAC00016C94 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1466567F2E56FAAC00016C94 /* WidgetKit.framework */; };
 		1466568D2E57044200016C94 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 1466568C2E57044200016C94 /* SDWebImage */; };
@@ -52,11 +49,6 @@
 		14B44E5F2E5527260071757B /* AppsFlyerLib-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E5E2E5527260071757B /* AppsFlyerLib-Dynamic */; };
 		14B44E622E5527C60071757B /* Mixpanel in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E612E5527C60071757B /* Mixpanel */; };
 		14B44E652E5528110071757B /* LinkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E642E5528110071757B /* LinkKit */; };
-		14B44E682E55289A0071757B /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E672E55289A0071757B /* RevenueCat */; };
-		14B44E6A2E55289A0071757B /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E692E55289A0071757B /* RevenueCatUI */; };
-		14B44E6C2E552A170071757B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14B44E6B2E552A160071757B /* GoogleService-Info.plist */; };
-		14B44E6D2E552A170071757B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14B44E6B2E552A160071757B /* GoogleService-Info.plist */; };
-		14B44E6E2E552A170071757B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14B44E6B2E552A160071757B /* GoogleService-Info.plist */; };
 		14B44E712E552ABD0071757B /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E702E552ABD0071757B /* FirebaseAI */; };
 		14B44E732E552ABD0071757B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E722E552ABD0071757B /* FirebaseAnalytics */; };
 		14B44E752E552ABD0071757B /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E742E552ABD0071757B /* FirebaseAppCheck */; };
@@ -66,6 +58,18 @@
 		14B44E7D2E552ABD0071757B /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E7C2E552ABD0071757B /* FirebaseRemoteConfig */; };
 		14B44E9A2E555B020071757B /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E992E555B020071757B /* GoogleSignIn */; };
 		14B44E9C2E555B020071757B /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B44E9B2E555B020071757B /* GoogleSignInSwift */; };
+		14E3CDDA2E57B4C100089834 /* StreamChatSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDD92E57B4C100089834 /* StreamChatSwiftUI */; };
+		14E3CDDD2E57BB7800089834 /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDDC2E57BB7800089834 /* OneSignalExtension */; };
+		14E3CDDF2E57BB7800089834 /* OneSignalFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDDE2E57BB7800089834 /* OneSignalFramework */; };
+		14E3CDE12E57BB7800089834 /* OneSignalInAppMessages in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDE02E57BB7800089834 /* OneSignalInAppMessages */; };
+		14E3CDE32E57BB7800089834 /* OneSignalLocation in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDE22E57BB7800089834 /* OneSignalLocation */; };
+		14E3CDEF2E57BBE700089834 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14E3CDE82E57BBE700089834 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		14E3CDF72E57BC6800089834 /* OneSignalExtension in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CDF62E57BC6800089834 /* OneSignalExtension */; };
+		14E3CE7C2E59479000089834 /* SproutAppIntents.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = 14E3CE732E59479000089834 /* SproutAppIntents.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		14E3CEC12E596F4F00089834 /* StreamChatSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CEC02E596F4F00089834 /* StreamChatSwiftUI */; };
+		14E3CEE62E59F07B00089834 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CEE52E59F07B00089834 /* FirebaseAnalyticsCore */; };
+		14E3CEE82E59F07B00089834 /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 14E3CEE72E59F07B00089834 /* FirebaseAnalyticsIdentitySupport */; };
+		3F1DD77552CE4C87BA3C92E0 /* Appwrite in Frameworks */ = {isa = PBXBuildFile; productRef = 09F92476758E4890B666FE22 /* Appwrite */; };
 		4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 1AA7ECB4D81B4D319058FEAA /* Sentry */; };
 /* End PBXBuildFile section */
 
@@ -84,12 +88,19 @@
 			remoteGlobalIDString = 141705CF2E505701004229DD;
 			remoteInfo = Sprout;
 		};
-		1466566C2E56DC4100016C94 /* PBXContainerItemProxy */ = {
+		14E3CDED2E57BBE700089834 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 141705C82E505701004229DD /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 146656662E56DC4000016C94;
-			remoteInfo = NotificationService;
+			remoteGlobalIDString = 14E3CDE72E57BBE700089834;
+			remoteInfo = OneSignalNotificationServiceExtension;
+		};
+		14E3CE7A2E59479000089834 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 141705C82E505701004229DD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 14E3CE722E59479000089834;
+			remoteInfo = SproutAppIntents;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -100,9 +111,20 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				1466566E2E56DC4100016C94 /* NotificationService.appex in Embed Foundation Extensions */,
+				14E3CDEF2E57BBE700089834 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14E3CE822E59479000089834 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				14E3CE7C2E59479000089834 /* SproutAppIntents.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -128,40 +150,104 @@
 		1417061C2E525FD3004229DD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		1417061E2E525FDC004229DD /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		1417061F2E525FDC004229DD /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
-		146656672E56DC4000016C94 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1466567F2E56FAAC00016C94 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
-		14B44E6B2E552A160071757B /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		14B44E842E552DCD0071757B /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		14B44E852E552DD40071757B /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
 		14B44E862E552DFC0071757B /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		14E3CDE82E57BBE700089834 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		14E3CE732E59479000089834 /* SproutAppIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = SproutAppIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		146656732E56DC4100016C94 /* Exceptions for "NotificationService" folder in "NotificationService" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 146656662E56DC4000016C94 /* NotificationService */;
-		};
 		14B44E962E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				LaunchScreen.storyboard,
+				Resources/LaunchScreen.storyboard,
 			);
 			target = 141705DE2E505702004229DD /* SproutTests */;
 		};
 		14B44E972E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				LaunchScreen.storyboard,
+				Resources/LaunchScreen.storyboard,
 			);
 			target = 141705E82E505702004229DD /* SproutUITests */;
 		};
 		14C0F37A2E551EAB003DDEA0 /* Exceptions for "Sprout" folder in "Sprout" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Assets.xcassets,
+				Constants/AppConfig.swift,
+				ContentView.swift,
+				Data/DataContainer.swift,
+				Data/Models/NetworkModels.swift,
+				Data/Models/Transaction.swift,
+				Extensions/AppDelegateInAppMessageUIExt.swift,
+				Extensions/AppleSignInCoordinatorExtension.swift,
+				Extensions/NotificationExtensions.swift,
+				Extensions/ViewExtension.swift,
 				Info.plist,
+				Item.swift,
+				LaunchScreen.storyboard,
+				Localization/Localizable.strings,
+				Resources/Info.plist,
+				Services/SiriIntentHandler.swift,
+				SproutApp.swift,
+				Tutorial.tutorial,
+				Views/BannerViewController.swift,
+				Views/FeedViewModel.swift,
+				Views/FloatingCirclesView.swift,
+				Views/ForgotPasswordView.swift,
+				Views/LiquidGlassTabBar.swift,
+				Views/LoginView.swift,
+				Views/SDWebImageGIFViewProvider.swift,
+				Views/SignUpView.swift,
+				Views/VerificationView.swift,
+
+			);
+			target = 141705CF2E505701004229DD /* Sprout */;
+		};
+		14E3CDF42E57BBE700089834 /* Exceptions for "OneSignalNotificationServiceExtension" folder in "OneSignalNotificationServiceExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 14E3CDE72E57BBE700089834 /* OneSignalNotificationServiceExtension */;
+		};
+		14E3CE3A2E59213300089834 /* Exceptions for "Sprout" folder in "OneSignalNotificationServiceExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Config/AppConfiguration.swift,
+				Core/Services/Shared/KeychainService.swift,
+				Core/Services/Shared/UserDefaultsService.swift,
+			);
+			target = 14E3CDE72E57BBE700089834 /* OneSignalNotificationServiceExtension */;
+		};
+		14E3CE812E59479000089834 /* Exceptions for "SproutAppIntents" folder in "SproutAppIntents" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 14E3CE722E59479000089834 /* SproutAppIntents */;
+		};
+		14E3CE8C2E594A0B00089834 /* Exceptions for "Sprout" folder in "SproutAppIntents" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Data/Models/Shared/Currency.swift,
+				Core/Data/Models/Shared/ExpenseCategory.swift,
+				Core/Data/Models/Shared/Transaction.swift,
+				Core/Extensions/Shared/DateExtensions.swift,
+				Core/Extensions/Shared/IntentExtensions.swift,
+				Core/Services/Shared/KeychainService.swift,
+				Core/Services/Shared/ExpenseShortcutInput.swift,
+				Core/Services/Shared/UserDefaultsService.swift,
+			);
+			target = 14E3CE722E59479000089834 /* SproutAppIntents */;
+		};
+		C0D3A11E0000000000000001 /* Expense intent in containing app */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Intents/AddExpenseIntent.swift,
 			);
 			target = 141705CF2E505701004229DD /* Sprout */;
 		};
@@ -178,22 +264,33 @@
 			path = SproutUITests;
 			sourceTree = "<group>";
 		};
-		146656682E56DC4100016C94 /* NotificationService */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				146656732E56DC4100016C94 /* Exceptions for "NotificationService" folder in "NotificationService" target */,
-			);
-			path = NotificationService;
-			sourceTree = "<group>";
-		};
 		14C0F3722E551EAB003DDEA0 /* Sprout */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				14C0F37A2E551EAB003DDEA0 /* Exceptions for "Sprout" folder in "Sprout" target */,
 				14B44E962E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutTests" target */,
 				14B44E972E553CEF0071757B /* Exceptions for "Sprout" folder in "SproutUITests" target */,
+				14E3CE3A2E59213300089834 /* Exceptions for "Sprout" folder in "OneSignalNotificationServiceExtension" target */,
+				14E3CE8C2E594A0B00089834 /* Exceptions for "Sprout" folder in "SproutAppIntents" target */,
 			);
 			path = Sprout;
+			sourceTree = "<group>";
+		};
+		14E3CDE92E57BBE700089834 /* OneSignalNotificationServiceExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				14E3CDF42E57BBE700089834 /* Exceptions for "OneSignalNotificationServiceExtension" folder in "OneSignalNotificationServiceExtension" target */,
+			);
+			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		14E3CE742E59479000089834 /* SproutAppIntents */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				14E3CE812E59479000089834 /* Exceptions for "SproutAppIntents" folder in "SproutAppIntents" target */,
+				C0D3A11E0000000000000001 /* Expense intent in containing app */,
+			);
+			path = SproutAppIntents;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -210,27 +307,32 @@
 				1417060F2E525F7E004229DD /* AuthenticationServices.framework in Frameworks */,
 				1463CDA02E569EE3007476A0 /* FacebookAEM in Frameworks */,
 				14B44E9A2E555B020071757B /* GoogleSignIn in Frameworks */,
+				14E3CDE32E57BB7800089834 /* OneSignalLocation in Frameworks */,
 				1417061D2E525FD3004229DD /* AVFoundation.framework in Frameworks */,
 				14B44E652E5528110071757B /* LinkKit in Frameworks */,
+				14E3CDDF2E57BB7800089834 /* OneSignalFramework in Frameworks */,
 				1463CDA62E569EE3007476A0 /* FacebookShare in Frameworks */,
 				141B37E12E5566DB00121BAF /* AWSAPIGateway in Frameworks */,
 				14B44E752E552ABD0071757B /* FirebaseAppCheck in Frameworks */,
 				141B37F12E5566DB00121BAF /* AWSS3Control in Frameworks */,
 				141B37F32E5566DB00121BAF /* AWSSDKCommon in Frameworks */,
 				141706012E525C1B004229DD /* StoreKit.framework in Frameworks */,
+				14E3CEE62E59F07B00089834 /* FirebaseAnalyticsCore in Frameworks */,
 				141706072E525DAC004229DD /* AdSupport.framework in Frameworks */,
 				141B37EB2E5566DB00121BAF /* AWSRDS in Frameworks */,
 				141706152E525F9C004229DD /* Security.framework in Frameworks */,
 				14B44E9C2E555B020071757B /* GoogleSignInSwift in Frameworks */,
+				14E3CDDD2E57BB7800089834 /* OneSignalExtension in Frameworks */,
 				1417060B2E525F42004229DD /* LinkPresentation.framework in Frameworks */,
 				141706032E525D95004229DD /* AppTrackingTransparency.framework in Frameworks */,
 				14B44E772E552ABD0071757B /* FirebaseCore in Frameworks */,
+				14E3CDDA2E57B4C100089834 /* StreamChatSwiftUI in Frameworks */,
 				14B44E582E5526D40071757B /* BrazeKit in Frameworks */,
 				141B37ED2E5566DB00121BAF /* AWSRDSData in Frameworks */,
 				141B37E52E5566DB00121BAF /* AWSCognitoIdentity in Frameworks */,
 				141706192E525FBA004229DD /* SafariServices.framework in Frameworks */,
 				14B44E622E5527C60071757B /* Mixpanel in Frameworks */,
-				141B37F62E5567ED00121BAF /* ZendeskSupportSDK in Frameworks */,
+				14E3CDE12E57BB7800089834 /* OneSignalInAppMessages in Frameworks */,
 				14B44E7B2E552ABD0071757B /* FirebasePerformance in Frameworks */,
 				14B44E5A2E5526D40071757B /* BrazeNotificationService in Frameworks */,
 				1466567E2E56E33900016C94 /* BrazeLocation in Frameworks */,
@@ -245,14 +347,14 @@
 				141706052E525DA2004229DD /* AdServices.framework in Frameworks */,
 				14B44E7D2E552ABD0071757B /* FirebaseRemoteConfig in Frameworks */,
 				141B37E32E5566DB00121BAF /* AWSAppSync in Frameworks */,
-				14B44E6A2E55289A0071757B /* RevenueCatUI in Frameworks */,
 				1463CDA42E569EE3007476A0 /* FacebookLogin in Frameworks */,
 				141706172E525FA3004229DD /* CryptoKit.framework in Frameworks */,
 				141706092E525F36004229DD /* UIKit.framework in Frameworks */,
-				14B44E682E55289A0071757B /* RevenueCat in Frameworks */,
 				141706212E525FDC004229DD /* PhotosUI.framework in Frameworks */,
 				14B44E792E552ABD0071757B /* FirebaseCrashlytics in Frameworks */,
 				141706112E525F89004229DD /* BackgroundTasks.framework in Frameworks */,
+				14E3CEE82E59F07B00089834 /* FirebaseAnalyticsIdentitySupport in Frameworks */,
+				3F1DD77552CE4C87BA3C92E0 /* Appwrite in Frameworks */,
 				141706132E525F91004229DD /* Network.framework in Frameworks */,
 				1466568D2E57044200016C94 /* SDWebImage in Frameworks */,
 				4D4D6DB1334544B1984F6756 /* Sentry in Frameworks */,
@@ -275,11 +377,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		146656642E56DC4000016C94 /* Frameworks */ = {
+		14E3CDE52E57BBE700089834 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				146656762E56DC8400016C94 /* BrazeNotificationService in Frameworks */,
+				14E3CEC12E596F4F00089834 /* StreamChatSwiftUI in Frameworks */,
+				14E3CDF72E57BC6800089834 /* OneSignalExtension in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14E3CE702E59479000089834 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,11 +400,11 @@
 			isa = PBXGroup;
 			children = (
 				14B44E832E552D9C0071757B /* Configuration */,
-				14B44E6B2E552A160071757B /* GoogleService-Info.plist */,
 				14C0F3722E551EAB003DDEA0 /* Sprout */,
 				141705E22E505702004229DD /* SproutTests */,
 				141705EC2E505702004229DD /* SproutUITests */,
-				146656682E56DC4100016C94 /* NotificationService */,
+				14E3CDE92E57BBE700089834 /* OneSignalNotificationServiceExtension */,
+				14E3CE742E59479000089834 /* SproutAppIntents */,
 				141705FF2E525C1B004229DD /* Frameworks */,
 				141705D12E505701004229DD /* Products */,
 			);
@@ -306,7 +416,8 @@
 				141705D02E505701004229DD /* Sprout.app */,
 				141705DF2E505702004229DD /* SproutTests.xctest */,
 				141705E92E505702004229DD /* SproutUITests.xctest */,
-				146656672E56DC4000016C94 /* NotificationService.appex */,
+				14E3CDE82E57BBE700089834 /* OneSignalNotificationServiceExtension.appex */,
+				14E3CE732E59479000089834 /* SproutAppIntents.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -358,12 +469,14 @@
 				141705CD2E505701004229DD /* Frameworks */,
 				141705CE2E505701004229DD /* Resources */,
 				146656742E56DC4100016C94 /* Embed Foundation Extensions */,
+				14E3CE822E59479000089834 /* Embed ExtensionKit Extensions */,
 				4957DB6FE1634E5EA256EC01 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				1466566D2E56DC4100016C94 /* PBXTargetDependency */,
+				14E3CDEE2E57BBE700089834 /* PBXTargetDependency */,
+				14E3CE7B2E59479000089834 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				14C0F3722E551EAB003DDEA0 /* Sprout */,
@@ -376,8 +489,6 @@
 				14B44E5E2E5527260071757B /* AppsFlyerLib-Dynamic */,
 				14B44E612E5527C60071757B /* Mixpanel */,
 				14B44E642E5528110071757B /* LinkKit */,
-				14B44E672E55289A0071757B /* RevenueCat */,
-				14B44E692E55289A0071757B /* RevenueCatUI */,
 				14B44E702E552ABD0071757B /* FirebaseAI */,
 				14B44E722E552ABD0071757B /* FirebaseAnalytics */,
 				14B44E742E552ABD0071757B /* FirebaseAppCheck */,
@@ -397,7 +508,6 @@
 				141B37EE2E5566DB00121BAF /* AWSS3 */,
 				141B37F02E5566DB00121BAF /* AWSS3Control */,
 				141B37F22E5566DB00121BAF /* AWSSDKCommon */,
-				141B37F52E5567ED00121BAF /* ZendeskSupportSDK */,
 				1AA7ECB4D81B4D319058FEAA /* Sentry */,
 				1463CD9F2E569EE3007476A0 /* FacebookAEM */,
 				1463CDA12E569EE3007476A0 /* FacebookCore */,
@@ -405,6 +515,14 @@
 				1463CDA52E569EE3007476A0 /* FacebookShare */,
 				1466567D2E56E33900016C94 /* BrazeLocation */,
 				1466568C2E57044200016C94 /* SDWebImage */,
+				14E3CDD92E57B4C100089834 /* StreamChatSwiftUI */,
+				14E3CDDC2E57BB7800089834 /* OneSignalExtension */,
+				14E3CDDE2E57BB7800089834 /* OneSignalFramework */,
+				14E3CDE02E57BB7800089834 /* OneSignalInAppMessages */,
+				14E3CDE22E57BB7800089834 /* OneSignalLocation */,
+				14E3CEE52E59F07B00089834 /* FirebaseAnalyticsCore */,
+				14E3CEE72E59F07B00089834 /* FirebaseAnalyticsIdentitySupport */,
+				09F92476758E4890B666FE22 /* Appwrite */,
 			);
 			productName = Sprout;
 			productReference = 141705D02E505701004229DD /* Sprout.app */;
@@ -456,28 +574,51 @@
 			productReference = 141705E92E505702004229DD /* SproutUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		146656662E56DC4000016C94 /* NotificationService */ = {
+		14E3CDE72E57BBE700089834 /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1466566F2E56DC4100016C94 /* Build configuration list for PBXNativeTarget "NotificationService" */;
+			buildConfigurationList = 14E3CDF02E57BBE700089834 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				146656632E56DC4000016C94 /* Sources */,
-				146656642E56DC4000016C94 /* Frameworks */,
-				146656652E56DC4000016C94 /* Resources */,
+				14E3CDE42E57BBE700089834 /* Sources */,
+				14E3CDE52E57BBE700089834 /* Frameworks */,
+				14E3CDE62E57BBE700089834 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				146656682E56DC4100016C94 /* NotificationService */,
+				14E3CDE92E57BBE700089834 /* OneSignalNotificationServiceExtension */,
 			);
-			name = NotificationService;
+			name = OneSignalNotificationServiceExtension;
 			packageProductDependencies = (
-				146656752E56DC8400016C94 /* BrazeNotificationService */,
+				14E3CDF62E57BC6800089834 /* OneSignalExtension */,
+				14E3CEC02E596F4F00089834 /* StreamChatSwiftUI */,
 			);
-			productName = NotificationService;
-			productReference = 146656672E56DC4000016C94 /* NotificationService.appex */;
+			productName = OneSignalNotificationServiceExtension;
+			productReference = 14E3CDE82E57BBE700089834 /* OneSignalNotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		14E3CE722E59479000089834 /* SproutAppIntents */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14E3CE7D2E59479000089834 /* Build configuration list for PBXNativeTarget "SproutAppIntents" */;
+			buildPhases = (
+				14E3CE6F2E59479000089834 /* Sources */,
+				14E3CE702E59479000089834 /* Frameworks */,
+				14E3CE712E59479000089834 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				14E3CE742E59479000089834 /* SproutAppIntents */,
+			);
+			name = SproutAppIntents;
+			packageProductDependencies = (
+			);
+			productName = SproutAppIntents;
+			productReference = 14E3CE732E59479000089834 /* SproutAppIntents.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -500,7 +641,10 @@
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 141705CF2E505701004229DD;
 					};
-					146656662E56DC4000016C94 = {
+					14E3CDE72E57BBE700089834 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					14E3CE722E59479000089834 = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
@@ -519,14 +663,15 @@
 				14B44E5D2E5527260071757B /* XCRemoteSwiftPackageReference "AppsFlyerFramework-Dynamic" */,
 				14B44E602E5527C60071757B /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
 				14B44E632E5528110071757B /* XCRemoteSwiftPackageReference "plaid-link-ios-spm" */,
-				14B44E662E55289A0071757B /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 				14B44E6F2E552ABD0071757B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				14B44E982E555B020071757B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
-				141B37F42E5567ED00121BAF /* XCRemoteSwiftPackageReference "support_sdk_ios" */,
 				F0195ADB1D89449B8758F552 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				1466568B2E57044200016C94 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+				14E3CDD82E57B4C100089834 /* XCRemoteSwiftPackageReference "stream-chat-swiftui" */,
+				14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */,
+				F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 141705D12E505701004229DD /* Products */;
@@ -536,7 +681,8 @@
 				141705CF2E505701004229DD /* Sprout */,
 				141705DE2E505702004229DD /* SproutTests */,
 				141705E82E505702004229DD /* SproutUITests */,
-				146656662E56DC4000016C94 /* NotificationService */,
+				14E3CDE72E57BBE700089834 /* OneSignalNotificationServiceExtension */,
+				14E3CE722E59479000089834 /* SproutAppIntents */,
 			);
 		};
 /* End PBXProject section */
@@ -546,7 +692,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14B44E6E2E552A170071757B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,7 +699,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14B44E6C2E552A170071757B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,11 +706,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14B44E6D2E552A170071757B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		146656652E56DC4000016C94 /* Resources */ = {
+		14E3CDE62E57BBE700089834 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14E3CE712E59479000089834 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -576,9 +726,11 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+
+
 		14B44E8F2E5530880071757B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -589,12 +741,13 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$SRCROOT/Scripts/generate-secrets.sh\"\n";
 		};
 		4957DB6FE1634E5EA256EC01 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -606,7 +759,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=michael-dadi-1b\n  export SENTRY_PROJECT=sprout-ios\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+			shellScript = "sh \"$SRCROOT/scripts/upload-debug-symbols.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -632,7 +785,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		146656632E56DC4000016C94 /* Sources */ = {
+		14E3CDE42E57BBE700089834 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		14E3CE6F2E59479000089834 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -652,10 +812,15 @@
 			target = 141705CF2E505701004229DD /* Sprout */;
 			targetProxy = 141705EA2E505702004229DD /* PBXContainerItemProxy */;
 		};
-		1466566D2E56DC4100016C94 /* PBXTargetDependency */ = {
+		14E3CDEE2E57BBE700089834 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 146656662E56DC4000016C94 /* NotificationService */;
-			targetProxy = 1466566C2E56DC4100016C94 /* PBXContainerItemProxy */;
+			target = 14E3CDE72E57BBE700089834 /* OneSignalNotificationServiceExtension */;
+			targetProxy = 14E3CDED2E57BBE700089834 /* PBXContainerItemProxy */;
+		};
+		14E3CE7B2E59479000089834 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 14E3CE722E59479000089834 /* SproutAppIntents */;
+			targetProxy = 14E3CE7A2E59479000089834 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -787,6 +952,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14B44E862E552DFC0071757B /* Debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
@@ -795,19 +961,19 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Sprout/Info.plist;
+				INFOPLIST_FILE = Sprout/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
-				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Sprout uses your camera to read receipt text on this device. You review every expense before saving.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Sprout uses Face ID for secure and convenient authentication to protect your financial data";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Sprout uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Sprout uses your location to provide personalized financial insights and nearby merchant recommendations.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Sprout needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Sprout uses Siri to allow you to make use of voice commands to access and update your account information";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Sprout uses tracking data to help provide you with a personalized in-app experience and relevant content";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -833,6 +999,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14B44E842E552DCD0071757B /* Release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
@@ -841,19 +1008,19 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Sprout/Info.plist;
+				INFOPLIST_FILE = Sprout/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
-				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Sprout uses your camera to read receipt text on this device. You review every expense before saving.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Sprout uses Face ID for secure and convenient authentication to protect your financial data";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Sprout uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Sprout uses your location to provide personalized financial insights and nearby merchant recommendations.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Sprout needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Sprout uses Siri to allow you to make use of voice commands to access and update your account information";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Sprout uses tracking data to help provide you with a personalized in-app experience and relevant content";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -951,84 +1118,6 @@
 			};
 			name = Release;
 		};
-		146656702E56DC4100016C94 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BVRSQVUB66;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.NotificationService;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		146656712E56DC4100016C94 /* Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BVRSQVUB66;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.NotificationService;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Staging;
-		};
-		146656722E56DC4100016C94 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BVRSQVUB66;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = NotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.NotificationService;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		14B44E872E552E1D0071757B /* Staging */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14B44E852E552DD40071757B /* Staging.xcconfig */;
@@ -1098,6 +1187,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 14B44E852E552DD40071757B /* Staging.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sprout/Sprout.entitlements;
@@ -1106,19 +1196,19 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = BVRSQVUB66;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Sprout/Info.plist;
+				INFOPLIST_FILE = Sprout/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Sprout;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
-				INFOPLIST_KEY_NSCameraUsageDescription = "$(PRODUCT_NAME) needs camera access so that you can upload receipts and invoices for your records, and chat with support";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "$(PRODUCT_NAME) uses Face ID for secure and convenient authentication to protect your financial data";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to track spending at different locations and provide location-based budgeting insights.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) uses your location to provide personalized financial insights and nearby merchant recommendations.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "$(PRODUCT_NAME) needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
-				INFOPLIST_KEY_NSSiriUsageDescription = "$(PRODUCT_NAME) uses Siri to allow you to make use of voice commands to access and update your account information";
-				INFOPLIST_KEY_NSUserTrackingUsageDescription = "$(PRODUCT_NAME) uses tracking data to help provide you with a personalized in-app experience and relevant content";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Sprout uses your camera to read receipt text on this device. You review every expense before saving.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Sprout uses Face ID for secure and convenient authentication to protect your financial data";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Sprout uses your location to track spending at different locations and provide location-based budgeting insights.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Sprout uses your location to provide personalized financial insights and nearby merchant recommendations.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Sprout needs access to your photo library to select receipts and invoices for you to upload to your records, and chat with support";
+				INFOPLIST_KEY_NSSiriUsageDescription = "Sprout uses Siri to allow you to make use of voice commands to access and update your account information";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Sprout uses tracking data to help provide you with a personalized in-app experience and relevant content";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1178,6 +1268,168 @@
 			};
 			name = Staging;
 		};
+		14E3CDF12E57BBE700089834 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		14E3CDF22E57BBE700089834 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Staging;
+		};
+		14E3CDF32E57BBE700089834 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.OneSignalNotificationServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		14E3CE7E2E59479000089834 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SproutAppIntents/SproutAppIntents.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SproutAppIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SproutAppIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.SproutAppIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		14E3CE7F2E59479000089834 /* Staging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SproutAppIntents/SproutAppIntents.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SproutAppIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SproutAppIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.SproutAppIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Staging;
+		};
+		14E3CE802E59479000089834 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SproutAppIntents/SproutAppIntents.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BVRSQVUB66;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SproutAppIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SproutAppIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.michaeldadi.Sprout.SproutAppIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1221,12 +1473,22 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1466566F2E56DC4100016C94 /* Build configuration list for PBXNativeTarget "NotificationService" */ = {
+		14E3CDF02E57BBE700089834 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				146656702E56DC4100016C94 /* Debug */,
-				146656712E56DC4100016C94 /* Staging */,
-				146656722E56DC4100016C94 /* Release */,
+				14E3CDF12E57BBE700089834 /* Debug */,
+				14E3CDF22E57BBE700089834 /* Staging */,
+				14E3CDF32E57BBE700089834 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		14E3CE7D2E59479000089834 /* Build configuration list for PBXNativeTarget "SproutAppIntents" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14E3CE7E2E59479000089834 /* Debug */,
+				14E3CE7F2E59479000089834 /* Staging */,
+				14E3CE802E59479000089834 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1234,20 +1496,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appwrite/sdk-for-apple";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 21.1.1;
+			};
+		};
 		141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.5.24;
-			};
-		};
-		141B37F42E5567ED00121BAF /* XCRemoteSwiftPackageReference "support_sdk_ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zendesk/support_sdk_ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.1.0;
 			};
 		};
 		1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
@@ -1298,14 +1560,6 @@
 				minimumVersion = 6.0.4;
 			};
 		};
-		14B44E662E55289A0071757B /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.35.0;
-			};
-		};
 		14B44E6F2E552ABD0071757B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1322,6 +1576,22 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		14E3CDD82E57B4C100089834 /* XCRemoteSwiftPackageReference "stream-chat-swiftui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getstream/stream-chat-swiftui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.86.0;
+			};
+		};
+		14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OneSignal/OneSignal-iOS-SDK";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.14;
+			};
+		};
 		F0195ADB1D89449B8758F552 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
@@ -1333,6 +1603,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		09F92476758E4890B666FE22 /* Appwrite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F704AD16ED95404FB3F0CFE3 /* XCRemoteSwiftPackageReference "sdk-for-apple" */;
+			productName = Appwrite;
+		};
 		141B37E02E5566DB00121BAF /* AWSAPIGateway */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
@@ -1383,11 +1658,6 @@
 			package = 141B37DF2E5566DB00121BAF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
 			productName = AWSSDKCommon;
 		};
-		141B37F52E5567ED00121BAF /* ZendeskSupportSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 141B37F42E5567ED00121BAF /* XCRemoteSwiftPackageReference "support_sdk_ios" */;
-			productName = ZendeskSupportSDK;
-		};
 		1463CD9F2E569EE3007476A0 /* FacebookAEM */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
@@ -1407,11 +1677,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1463CD9E2E569EE3007476A0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookShare;
-		};
-		146656752E56DC8400016C94 /* BrazeNotificationService */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B44E562E5526D40071757B /* XCRemoteSwiftPackageReference "braze-swift-sdk" */;
-			productName = BrazeNotificationService;
 		};
 		1466567D2E56E33900016C94 /* BrazeLocation */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1452,16 +1717,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B44E632E5528110071757B /* XCRemoteSwiftPackageReference "plaid-link-ios-spm" */;
 			productName = LinkKit;
-		};
-		14B44E672E55289A0071757B /* RevenueCat */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B44E662E55289A0071757B /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
-			productName = RevenueCat;
-		};
-		14B44E692E55289A0071757B /* RevenueCatUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 14B44E662E55289A0071757B /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
-			productName = RevenueCatUI;
 		};
 		14B44E702E552ABD0071757B /* FirebaseAI */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1507,6 +1762,51 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 14B44E982E555B020071757B /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		14E3CDD92E57B4C100089834 /* StreamChatSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDD82E57B4C100089834 /* XCRemoteSwiftPackageReference "stream-chat-swiftui" */;
+			productName = StreamChatSwiftUI;
+		};
+		14E3CDDC2E57BB7800089834 /* OneSignalExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */;
+			productName = OneSignalExtension;
+		};
+		14E3CDDE2E57BB7800089834 /* OneSignalFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */;
+			productName = OneSignalFramework;
+		};
+		14E3CDE02E57BB7800089834 /* OneSignalInAppMessages */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */;
+			productName = OneSignalInAppMessages;
+		};
+		14E3CDE22E57BB7800089834 /* OneSignalLocation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */;
+			productName = OneSignalLocation;
+		};
+		14E3CDF62E57BC6800089834 /* OneSignalExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDDB2E57BB7800089834 /* XCRemoteSwiftPackageReference "OneSignal-iOS-SDK" */;
+			productName = OneSignalExtension;
+		};
+		14E3CEC02E596F4F00089834 /* StreamChatSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14E3CDD82E57B4C100089834 /* XCRemoteSwiftPackageReference "stream-chat-swiftui" */;
+			productName = StreamChatSwiftUI;
+		};
+		14E3CEE52E59F07B00089834 /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B44E6F2E552ABD0071757B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		14E3CEE72E59F07B00089834 /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 14B44E6F2E552ABD0071757B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
 		};
 		1AA7ECB4D81B4D319058FEAA /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;

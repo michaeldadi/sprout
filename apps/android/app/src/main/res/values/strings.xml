@@ -32,6 +32,12 @@
     <string name="verify_code_sent_to">We\'ve sent a verification code to</string>
     <string name="verify_code_resent_to">Verification code resent to</string>
     <string name="verification_code">Verification Code</string>
+    <string name="reset_your_password">Reset Your Password</string>
+    <string name="enter_reset_code_sent_to">Enter the code sent to</string>
+    <string name="new_password">New password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="password_minimum_length">Use a password with at least 8 characters.</string>
+    <string name="password_reset_complete">Password changed. Sign in with your new password.</string>
     <string name="verify_enter_code">Enter 6-digit code</string>
     <string name="verify_enter_code_long">Please enter a 6-digit verification code</string>
     <string name="text_email_verified">Email verified! You can now sign in.</string>
@@ -80,4 +86,6 @@
 
     <string name="facebook_app_id">2287167571720834</string>
     <string name="facebook_client_token">e1679b2f8fd845e6646f7cb46fe55b0a</string>
+    <string name="add_expense_shortcut_label">Add expense</string>
+    <string name="add_expense_shortcut_description">Review a new expense in Sprout</string>
 </resources>

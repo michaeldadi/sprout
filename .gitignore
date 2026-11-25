@@ -141,3 +141,13 @@ dist
 **/*.tfstate*
 **/.plans/
 **/backend.hcl
+
+# Local review captures and generated output
+.DS_Store
+/.playwright-mcp/
+/apps/android/.kotlin/
+/apps/android/acceptance/build/
+/services/dist/
+/services/bundles/
+__pycache__/
+*.pyc

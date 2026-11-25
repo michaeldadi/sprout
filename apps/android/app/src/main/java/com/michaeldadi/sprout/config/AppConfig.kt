@@ -1,5 +1,7 @@
 package com.michaeldadi.sprout.config
 
+import com.michaeldadi.sprout.BuildConfig
+
 /**
  * Central configuration object for the app
  * Mirrors the iOS AppConfig.swift structure
@@ -10,14 +12,13 @@ object AppConfig {
     const val cognitoUserPoolId = "us-east-1_acu33uaoz"
     const val cognitoClientId = "52atb5sd5p1gcn5ohlvtt9dkfp"
 
-    // Google Sign In Configuration
-    const val googleSignInClientId = "580971148783-b04rqp82bnk3qv478l0bo0jtdunu4kkc.apps.googleusercontent.com"
-
-    // Apple Sign In Configuration
-    const val appleSignInServiceId = "com.services.michaeldadi.sprout"
+    // Public client identifiers are supplied by the selected build environment.
+    val googleSignInClientId = BuildConfig.SPROUT_GOOGLE_WEB_CLIENT_ID.trim()
+    val appwriteEndpoint = BuildConfig.SPROUT_APPWRITE_ENDPOINT.trim()
+    val appwriteProjectId = BuildConfig.SPROUT_APPWRITE_PROJECT_ID.trim()
 
     // API Configuration
-    const val apiBaseUrl = "https://api.getsprout.io" // TODO: Update with actual API base URL
+    val apiBaseUrl: String = BuildConfig.SPROUT_API_BASE_URL.trim()
 
     // App Configuration
     const val appName = "Sprout"

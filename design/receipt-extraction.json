@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "maxCharacters": 12000,
+  "patterns": {
+    "finalTotal": "^(?:grand\\s+total|total(?:\\s+(?:due|paid|amount|sale))?|amount\\s+due|balance\\s+due)\\s*[:=]?\\s*(?:USD\\s*)?\\$?\\s*((?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d{1,2})?)\\s*(?:USD)?\\s*$",
+    "date": "\\b(\\d{4})[-/](\\d{2})[-/](\\d{2})\\b|\\b(\\d{1,2})/(\\d{1,2})/(\\d{4})\\b",
+    "merchantNoise": "\\b(?:receipt|invoice|thank|welcome|subtotal|tax|total|cash|visa|mastercard|debit|credit|payment|change|date|time|tel|phone|auth|terminal|order|quantity|qty|www|http|copy|refund)\\b|@|[$\u20ac\u00a3\u00a5\u20b9]|\\d{3}[- .)]\\s*\\d{3}[- .]\\d{4}|^\\d{1,6}\\s+.*\\b(?:st|street|rd|road|ave|avenue|blvd|drive|dr|lane|ln)\\b|^[A-Za-z ]+,?\\s+[A-Z]{2}\\s+\\d{5}(?:-\\d{4})?$",
+    "refund": "^\\s*(?:refund|credit\\s+return|return\\s+receipt)\\b"
+  }
+}

@@ -42,6 +42,7 @@ fun VerificationScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
 
     // State
     var verificationCode by remember { mutableStateOf("") }
@@ -325,9 +326,16 @@ fun VerificationScreen(
             // Resend Code
             TextButton(
                 onClick = {
-                    // TODO: Implement resend functionality
-                    ToastManager.showInfo(context, "$textVerificationCodeResent $email")
-                }
+                    scope.launch {
+                        try {
+                            authService.resendConfirmationCode(email)
+                            ToastManager.showInfo(context, "$textVerificationCodeResent $email")
+                        } catch (e: Exception) {
+                            ToastManager.showError(context, e.message ?: textVerificationFailure)
+                        }
+                    }
+                },
+                enabled = !isLoading
             ) {
                 Text(
                     text = stringResource(R.string.not_receive_code),

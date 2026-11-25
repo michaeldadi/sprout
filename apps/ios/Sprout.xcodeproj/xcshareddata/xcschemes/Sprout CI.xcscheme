@@ -6,6 +6,15 @@
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
       buildArchitectures = "Automatic">
+      <PostActions>
+         <ExecutionAction ActionType="Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent title="Embed Swift compatibility runtime" scriptText="bash &quot;$SRCROOT/scripts/embed-swift-compatibility.sh&quot;&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="141705CF2E505701004229DD" BuildableName="Sprout.app" BlueprintName="Sprout" ReferencedContainer="container:Sprout.xcodeproj" />
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -40,6 +49,9 @@
                BlueprintName = "SproutTests"
                ReferencedContainer = "container:Sprout.xcodeproj">
             </BuildableReference>
+         </TestableReference>
+         <TestableReference skipped="NO" parallelizable="NO">
+            <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="141705E82E505702004229DD" BuildableName="SproutUITests.xctest" BlueprintName="SproutUITests" ReferencedContainer="container:Sprout.xcodeproj" />
          </TestableReference>
       </Testables>
    </TestAction>

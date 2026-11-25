@@ -135,8 +135,8 @@ struct VoiceExpenseView: View {
             .navigationTitle("Voice Entry")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
-            .onChange(of: speechRecognizer.transcript) { transcript in
-                parseExpenseFromText(transcript)
+            .onChange(of: speechRecognizer.transcript) { _, newTranscript in
+                parseExpenseFromText(newTranscript)
             }
             .onAppear {
                 speechRecognizer.requestPermission()
@@ -172,14 +172,9 @@ struct VoiceExpenseView: View {
         // Simple parsing logic for demo - in production you'd use more sophisticated NLP
         let lowercased = text.lowercased()
         
-        // Extract amount using regex
-        let amountRegex = try! NSRegularExpression(pattern: "\\$?([0-9]+\\.?[0-9]*)")
-        let amountRange = NSRange(location: 0, length: text.count)
-        if let match = amountRegex.firstMatch(in: text, range: amountRange) {
-            let matchRange = Range(match.range(at: 1), in: text)!
-            amount = "$" + String(text[matchRange])
-        }
-        
+        let candidates = ExpenseDraft.explicitAmounts(in: text)
+        amount = candidates.count == 1 ? candidates[0] : ""
+
         // Extract merchant (common patterns)
         let merchantKeywords = ["at ", "from ", "to "]
         for keyword in merchantKeywords {
@@ -221,6 +216,7 @@ struct VoiceExpenseView: View {
     }
 }
 
+@MainActor
 class SpeechRecognizer: ObservableObject {
     @Published var transcript = ""
     @Published var isAvailable = false
@@ -229,6 +225,7 @@ class SpeechRecognizer: ObservableObject {
     private var speechRecognizer = SFSpeechRecognizer()
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    private var hasInstalledTap = false
     
     init() {
         checkAvailability()
@@ -238,53 +235,48 @@ class SpeechRecognizer: ObservableObject {
         isAvailable = SFSpeechRecognizer.authorizationStatus() == .authorized && speechRecognizer?.isAvailable == true
     }
     
-    func requestPermission() {
-        SFSpeechRecognizer.requestAuthorization { status in
-            DispatchQueue.main.async {
-                self.isAvailable = status == .authorized && self.speechRecognizer?.isAvailable == true
-            }
-        }
+    func requestPermission() { Task { isAvailable = await requestAccess() } }
+
+    func requestAccess() async -> Bool {
+        let status = await withCheckedContinuation { continuation in SFSpeechRecognizer.requestAuthorization { continuation.resume(returning: $0) } }
+        guard status == .authorized else { isAvailable = false; return false }
+        let microphone = await AVAudioApplication.requestRecordPermission()
+        isAvailable = microphone && speechRecognizer?.isAvailable == true
+        return isAvailable
     }
-    
+
     func startTranscribing() {
-        guard let speechRecognizer = speechRecognizer, speechRecognizer.isAvailable else { return }
-        
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        
-        let inputNode = audioEngine.inputNode
-        guard let recognitionRequest = recognitionRequest else { return }
-        
-        recognitionRequest.shouldReportPartialResults = true
-        
-        recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
-            if let result = result {
-                DispatchQueue.main.async {
-                    self.transcript = result.bestTranscription.formattedString
+        stopTranscribing()
+        guard isAvailable, let speechRecognizer, speechRecognizer.isAvailable else { return }
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.record,mode: .measurement,options: .duckOthers)
+            try AVAudioSession.sharedInstance().setActive(true)
+            let request = SFSpeechAudioBufferRecognitionRequest()
+            request.shouldReportPartialResults = true
+            request.requiresOnDeviceRecognition = speechRecognizer.supportsOnDeviceRecognition
+            recognitionRequest = request
+            recognitionTask = speechRecognizer.recognitionTask(with: request) { [weak self] result, error in
+                Task { @MainActor in
+                    guard let self else { return }
+                    if let result { self.transcript = result.bestTranscription.formattedString }
+                    if error != nil || result?.isFinal == true { self.stopTranscribing() }
                 }
             }
-            
-            if error != nil || result?.isFinal == true {
-                self.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
-                self.recognitionRequest = nil
-                self.recognitionTask = nil
-            }
-        }
-        
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
-            self.recognitionRequest?.append(buffer)
-        }
-        
-        audioEngine.prepare()
-        
-        try? audioEngine.start()
+            let input = audioEngine.inputNode
+            input.installTap(onBus: 0,bufferSize: 1024,format: input.outputFormat(forBus: 0)) { buffer,_ in request.append(buffer) }
+            hasInstalledTap = true
+            audioEngine.prepare(); try audioEngine.start()
+        } catch { stopTranscribing(); isAvailable = false }
     }
-    
+
     func stopTranscribing() {
         audioEngine.stop()
-        recognitionRequest?.endAudio()
+        if hasInstalledTap { audioEngine.inputNode.removeTap(onBus: 0); hasInstalledTap = false }
+        recognitionRequest?.endAudio(); recognitionRequest = nil
+        let task = recognitionTask; recognitionTask = nil; task?.cancel()
+        try? AVAudioSession.sharedInstance().setActive(false,options: .notifyOthersOnDeactivation)
     }
+
 }
 
 #Preview {

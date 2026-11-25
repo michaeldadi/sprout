@@ -112,7 +112,10 @@ class MockAuthService: ObservableObject {
         
         // Simulate successful sign in
         self.currentUser = CognitoUser(
+            id: "mock-user",
             email: email,
+            username: email,
+            fullName: nil,
             accessToken: "mock_access_token",
             idToken: "mock_id_token",
             refreshToken: "mock_refresh_token"
@@ -197,7 +200,10 @@ class MockAuthService: ObservableObject {
         // Simulate successful token refresh
         if let currentUser = currentUser {
             self.currentUser = CognitoUser(
+                id: currentUser.id,
                 email: currentUser.email,
+                username: currentUser.username,
+                fullName: currentUser.fullName,
                 accessToken: "refreshed_access_token",
                 idToken: "refreshed_id_token",
                 refreshToken: currentUser.refreshToken
@@ -235,7 +241,10 @@ class MockAuthService: ObservableObject {
         // Simulate successful Apple Sign In
         let mockEmail = "apple.user@icloud.com"
         self.currentUser = CognitoUser(
+            id: "mock-apple-user",
             email: mockEmail,
+            username: mockEmail,
+            fullName: nil,
             accessToken: "apple_access_token",
             idToken: idToken,
             refreshToken: "apple_refresh_token"
@@ -262,7 +271,10 @@ class MockAuthService: ObservableObject {
         
         // Simulate successful Google Sign In
         self.currentUser = CognitoUser(
+            id: "mock-user",
             email: email,
+            username: email,
+            fullName: nil,
             accessToken: accessToken,
             idToken: idToken,
             refreshToken: "google_refresh_token"
@@ -300,7 +312,10 @@ class MockAuthService: ObservableObject {
     
     func simulateAuthenticatedUser(email: String = "test@example.com") {
         self.currentUser = CognitoUser(
+            id: "mock-user",
             email: email,
+            username: email,
+            fullName: nil,
             accessToken: "test_access_token",
             idToken: "test_id_token",
             refreshToken: "test_refresh_token"

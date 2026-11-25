@@ -2,8 +2,7 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import {
   createSuccessResponse,
   createErrorResponse,
-  getUserIdFromEvent,
-  generateId
+  getUserIdFromEvent
 } from '../common/utils';
 
 /**
@@ -21,17 +20,12 @@ export const handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    console.log('CreateReceiptUrl handler called', {
-      body: event.body,
-      headers: event.headers
-    });
-
     // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
       return createSuccessResponse({});
     }
 
-    // Get user ID from JWT token or headers
+    // Get user ID from the authorizer's verified JWT claims.
     const userId = getUserIdFromEvent(event);
     if (!userId) {
       return createErrorResponse(
@@ -119,52 +113,9 @@ export const handler = async (
       );
     }
 
-    // Generate unique file key for S3
-    const fileExtension = requestBody.fileName.substring(requestBody.fileName.lastIndexOf('.'));
-    const uniqueFileName = `receipts/${userId}/${generateId()}${fileExtension}`;
-
-    // S3 bucket configuration
-    const bucketName = process.env.RECEIPTS_BUCKET_NAME || 'sprout-receipts-dev';
-    const region = process.env.AWS_REGION || 'us-east-1';
-
-    // In a real implementation, you would use AWS SDK to generate pre-signed URL
-    // For now, we'll return a mock pre-signed URL structure
-    const presignedUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${uniqueFileName}`;
-    const publicUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${uniqueFileName}`;
-
-    console.log('Generated upload URLs:', {
-      userId,
-      fileName: requestBody.fileName,
-      uniqueFileName,
-      transactionId: requestBody.transactionId
-    });
-
-    // Mock S3 pre-signed URL generation
-    // In real implementation:
-    // const s3 = new AWS.S3();
-    // const presignedUrl = s3.getSignedUrl('putObject', {
-    //   Bucket: bucketName,
-    //   Key: uniqueFileName,
-    //   ContentType: requestBody.contentType,
-    //   Expires: 3600, // 1 hour
-    //   Conditions: [
-    //     ['content-length-range', 0, 10485760] // 10MB max
-    //   ]
-    // });
-
-    const response = {
-      uploadUrl: presignedUrl,
-      publicUrl: publicUrl,
-      fileName: uniqueFileName,
-      contentType: requestBody.contentType,
-      expiresIn: 3600, // 1 hour in seconds
-      maxFileSize: 10485760, // 10MB in bytes
-      transactionId: requestBody.transactionId
-    };
-
-    console.log(`Successfully created upload URL for user ${userId}`);
-
-    return createSuccessResponse(response, 201);
+    // The storage provider and private download contract are still open.
+    // A plain bucket URL is neither signed nor usable with the private bucket.
+    return createErrorResponse('UPLOAD_UNAVAILABLE', 'Receipt uploads are unavailable', 503);
 
   } catch (error) {
     console.error('Error in CreateReceiptUrl handler:', error);

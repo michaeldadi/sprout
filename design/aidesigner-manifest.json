@@ -1,0 +1,920 @@
+{
+  "schemaVersion": 1,
+  "projectId": "GxWskg4Eq62t",
+  "projectName": "Sprout Mobile",
+  "capturedAt": "2026-11-09",
+  "selection": {
+    "onboarding": "B / Living demo",
+    "signedIn": "B / Insight first",
+    "dark": "C palette applied to B layout"
+  },
+  "frames": [
+    {
+      "id": "fr_svc8065nl",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "activity",
+      "name": "Sprout Android C \u2014 Activity",
+      "sourceFile": "designs/sprout-android-signed-in-c-activity.html",
+      "sha256": "a5ad0957c413067e1ad34f5136629b820ca9c85500a5c4f3350e124de5c8fa15",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_swolmje8q",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "activity",
+      "name": "Activity \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-activity.html",
+      "sha256": "ea79589341873309205090ff4ab8b66d36b0c5b709aa4e0c2ea1895c56b2abbc",
+      "revision": 6,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "activity",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyActivity",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-activity.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "7514d423f7f07cf4f07c26edb0b2a3ff62e131aef45154f5f26bfeaf2adff824"
+      }
+    },
+    {
+      "id": "fr_m6hees8em",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "add-expense",
+      "name": "Add expense \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-add-expense.html",
+      "sha256": "3d675da86d23280e4edfc15a13e73fe338baef6287ab52e55dfb499df2e328a9",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "ModalBottomSheet: MoneyExpenseSheet",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyExpenseSheet",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-add-expense.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "9b2388ad4825f68f5d6ecd6935b6716af1c4acccb82b125c8a34634ddea5a8b6"
+      }
+    },
+    {
+      "id": "fr_xitg3gzus",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "add-expense",
+      "name": "Sprout Android C \u2014 Add expense",
+      "sourceFile": "designs/sprout-android-signed-in-c-add-expense.html",
+      "sha256": "9f2b1ea19c9568e9755df13113accf6bd84d354ea279d1350b00faeb8aced264",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_4jn32sqfk",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "budget",
+      "name": "Budget \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-budget.html",
+      "sha256": "f8561005090d203d18ceec0b2b2325b1183ab6ad0b0c76e01de8a633c2e34908",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "budget",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyBudgetScreen",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-budget.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "0cfb3959dd866050183ae498bcc19a3213ed35de9987d36db384ba67a4d54bbb"
+      }
+    },
+    {
+      "id": "fr_gwrhhr74j",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "budget",
+      "name": "Sprout Android C \u2014 Budget",
+      "sourceFile": "designs/sprout-android-signed-in-c-budget.html",
+      "sha256": "e4923b3c440920d872115af738e35fef268ef9bf44f33ec6700857efdd4e906a",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_cbffd6ptf",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "home",
+      "name": "Home \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-home.html",
+      "sha256": "39b8268049224f9fe859419551617a9f3ea4c6324a534a9b48d0cf3116f1835c",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "home",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyHome",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-home.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "bbbde201021c477bbc032f24d042bbfbe9230016b795cce4599add32a9d943e9"
+      }
+    },
+    {
+      "id": "fr_h8jr3ecff",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "home",
+      "name": "Sprout Android C \u2014 Home",
+      "sourceFile": "designs/sprout-android-signed-in-c-home.html",
+      "sha256": "5dd990b0c552cd5693cb058873f5798f203bd4e95c351e7340c6db14c36572f1",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_d2j6jbpb6",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "insights-chat",
+      "name": "Insights & chat \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-insights-chat.html",
+      "sha256": "03a315a1492bde1a803ea8b933233da9aef6f3c602a0b6b5e2e4c1fca5190b74",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "insights",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyInsights",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-insights.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "3d0d22ccfec122f9f9e737e7bee2cae2a50cc5f2a8b222b18b4e76582671698d"
+      }
+    },
+    {
+      "id": "fr_uonkux1eh",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "insights-chat",
+      "name": "Sprout Android C \u2014 Insights & chat",
+      "sourceFile": "designs/sprout-android-signed-in-c-insights-chat.html",
+      "sha256": "ee42c67459f5b22805d7c24687a2311be15652e3547b9b3b5cafdeef5c7aaeed",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_bnsupwddd",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "profile-security",
+      "name": "Sprout Android C \u2014 Profile & security",
+      "sourceFile": "designs/sprout-android-signed-in-c-profile-secur.html",
+      "sha256": "a11ad2d8e38a7e83773b4493a971fc4f9b9c8f0f57ebc49451a9aefed362ad6c",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_q26xah8au",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "profile-security",
+      "name": "Profile & security \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-profile-secur.html",
+      "sha256": "646df3d6fef8a0883c96c2045961ea0cf8cf2fbb8763de5616caa0ab347e3aa1",
+      "revision": 6,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "profile",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyProfileScreen",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-profile.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "5ff20f3025874ad7fd5ed5ece9239b094ea40b6cb3fc12075197c7e748ac5731"
+      }
+    },
+    {
+      "id": "fr_ck71lnx4j",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "subscription-detail",
+      "name": "Sprout Android C \u2014 Subscription detail",
+      "sourceFile": "designs/sprout-android-signed-in-c-subscription-.html",
+      "sha256": "02fa65ff3e9fcd677a793af92a0729bf05eb21e5047c8781fc08850988e9cc6d",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_oov8umkil",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "subscription-detail",
+      "name": "Subscription detail \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-subscription-.html",
+      "sha256": "cf16ef852b5d65d83e029f2ead33b8eb90043a3ce78e9e393672838f825f332c",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "subscription/{id}",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneySubscriptionScreen",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-subscription-detail.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "ed6bfd32c087d2e1800efcc81ee03af57858674d07cfd82e65aaedacca472061"
+      }
+    },
+    {
+      "id": "fr_8x57rc3u0",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "dark-reference",
+      "screen": "subscriptions",
+      "name": "Sprout Android C \u2014 Subscriptions",
+      "sourceFile": "designs/sprout-android-signed-in-c-subscriptions.html",
+      "sha256": "b337bfeb23d92b99bcf5fb8ba9e141ddae2b6b7f0cbc034b1044204c0ecab2b3",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_k5tdhfu3l",
+      "explorationId": "ex_undkjq6ub",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "subscriptions",
+      "name": "Subscriptions \u2014 Insight first",
+      "sourceFile": "designs/sprout-android-signed-in-b-subscriptions.html",
+      "sha256": "618b7b2a099a2f8d979f16643e198213a87c51883dfe0b6cffc5799f79a2786a",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "subscriptions",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneySubscriptions",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-subscriptions.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "76ad14a77e8e83d7dbdb0ee1579205e2410b9b255818b51108a3a9818b652216"
+      }
+    },
+    {
+      "id": "fr_pmayh5dv2",
+      "explorationId": "ex_w9l4clbdp",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "connect-bank",
+      "name": "Connect bank \u2014 Living demo",
+      "sourceFile": "designs/sprout-android-onboarding-flow-b-connect.html",
+      "sha256": "79f9ee88fb8a95f061014e5a51693fff3d4e483ada5eb54f3f8ae7cac6ea0898",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: connect-bank",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboarding",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-connect-bank.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "b3eb3b5733b75668ce73ec03297a2dfc022c3442b6c7af4fc971ee49080bfd9b"
+      }
+    },
+    {
+      "id": "fr_ei3n1zc1x",
+      "explorationId": "ex_w9l4clbdp",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "subscriptions-found",
+      "name": "Subscriptions found \u2014 Living demo",
+      "sourceFile": "designs/sprout-android-onboarding-flow-b-subscri.html",
+      "sha256": "69b597785d8f7e9b525ca31b3b4ffd9a972f28b1638df2be1c0f466c748b234e",
+      "revision": 6,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: subscriptions-found",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboarding",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-subscriptions-found.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "2d7399246d2dae0a350d1b9a376d8029f9bdeeee2d5f0069f6a2f797d2e4676d"
+      }
+    },
+    {
+      "id": "fr_9xrq1uh50",
+      "explorationId": "ex_w9l4clbdp",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "welcome",
+      "name": "Welcome \u2014 Living demo",
+      "sourceFile": "designs/sprout-android-onboarding-flow-b-welcome.html",
+      "sha256": "eeb5bad6cddb777e169a741a70fa8ee227a4920dd7441faa767f212bb0c4fde9",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: welcome",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyWelcome.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyWelcome",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-welcome.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "753428ba59df0a270f74f64b0e7fc05dd9bb7197d7452e70e6572e764e91a6a4"
+      }
+    },
+    {
+      "id": "fr_gefx4ta6u",
+      "explorationId": "ex_w9l4clbdp",
+      "platform": "android",
+      "role": "baseline",
+      "screen": "your-plan",
+      "name": "Your plan \u2014 Living demo",
+      "sourceFile": "designs/sprout-android-onboarding-flow-b-your-pl.html",
+      "sha256": "ac845831d43e4e94ce13626cd24fffc4c2286fbf53572ba688492fe62de100f3",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: your-plan",
+      "nativeSource": "apps/android/app/src/main/java/com/michaeldadi/sprout/money/MoneyApp.kt",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboarding",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/android-your-plan.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "Medium Phone / Android API 37",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "7779f2705bbb79f2b023c539b876ba2d1368760204e85ef7220f3f8e219153aa"
+      }
+    },
+    {
+      "id": "fr_y20dnbt20",
+      "explorationId": "ex_8x1phzwno",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "connect-bank",
+      "name": "Connect bank \u2014 Living demo",
+      "sourceFile": "designs/sprout-ios-onboarding-flow-b-connect-ban.html",
+      "sha256": "5d38ed4a07bc6422f8be5397a58809800b8afc9215f72ccc9df591d76484ed04",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: connect-bank",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboardingView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-connect-bank.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "0fe41f495e676a72a967ce8081250745097a528adc91d9fe53a8c3d757d73322"
+      }
+    },
+    {
+      "id": "fr_gxhtyelsf",
+      "explorationId": "ex_8x1phzwno",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "subscriptions-found",
+      "name": "Subscriptions found \u2014 Living demo",
+      "sourceFile": "designs/sprout-ios-onboarding-flow-b-subscriptio.html",
+      "sha256": "d149d4742ce7debd91d7345007c57f19158b302276075a2ff02c19615df99ede",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: subscriptions-found",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboardingView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-subscriptions-found.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "43330e7ebe12d6f71f56bc0841a64f13f7eeaa9f45cd692b0e649a14ebfa466f"
+      }
+    },
+    {
+      "id": "fr_d0sxgfyem",
+      "explorationId": "ex_8x1phzwno",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "welcome",
+      "name": "Welcome \u2014 Living demo",
+      "sourceFile": "designs/sprout-ios-onboarding-flow-b-welcome.html",
+      "sha256": "fd6221bde17cb9017ef4b1f9acaca8c011c2063e5495334a3c511799f1ef6461",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: welcome",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyWelcomeView.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyWelcomeView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-welcome.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "ee2a2b18d47a20355f25adae593b1574176f187e802a277f3c000551c3fb5606"
+      }
+    },
+    {
+      "id": "fr_i4qc4a15y",
+      "explorationId": "ex_8x1phzwno",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "your-plan",
+      "name": "Your plan \u2014 Living demo",
+      "sourceFile": "designs/sprout-ios-onboarding-flow-b-your-plan.html",
+      "sha256": "0caeed3e86367b7241c912a06af9dd7140b430a1f7f5508ec4b0b9332c0a495b",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "onboarding checkpoint: your-plan",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyOnboardingView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-your-plan.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "d5db1b208c1d8488739d0c988a9d7e8d7084a4065759cc678bb8a7f2de93f0fd"
+      }
+    },
+    {
+      "id": "fr_5pihctt24",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "activity",
+      "name": "Sprout iOS C \u2014 Activity",
+      "sourceFile": "designs/sprout-ios-signed-in-c-activity.html",
+      "sha256": "b0ae02b97827534f740a75e0795d7d02431f82515ad816ba7ee8c12a3fa7be93",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_otmhe5m2s",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "activity",
+      "name": "Sprout iOS B \u2014 Activity",
+      "sourceFile": "designs/sprout-ios-signed-in-b-activity.html",
+      "sha256": "7bf45915050cd2aceff5fea1d809847b6d9dc65b4d518d732d474f90500e0078",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyTab.activity",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyActivityView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-activity.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "de65faaa1c323d84bf52da6d6154a4c37f6d1d5d411cdd2d839d9c6f40f447a0"
+      }
+    },
+    {
+      "id": "fr_et9j996fj",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "add-expense",
+      "name": "Sprout iOS C \u2014 Add expense",
+      "sourceFile": "designs/sprout-ios-signed-in-c-add-expense.html",
+      "sha256": "4a2bd5ba04ca31cde9fb893da86986e53a1e82751a26156834762b850deb0e64",
+      "revision": 8,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_xr8gc5gdq",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "add-expense",
+      "name": "Sprout iOS B \u2014 Add expense",
+      "sourceFile": "designs/sprout-ios-signed-in-b-add-expense.html",
+      "sha256": "f7da8d1269a60c1aa3f5a7ddea6f28c42acb5f8886bba00f98d2c901994ef379",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "sheet: MoneyExpenseEditor",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyExpenseEditor",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-add-expense.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "d974ca0176336c34799353e64723888b926399191ae6ec8a22349d3bb81cf5f5"
+      }
+    },
+    {
+      "id": "fr_pifmdsh88",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "budget",
+      "name": "Sprout iOS C \u2014 Budget",
+      "sourceFile": "designs/sprout-ios-signed-in-c-budget.html",
+      "sha256": "9dc9f080b6a69b31d7e705bd43c3f660d64f6211aeeae432202f313037991867",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_xp7bdypqr",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "budget",
+      "name": "Sprout iOS B \u2014 Budget",
+      "sourceFile": "designs/sprout-ios-signed-in-b-budget.html",
+      "sha256": "11a4e640a03d23b2682f571c6dc95224eef274ed034aac2d0d2543b6056aaeb6",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyTab.budget",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyAppView.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyBudgetView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-budget.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "cc4603ae96a8d956339e6ece3d63efcc289483849aed620b1a9dd56f1b69f661"
+      }
+    },
+    {
+      "id": "fr_8rpkdwsbi",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "home",
+      "name": "Sprout iOS C \u2014 Home",
+      "sourceFile": "designs/sprout-ios-signed-in-c-home.html",
+      "sha256": "f62d2089d6f9d9c3b0730a83061d9989ce67abe5d35d8a5d847b624b5562ad0e",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_aeg7fcx09",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "home",
+      "name": "Sprout iOS B \u2014 Home",
+      "sourceFile": "designs/sprout-ios-signed-in-b-home.html",
+      "sha256": "6b30b3be909d857d285bd5fa7ab038f1dc96b2da3db62b4b571c1796fe9c7157",
+      "revision": 5,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyTab.home",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyAppView.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyHomeView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-home.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "945888c59279a70f96b4d9e9f02f24d83b5dff161223f09fb9e85fbe3247c036"
+      }
+    },
+    {
+      "id": "fr_gtjch0f6x",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "insights-chat",
+      "name": "Sprout iOS C \u2014 Insights & chat",
+      "sourceFile": "designs/sprout-ios-signed-in-c-insights-chat.html",
+      "sha256": "5e1b99e2de49feb0aaca452ae8d913391ea6dbd467cde2382c874315ba8310d8",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_ne848smow",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "insights-chat",
+      "name": "Sprout iOS B \u2014 Insights & chat",
+      "sourceFile": "designs/sprout-ios-signed-in-b-insights-chat.html",
+      "sha256": "87c0153f13a9f70b29c8cf2dc76ee7787de395041b18d423faa16ae0ab34f156",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyTab.insights",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyInsightsView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-insights.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "a81776c9f519e003d7643e1f0eb8bbd3109530407209258e1478fef6edd2c4da"
+      }
+    },
+    {
+      "id": "fr_d1m6x1clw",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "profile-security",
+      "name": "Sprout iOS B \u2014 Profile & security",
+      "sourceFile": "designs/sprout-ios-signed-in-b-profile-security.html",
+      "sha256": "26bbaf4117f0e5a7e8585a27f79a9ba9dd9c97c98454752ca8b87e82398eeb84",
+      "revision": 3,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyTab.profile",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneyProfileView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-profile.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "f4e198141903fb8dd4010091fc609c5e894b1b03119134ea9b35ae7aa87dc3db"
+      }
+    },
+    {
+      "id": "fr_ds0gwrp5g",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "profile-security",
+      "name": "Sprout iOS C \u2014 Profile & security",
+      "sourceFile": "designs/sprout-ios-signed-in-c-profile-security.html",
+      "sha256": "393bbc5852a67be592425b1db7fc29f4cb40ded60e127d76f734cfa9cc151825",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_4dlt2zjj6",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "subscription-detail",
+      "name": "Sprout iOS C \u2014 Subscription detail",
+      "sourceFile": "designs/sprout-ios-signed-in-c-subscription-deta.html",
+      "sha256": "c2cfaf61a077196228de404e00680afaa44280405937774bfeffaf4ed44fa340",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_t6kutqtkw",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "subscription-detail",
+      "name": "Sprout iOS B \u2014 Subscription detail",
+      "sourceFile": "designs/sprout-ios-signed-in-b-subscription-deta.html",
+      "sha256": "1e306c799198f158181d7c640500c6e8b1e03846ac6eaa2a5559fe382c9d11ab",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyRoute.subscription(id) in Insights",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneySubscriptionDetail",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-subscription-detail.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "019176456a5ef21b322a30d6c2dab6fb718f86d905e98d4d8f35bb80350b504e"
+      }
+    },
+    {
+      "id": "fr_pkrp241j0",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "dark-reference",
+      "screen": "subscriptions",
+      "name": "Sprout iOS C \u2014 Subscriptions",
+      "sourceFile": "designs/sprout-ios-signed-in-c-subscriptions.html",
+      "sha256": "529a3f6f01fe4d2c7a84dbf1d0c7bfdbc8c07b07ed8ac33d16cbd14dd5aa1578",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "id": "fr_uc5b6flda",
+      "explorationId": "ex_ifpd5ma8j",
+      "platform": "ios",
+      "role": "baseline",
+      "screen": "subscriptions",
+      "name": "Sprout iOS B \u2014 Subscriptions",
+      "sourceFile": "designs/sprout-ios-signed-in-b-subscriptions.html",
+      "sha256": "3cc3605a76c34d4c82fd7797444cc0448766009b941f141a27a206c838aef4b1",
+      "revision": 4,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeRoute": "MoneyRoute.subscriptions in Insights",
+      "nativeSource": "apps/ios/Sprout/Features/Money/MoneyJourneys.swift",
+      "acceptance": "pending-native-comparison",
+      "nativeSymbol": "MoneySubscriptionsView",
+      "nativeEvidence": {
+        "file": "docs/ai-autopilot/evidence/ios-subscriptions.png",
+        "data": "fictional-read-only-debug-fixture",
+        "capturedOn": "2026-11-09",
+        "device": "iPhone 17 Pro / iOS 26.4.1",
+        "acceptance": "content-and-navigation-capture; full interaction and accessibility acceptance pending",
+        "sha256": "9954040164e544880b3fcba187634776e70f8140a8374b39f7aa8bad7cf26516"
+      }
+    }
+  ],
+  "departures": [
+    "Use Remaining budget until a forecast is eligible.",
+    "Use Connected cash balance with scope/freshness; do not imply savings.",
+    "Render actual charges; do not infer usage.",
+    "Cancellation requires verified partner coverage and exact approval.",
+    "Use adaptive native safe areas and fonts, not fixed web dimensions.",
+    "Budget editing uses one reviewed component per save, captures its original version, and includes a native saved-category selector and historical limits. This prevents partial saves and silent overwrites during sync.",
+    "Receipt capture retains the selected expense review layout and adds an explicit default-off compressed-copy choice. Transaction details add private preview, removal confirmation, pending-copy recovery and owner-scoped storage limits as native operational surfaces. OCR works without retaining an image.",
+    "The Insights Feed adds a first-party Review last week action and a persistent evidence-linked review card. Manual review does not enable notification delivery; partial history and immutable preparation dates remain explicit."
+  ],
+  "sourceRoot": "/Users/michaeldadi/AIDesigner/sprout",
+  "requiredStates": [
+    "loading",
+    "empty",
+    "stale",
+    "offline",
+    "error",
+    "recovery"
+  ]
+}

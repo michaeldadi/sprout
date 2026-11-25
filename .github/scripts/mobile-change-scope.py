@@ -7,7 +7,10 @@ import sys
 
 paths = [path for path in sys.stdin.buffer.read().decode().split("\0") if path]
 shared_contract = any(
-    path.startswith("services/api/")
+    path.startswith("services/")
+    or path.startswith("design/")
+    or path.startswith("infra/appwrite/")
+    or path in {"scripts/generate-contracts.ts", "scripts/generate-design-tokens.mjs"}
     or path.startswith("infra/lib/constructs/")
     or path in {
         "services/package.json",

@@ -57,16 +57,23 @@ jobs:
           test ! -e apps/.env.local
           CONFIGURATION=Debug SRCROOT="$GITHUB_WORKSPACE/apps/ios" bash apps/ios/Scripts/generate-secrets.sh
           test -s apps/ios/Sprout/Generated/Secrets.swift
+      - name: Verify private ZIP interoperability
+        run: python3 scripts/validate-ios-export-zip.py
       - name: Build and test on simulator
         run: |
           xcodebuild test \
             -project apps/ios/Sprout.xcodeproj \
             -scheme 'Sprout CI' \
+            -sdk iphonesimulator \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=iPhone 17,OS=latest' \
             -resultBundlePath "$RUNNER_TEMP/Sprout-CI.xcresult" \
             -only-testing:SproutTests/AppleSignInTests/testNSErrorCode1000Handling \
-            CODE_SIGNING_ALLOWED=NO
+            -only-testing:SproutTests/MoneyDomainTests \
+            -skip-testing:SproutTests/MoneyDomainTests/testLiveSDKEmailAuthentication \
+            -only-testing:SproutUITests/MoneyDesignAcceptanceTests \
+            -parallel-testing-enabled NO \
+            CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES CODE_SIGN_IDENTITY=-
       - name: Upload test result
         if: always()
         uses: actions/upload-artifact@v4
@@ -89,7 +96,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
           cache: gradle
           cache-dependency-path: |
             apps/android/**/*.gradle.kts
@@ -97,7 +104,9 @@ jobs:
             apps/android/gradle/wrapper/gradle-wrapper.properties
       - name: Build and run unit tests
         working-directory: apps/android
-        run: bash ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest
+        env:
+          SPROUT_UPLOAD_ANDROID_SYMBOLS: "0"
+        run: bash ./gradlew --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:assembleRelease :acceptance:assembleDebug :acceptance:assembleDebugAndroidTest
       - name: Upload unit test reports
         if: always()
         uses: actions/upload-artifact@v4
