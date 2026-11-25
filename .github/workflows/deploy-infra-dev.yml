@@ -1,24 +1,15 @@
 name: Deploy AWS Resources to Development
 
 on:
-  push:
-    branches: [ develop ]
-    paths:
-      - 'infra/**'
-      - '!infra/appwrite/**'
-      - 'services/**'
-      - '!services/appwrite/**'
-  pull_request:
-    branches: [ develop ]
-    paths:
-      - 'infra/**'
-      - '!infra/appwrite/**'
-      - 'services/**'
-      - '!services/appwrite/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   deploy-development:
     name: Deploy CDK Infrastructure to Development
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     environment: development
 

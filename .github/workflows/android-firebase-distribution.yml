@@ -1,15 +1,15 @@
 name: Deploy Android App to Firebase App Distribution
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'apps/android/**'
-      - '.github/workflows/android-firebase-distribution.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-and-distribute:
     name: Build and Distribute Android App
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     
     steps:
@@ -35,17 +35,27 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x apps/android/gradlew
 
-    - name: Decode google-services.json
+    - name: Validate and install Firebase release configuration
+      shell: bash
       env:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      run: |
-        echo $GOOGLE_SERVICES_JSON | base64 -d > apps/android/app/google-services.json
-
-    - name: Create local.properties
-      env:
         LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+        FIREBASE_APP_ID_ANDROID: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
       run: |
-        echo $LOCAL_PROPERTIES | base64 -d > apps/android/local.properties
+        for secret in GOOGLE_SERVICES_JSON LOCAL_PROPERTIES FIREBASE_APP_ID_ANDROID FIREBASE_SERVICE_ACCOUNT; do
+          if [[ -z "${!secret}" ]]; then
+            echo "::error::Missing Firebase release secret: $secret"
+            exit 1
+          fi
+        done
+        umask 077
+        if ! printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > apps/android/app/google-services.json ||
+           ! jq -e '.client | type == "array" and length > 0' apps/android/app/google-services.json > /dev/null 2>&1; then
+          echo "::error::GOOGLE_SERVICES_JSON must contain a base64-encoded Firebase Android configuration."
+          exit 1
+        fi
+        printf '%s' "$LOCAL_PROPERTIES" | base64 --decode > apps/android/local.properties
 
     - name: Build Release APK
       run: |
@@ -68,10 +78,7 @@ jobs:
           🚀 New build from main branch
           
           Commit: ${{ github.sha }}
-          Author: ${{ github.actor }}
-          
-          Changes:
-          ${{ github.event.head_commit.message }}
+          Dispatched by: ${{ github.actor }}
 
     - name: Upload AAB as artifact
       uses: actions/upload-artifact@v4
